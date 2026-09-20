@@ -356,6 +356,9 @@ function resolveCryptoCadenceTitleSuffix(cadence: (typeof CRYPTO_CADENCE_ROUTES)
   if (cadence.cadence === 'daily') {
     return DAILY_LABELS[locale]
   }
+  if (locale === 'zh') {
+    return resolveCryptoCadenceSidebarLabel(cadence, locale)
+  }
   return cadence.titleSuffix
 }
 

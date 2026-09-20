@@ -25,6 +25,21 @@ function normalizeWhitespace(value: string | null) {
 }
 
 describe('crypto cadence event presentation', () => {
+  it('renders Chinese cadence units without changing the event or its time window', () => {
+    const event = {
+      ...BASE_BTC_EVENT,
+      end_date: '2026-07-28T16:00:00.000Z',
+      series_slug: 'bitcoin-up-or-down-4h',
+    }
+    expect(resolveCryptoCadenceEventPresentation(event, 'zh')).toEqual({
+      title: 'BTC会上涨还是下跌 4小时',
+      subtitle: '7月28日 08:00 – 12:00 ET',
+    })
+    expect(resolveCryptoCadenceEventTitle(event, 'en')).toBe('BTC Up or Down 4h')
+    expect(event.title).toBe(BASE_BTC_EVENT.title)
+    expect(event.series_slug).toBe('bitcoin-up-or-down-4h')
+  })
+
   it.each([
     {
       routeSlug: '5M',

@@ -7,7 +7,7 @@ import type { Event, EventLiveChartConfig, EventSeriesEntry } from '@/types'
 import type { DataPoint, SeriesConfig } from '@/types/PredictionChartTypes'
 
 import PredictionChart from '@/components/PredictionChart'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import { resolveEventPagePath } from '@/lib/events-routing'
 
@@ -291,7 +291,7 @@ function EventLiveSeriesChartContent({
 }: EventLiveSeriesChartContentProps) {
   const t = useExtracted()
   const locale = useLocale()
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const { width: windowWidth } = useWindowSize()
   const liveColor = config.line_color || '#F59E0B'
   const chartHeight = Math.max(260, LIVE_CHART_HEIGHT - Math.max(0, chartHeightOffset))

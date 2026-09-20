@@ -24,7 +24,7 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } f
 import { useBalance } from '@/hooks/useBalance'
 import { useLiFiQuote } from '@/hooks/useLiFiQuote'
 import { useLiFiWalletTokens } from '@/hooks/useLiFiWalletTokens'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { formatDisplayAmount } from '@/lib/amount-input'
 import { COLLATERAL_TOKEN_ADDRESS } from '@/lib/contracts'
 import { DEFAULT_CHAIN_ID, IS_TEST_MODE } from '@/lib/network'
@@ -54,7 +54,7 @@ export function WalletDepositModal(props: WalletDepositModalProps) {
   } = props
 
   const [copied, setCopied] = useState(false)
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const siteLabel = siteName ?? site.name
   const isDirectTestModeDeposit = IS_TEST_MODE
   const tokensQueryEnabled = open && (view === 'wallets' || view === 'amount' || view === 'confirm')
@@ -326,7 +326,7 @@ export function WalletWithdrawModal(props: WalletWithdrawModalProps) {
     onMax,
     isBalanceLoading,
   } = props
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const siteLabel = siteName ?? site.name
 
   const content = (

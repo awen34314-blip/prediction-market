@@ -13,7 +13,7 @@ export default async function Header() {
         )}
       >
         <HeaderLogo />
-        <div className="wm-header-search hidden w-full items-center gap-2 lg:flex">
+        <div className="wm-header-search hidden min-w-0 flex-1 items-center gap-2 lg:flex">
           <HeaderSearch />
         </div>
         <div className="wm-header-actions min-w-0 shrink md:min-w-fit md:shrink-0">

@@ -26,7 +26,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'en_US',
   },
   zh: {
-    community: 'WindMarket 社区',
+    community: '风向市场社区',
     communityDetail: '交流预测 · 充值帮助',
     join: '加入社区',
     depositSupport: '充值客服',

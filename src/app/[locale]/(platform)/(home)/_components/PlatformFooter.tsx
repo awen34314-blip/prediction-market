@@ -22,7 +22,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { LOCALE_LABELS, normalizeEnabledLocales, SUPPORTED_LOCALES } from '@/i18n/locales'
 import { Link, usePathname } from '@/i18n/navigation'
 import { fetchHomeEventsPageApi } from '@/lib/events-api'
@@ -342,7 +342,7 @@ function CategoryMarketsFooter({
 
 function FooterNavigation({ links }: { links: FooterExternalLink[] }) {
   const t = useExtracted()
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const platformLinks = [
     { href: '/docs/api-reference' as Route, label: t('APIs') },
     { href: '/leaderboard' as Route, label: t('Leaderboard') },
@@ -387,7 +387,7 @@ function FooterNavigation({ links }: { links: FooterExternalLink[] }) {
 
 function FooterBottom({ socialLinks }: { socialLinks: FooterExternalLink[] }) {
   const t = useExtracted()
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const year = useSyncExternalStore(subscribeToCurrentYear, getCurrentYearSnapshot, getServerYearSnapshot)
 
   return (
@@ -451,7 +451,7 @@ export default function PlatformFooter({
 }: PlatformFooterProps) {
   const t = useExtracted()
   const locale = useLocale()
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const { tags } = usePlatformNavigationData()
 
   const mainCategories = useMemo(() => tags.filter((tag) => tag.slug !== 'trending' && tag.slug !== 'new'), [tags])

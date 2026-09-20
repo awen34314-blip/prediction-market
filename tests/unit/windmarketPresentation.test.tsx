@@ -6,11 +6,39 @@ import DepositSupport from '@/components/windmarket/DepositSupport'
 import { SUPPORTED_LOCALES } from '@/i18n/locales'
 import { withoutMigratedWindMarketIntegrations } from '@/lib/windmarket/legacy-integrations'
 import { buildWindMarketHomeMetadata } from '@/lib/windmarket/seo'
+import { getSitePresentation } from '@/lib/windmarket/site-presentation'
 
 describe('WindMarket native presentation', () => {
+  it('uses a single localized display name without mutating the configured identity', () => {
+    const site = {
+      name: 'WindMarket 风向市场',
+      description: 'Saved bilingual description',
+      logoImageUrl: '/logo.png',
+      supportUrl: 'https://t.me/WindMarketOfficial',
+    }
+    const chinese = getSitePresentation(site, 'zh')
+    const english = getSitePresentation(site, 'en')
+    expect(chinese.name).toBe('风向市场')
+    expect(english.name).toBe('WindMarket')
+    expect(chinese.description).toContain('真实世界事件预测平台')
+    expect(english.description).not.toMatch(/[\u3400-\u9fff]/)
+    expect(chinese.logoImageUrl).toBe(site.logoImageUrl)
+    expect(chinese.supportUrl).toBe(site.supportUrl)
+    expect(site.name).toBe('WindMarket 风向市场')
+    expect(site.description).toBe('Saved bilingual description')
+    for (const name of ['WindMarket', '风向市场', 'windmarket 风向市场']) {
+      expect(getSitePresentation({ ...site, name }, 'en').name).toBe('WindMarket')
+    }
+  })
+
+  it('preserves other white-label identities and their configured description', () => {
+    const site = { name: 'Kuest', description: 'Operator description' }
+    expect(getSitePresentation(site, 'zh')).toBe(site)
+  })
+
   it('renders the community bar on the server before user interaction', () => {
     const html = renderToStaticMarkup(<CommunityBar locale="zh" />)
-    expect(html).toContain('WindMarket 社区')
+    expect(html).toContain('风向市场社区')
     expect(html).toContain('加入社区')
     expect(html).toContain('https://t.me/WindMarketOfficial')
     expect(html).not.toContain('<script')

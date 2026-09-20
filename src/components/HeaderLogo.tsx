@@ -1,7 +1,7 @@
 'use client'
 
 import SiteLogoIcon from '@/components/SiteLogoIcon'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -10,7 +10,7 @@ interface HeaderLogoProps {
 }
 
 export default function HeaderLogo({ labelSuffix }: HeaderLogoProps) {
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const label = labelSuffix ? `${site.name} ${labelSuffix}` : site.name
 
   return (

@@ -15,7 +15,7 @@ import { useBalance } from '@/hooks/useBalance'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { useLiFiWalletUsdBalance } from '@/hooks/useLiFiWalletUsdBalance'
 import { useSignaturePromptRunner } from '@/hooks/useSignaturePromptRunner'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { MAX_AMOUNT_INPUT } from '@/lib/amount-input'
 import { DEFAULT_ERROR_MESSAGE } from '@/lib/constants'
 import { COLLATERAL_TOKEN_ADDRESS } from '@/lib/contracts'
@@ -295,7 +295,7 @@ export function WalletFlow({
     formattedUsdBalance: formattedConnectedWalletUsdBalance,
     isLoadingUsdBalance: isLoadingConnectedWalletUsdBalance,
   } = useLiFiWalletUsdBalance(user?.address, { enabled: depositOpen && !IS_TEST_MODE })
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const connectedWalletAddress = user?.address ?? null
   const { openTradeRequirements } = useTradingOnboarding()
 

@@ -41,10 +41,11 @@ import EventIconImage from '@/components/EventIconImage'
 import HomeFeaturedSideCardIcon from '@/components/HomeFeaturedSideCardIcon'
 import SiteLogoIcon from '@/components/SiteLogoIcon'
 import { Button } from '@/components/ui/button'
+import { useCategoryLabel } from '@/hooks/useCategoryLabel'
 import { useHasHydrated } from '@/hooks/useHasHydrated'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { Link } from '@/i18n/navigation'
 import { getAvatarPlaceholderStyle, shouldUseAvatarPlaceholder } from '@/lib/avatar'
 import { ensureReadableTextColorOnDark } from '@/lib/color-contrast'
@@ -1521,7 +1522,7 @@ function SportsScoreboard({
 }
 
 function FeaturedFooter({ item }: { item: HomeFeaturedEventCard }) {
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const t = useExtracted()
   const temporalLabel = useFeaturedTemporalLabel(item)
 
@@ -1576,6 +1577,7 @@ function FeaturedRightRailSingle({
   hideSideCard?: boolean
 }) {
   const t = useExtracted()
+  const localizeCategoryLabel = useCategoryLabel()
   const sideCardTitle = sideCard.title === DEFAULT_HOME_FEATURED_SIDE_CARD_TITLE ? t('Market pulse') : sideCard.title
   const sideCardText =
     sideCard.text === DEFAULT_HOME_FEATURED_SIDE_CARD_TEXT ? t('Fast movers across active markets.') : sideCard.text
@@ -1702,7 +1704,7 @@ function FeaturedRightRailSingle({
                   `truncate text-sm font-medium text-foreground/90 underline-offset-2 transition-colors group-hover/topic:text-foreground group-hover/topic:underline`,
                 )}
               >
-                {topic.label}
+                {localizeCategoryLabel(topic.label)}
               </span>
               {topic.volume24h > 0 && (
                 <span className="text-xs text-muted-foreground/70 tabular-nums">
@@ -1828,6 +1830,7 @@ function FeaturedRightRail({
   sideCard: HomeFeaturedSideCardSettings
 }) {
   const t = useExtracted()
+  const localizeCategoryLabel = useCategoryLabel()
   const activeSlides = sideCard.slides.filter((slide) => slide.enabled)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
@@ -1917,7 +1920,7 @@ function FeaturedRightRail({
             >
               <span className="w-3.5 text-xs font-medium text-muted-foreground/65 tabular-nums">{index + 1}</span>
               <span className="truncate text-sm font-medium text-foreground/90 underline-offset-2 group-hover/topic:underline">
-                {topic.label}
+                {localizeCategoryLabel(topic.label)}
               </span>
               {topic.volume24h > 0 && (
                 <span className="text-xs text-muted-foreground/70 tabular-nums">
