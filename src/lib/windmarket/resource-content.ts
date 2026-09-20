@@ -21,7 +21,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
   about: {
     zh: {
       intro:
-        '风向市场（WindMarket）是面向东南亚社区的真实世界事件预测平台。我们希望让读者用清晰的问题、可核对的规则和市场概率，理解正在发生的事情。',
+        '风向市场（WindMarket）专注东南亚预测市场，围绕真实世界事件，为东南亚社区提供市场信息、中英文入门指南和交流入口。我们希望让读者用清晰的问题、可核对的规则和市场概率，理解正在发生的事情。',
       takeaway: '先理解问题，再看概率。每个市场的具体规则，比标题更重要。',
       sections: [
         {
@@ -68,7 +68,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
     },
     en: {
       intro:
-        'WindMarket is a real-world event prediction platform focused on Southeast Asian communities. It brings clearly defined questions, verifiable rules and market probabilities into one place to help readers make sense of events.',
+        'WindMarket focuses on prediction markets for Southeast Asian communities, bringing together real-world event markets, English and Chinese guides, and a place to discuss what is happening. Clearly defined questions, verifiable rules and market probabilities help readers understand each event.',
       takeaway:
         'Understand the question before reading the probability. The detailed rules matter more than the headline.',
       sections: [

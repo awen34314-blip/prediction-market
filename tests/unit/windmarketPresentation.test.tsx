@@ -20,7 +20,7 @@ describe('WindMarket native presentation', () => {
     const english = getSitePresentation(site, 'en')
     expect(chinese.name).toBe('风向市场')
     expect(english.name).toBe('WindMarket')
-    expect(chinese.description).toContain('真实世界事件预测平台')
+    expect(chinese.description).toContain('东南亚预测市场')
     expect(english.description).not.toMatch(/[\u3400-\u9fff]/)
     expect(chinese.logoImageUrl).toBe(site.logoImageUrl)
     expect(chinese.supportUrl).toBe(site.supportUrl)
@@ -83,7 +83,7 @@ describe('WindMarket localized homepage SEO', () => {
       zh: `${siteUrl}/zh`,
       'x-default': `${siteUrl}/`,
     })
-    expect(chinese.title).toEqual({ absolute: '风向市场 WindMarket｜东南亚预测市场' })
+    expect(chinese.title).toEqual({ absolute: '东南亚预测市场｜风向市场 WindMarket' })
     expect(chinese.description).not.toBe(english.description)
     expect(chinese.openGraph).toMatchObject({ url: `${siteUrl}/zh`, locale: 'zh_CN', alternateLocale: ['en_US'] })
   })
