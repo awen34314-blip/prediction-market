@@ -11,6 +11,7 @@ import PlatformViewerState from '@/app/[locale]/(platform)/_components/PlatformV
 import { FilterProvider } from '@/app/[locale]/(platform)/_providers/FilterProvider'
 import PlatformNavigationProvider from '@/app/[locale]/(platform)/_providers/PlatformNavigationProvider'
 import { TradingOnboardingProvider } from '@/app/[locale]/(platform)/_providers/TradingOnboardingProvider'
+import CommunityBar from '@/components/windmarket/CommunityBar'
 import { getRootLocale } from '@/i18n/root-locale'
 import { loadPlatformMainTags } from '@/lib/platform-main-tags'
 import { buildChildParentMap, buildPlatformNavigationTags } from '@/lib/platform-navigation'
@@ -39,14 +40,15 @@ async function loadPlatformLayoutNavigation() {
 }
 
 async function PlatformLayoutContent({ children }: { children: ReactNode }) {
-  const { tags, childParentMap } = await loadPlatformLayoutNavigation()
+  const [{ tags, childParentMap }, locale] = await Promise.all([loadPlatformLayoutNavigation(), getRootLocale()])
 
   return (
     <TradingOnboardingProvider>
       <PlatformViewerState />
       <FilterProvider>
         <PlatformNavigationProvider tags={tags} childParentMap={childParentMap}>
-          <div className="min-h-screen">
+          <div className="min-h-screen" data-windmarket-platform>
+            <CommunityBar locale={locale} />
             <Header />
             <NavigationTabs />
             {children}

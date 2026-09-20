@@ -91,7 +91,7 @@ export default function NavigationTabs() {
   useScrollActiveItemIntoView({ activeIndex, containerRef, itemRef: tabItemRef })
 
   return (
-    <nav className="relative z-20 bg-background lg:sticky lg:top-17">
+    <nav data-windmarket-navigation className="relative z-20 bg-background lg:sticky lg:top-17">
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-border" />
       <div className="container mx-auto flex w-full min-w-0">
         <div

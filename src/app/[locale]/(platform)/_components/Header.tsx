@@ -6,14 +6,14 @@ import { cn } from '@/lib/utils'
 
 export default async function Header() {
   return (
-    <header className="top-0 z-30 bg-background lg:sticky">
+    <header data-windmarket-header className="top-0 z-30 bg-background lg:sticky">
       <div
         className={cn(
-          `relative z-50 container mx-auto flex min-h-15 w-full items-center justify-between gap-4 py-3 pb-1 md:min-h-17 md:pb-2`,
+          `wm-header-inner relative z-50 container mx-auto flex min-h-15 w-full items-center justify-between gap-4 py-3 pb-1 md:min-h-17 md:pb-2`,
         )}
       >
         <HeaderLogo />
-        <div className="hidden w-full items-center gap-2 lg:flex">
+        <div className="wm-header-search hidden w-full items-center gap-2 lg:flex">
           <HeaderSearch />
         </div>
         <div className="min-w-0 shrink md:min-w-fit md:shrink-0">

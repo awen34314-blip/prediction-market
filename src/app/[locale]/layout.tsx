@@ -26,6 +26,8 @@ import { deferPublicShellPrerenderIfNeeded, shouldPrerenderPublicShell } from '@
 import { resolvePwaThemeColors } from '@/lib/pwa-colors'
 import resolveSiteUrl from '@/lib/site-url'
 import { loadRuntimeThemeState } from '@/lib/theme-settings'
+import { withoutMigratedWindMarketIntegrations } from '@/lib/windmarket/legacy-integrations'
+import { getWindMarketCopy } from '@/lib/windmarket/localization'
 import { AppProviders } from '@/providers/AppProviders'
 import PublicRuntimeConfigProvider from '@/providers/PublicRuntimeConfigProvider'
 import SiteIdentityProvider from '@/providers/SiteIdentityProvider'
@@ -56,7 +58,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const runtimeTheme = await loadRuntimeThemeState()
   const site = runtimeTheme.site
   const siteUrl = resolveSiteUrl(process.env)
-  const defaultTitle = `${site.name} | ${site.description}`
+  const locale = await getRootLocale()
+  const copy = getWindMarketCopy(locale)
+  const defaultTitle = copy.title
   const fallbackOgImage = new URL('/api/og', siteUrl).toString()
   const socialImage = {
     url: fallbackOgImage,
@@ -71,19 +75,19 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${site.name}`,
       default: defaultTitle,
     },
-    description: site.description,
+    description: copy.description,
     applicationName: site.name,
     openGraph: {
       type: 'website',
       title: defaultTitle,
-      description: site.description,
+      description: copy.description,
       siteName: site.name,
       images: [socialImage],
     },
     twitter: {
       card: 'summary_large_image',
       title: defaultTitle,
-      description: site.description,
+      description: copy.description,
       images: [socialImage],
     },
     manifest: '/manifest.webmanifest',
@@ -140,7 +144,13 @@ async function loadLocaleRuntimeData(locale: SupportedLocale): Promise<LocaleRun
     globalAnnouncement,
     hasGlobalAnnouncement,
     publicRuntimeConfig,
-    runtimeTheme,
+    runtimeTheme: {
+      ...runtimeTheme,
+      site: {
+        ...runtimeTheme.site,
+        customJavascriptCodes: withoutMigratedWindMarketIntegrations(runtimeTheme.site.customJavascriptCodes),
+      },
+    },
   }
 }
 

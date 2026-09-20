@@ -9,6 +9,8 @@ import { isDynamicHomeCategorySlug } from '@/lib/platform-routing'
 import resolveSiteUrl from '@/lib/site-url'
 import { getSportsVerticalConfig, resolveSportsVerticalFromTags } from '@/lib/sports-vertical'
 import { getThemeSiteSameAs } from '@/lib/theme-site-identity'
+import { windmarket } from '@/lib/windmarket/config'
+import { getWindMarketCopy } from '@/lib/windmarket/localization'
 
 export interface StructuredDataNode {
   [key: string]: unknown
@@ -176,6 +178,10 @@ function buildBreadcrumbTargets({
 
 export function buildSiteStructuredData({ locale, site }: BuildSiteStructuredDataOptions) {
   const siteUrl = resolveSiteUrl(process.env)
+  const isWindMarket = new URL(siteUrl).hostname === 'app.windmarket.top' || /windmarket|风向市场/i.test(site.name)
+  const brandMetadata = isWindMarket
+    ? { alternateName: [...windmarket.alternateNames], description: getWindMarketCopy(locale).description }
+    : {}
   const organizationId = `${siteUrl}#organization`
   const websiteId = `${siteUrl}#website`
   const sameAs = getThemeSiteSameAs(site)
@@ -187,6 +193,7 @@ export function buildSiteStructuredData({ locale, site }: BuildSiteStructuredDat
     '@id': organizationId,
     name: site.name,
     description: site.description,
+    ...brandMetadata,
     url: siteUrl,
   }
 
@@ -205,6 +212,7 @@ export function buildSiteStructuredData({ locale, site }: BuildSiteStructuredDat
     url: siteUrl,
     name: site.name,
     description: site.description,
+    ...brandMetadata,
     inLanguage: locale,
     publisher: { '@id': organizationId },
   }
