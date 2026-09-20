@@ -6,6 +6,7 @@
   "git": {
     "deploymentEnabled": {
       "main": true,
+      "codex/windmarket-production": true,
       "*": false
     }
   }
