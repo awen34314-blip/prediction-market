@@ -1,4 +1,4 @@
-import { ChevronRightIcon, HeadphonesIcon, SendIcon } from 'lucide-react'
+import { ArrowUpRightIcon, HeadphonesIcon } from 'lucide-react'
 
 import { windmarket } from '@/lib/windmarket/config'
 import { getWindMarketCopy } from '@/lib/windmarket/localization'
@@ -29,12 +29,7 @@ export default function DepositSupport({ locale }: { locale: string }) {
           <span className="mt-0.5 block text-xs leading-5 text-muted-foreground">{copy.depositSupportDetail}</span>
         </span>
       </span>
-      <span className="flex shrink-0 items-center gap-2" aria-hidden="true">
-        <span className="flex size-6.5 items-center justify-center rounded-full bg-[#229ed9] text-white">
-          <SendIcon className="size-4" />
-        </span>
-        <ChevronRightIcon className="size-4 text-muted-foreground" />
-      </span>
+      <ArrowUpRightIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
     </a>
   )
 }

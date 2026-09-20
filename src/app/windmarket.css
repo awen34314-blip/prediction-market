@@ -40,8 +40,45 @@ html:root.dark:has([data-windmarket-platform]) {
   --accent-foreground: #f4f7f6 !important;
 }
 
-html:root:has([data-windmarket-platform]) header {
-  border-bottom: 1px solid var(--border);
+[data-windmarket-header] .wm-header-inner > a {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.wm-header-search {
+  min-width: 0;
+}
+.wm-header-search > div {
+  min-width: 0;
+}
+[data-windmarket-navigation] #navigation-main-tags > div,
+[data-windmarket-navigation] #navigation-main-tags > div > span {
+  height: 100%;
+}
+[data-windmarket-navigation] #navigation-main-tags a {
+  position: relative;
+  padding-block: 0;
+  border-radius: 0;
+}
+[data-windmarket-navigation] a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 12px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+[data-windmarket-navigation] #navigation-main-tags > div:first-child a[aria-current='page']::after {
+  inset-inline-start: 0;
+  inset-inline-end: 10px;
+}
+@media (min-width: 1024px) {
+  .wm-header-inner {
+    min-height: 68px;
+    padding-block: 12px;
+    gap: 24px;
+  }
 }
 html:root:has([data-windmarket-platform]) main > footer {
   margin-top: 80px;
@@ -53,12 +90,12 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
 }
 .wm-community-bar {
   color: var(--foreground);
-  background: linear-gradient(90deg, color-mix(in srgb, var(--primary) 4%, var(--card)), var(--card) 65%);
+  background: var(--card);
   border-bottom: 1px solid var(--border);
 }
 .wm-bar-inner {
-  min-height: 56px;
-  padding-block: 8px;
+  min-height: 44px;
+  padding-block: 6px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -67,13 +104,12 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   flex-shrink: 0;
   color: var(--primary);
   background: color-mix(in srgb, var(--primary) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--primary) 16%, transparent);
 }
 .wm-bar-copy {
   display: flex;
@@ -83,10 +119,9 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
   flex: 1;
 }
 .wm-bar-label {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   font-weight: 600;
-  letter-spacing: 0.01em;
   overflow-wrap: anywhere;
 }
 .wm-bar-detail {
@@ -101,8 +136,8 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 36px;
-  padding: 8px 14px;
+  min-height: 30px;
+  padding: 4px 12px;
   flex-shrink: 0;
   border-radius: 8px;
   background: var(--primary);
@@ -122,11 +157,18 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
   outline-offset: 3px;
 }
 .wm-deposit-support {
-  background: color-mix(in srgb, var(--primary) 3%, var(--card));
+  background: var(--card);
+}
+.wm-wallet-fund-menu {
+  gap: 10px;
 }
 .wm-wallet-fund-menu > button {
   min-height: 72px;
   gap: 12px;
+}
+.wm-wallet-fund-menu > button,
+.wm-deposit-support {
+  border-radius: 12px;
 }
 .wm-wallet-fund-menu > button > :first-child {
   min-width: 0;
@@ -150,6 +192,8 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
   background: color-mix(in srgb, var(--primary) 9%, transparent);
 }
 [data-windmarket-platform] [data-windmarket-card] {
+  border-color: color-mix(in srgb, var(--border) 80%, transparent);
+  box-shadow: 0 1px 4px #00000008;
   transition:
     border-color 160ms,
     background-color 160ms,
@@ -158,6 +202,8 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
 [data-windmarket-platform] [data-windmarket-card]:hover {
   transform: none;
   border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+  background: var(--card);
+  box-shadow: 0 3px 12px #0000000d;
 }
 [data-windmarket-platform] [data-windmarket-card]:focus-within {
   border-color: var(--primary);
