@@ -41,9 +41,22 @@ html:root.dark:has([data-windmarket-platform]) {
 }
 
 [data-windmarket-header] .wm-header-inner > a {
+  min-width: 0;
+  flex-shrink: 1;
   font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.025em;
+}
+[data-windmarket-header] .wm-header-inner > a > :first-child {
+  flex-shrink: 0;
+}
+[data-windmarket-header] .wm-header-inner > a > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wm-header-actions {
+  flex-shrink: 0;
 }
 .wm-header-search {
   min-width: 0;
@@ -216,6 +229,12 @@ html:root:has([data-windmarket-platform]) [role='dialog'] {
   }
 }
 @media (max-width: 640px) {
+  [data-windmarket-header] .wm-header-inner {
+    gap: 8px;
+  }
+  [data-windmarket-header] .wm-header-inner > a {
+    font-size: 18px;
+  }
   html:root:has([data-windmarket-platform]) main > footer {
     margin-top: 48px;
   }

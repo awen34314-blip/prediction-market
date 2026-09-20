@@ -16,7 +16,7 @@ export default async function Header() {
         <div className="wm-header-search hidden w-full items-center gap-2 lg:flex">
           <HeaderSearch />
         </div>
-        <div className="min-w-0 shrink md:min-w-fit md:shrink-0">
+        <div className="wm-header-actions min-w-0 shrink md:min-w-fit md:shrink-0">
           <div className="flex min-w-0 items-center gap-2">
             <HowItWorksDeferred />
             <HeaderMenu />
