@@ -5,10 +5,13 @@ import { NextResponse } from 'next/server'
 
 import { isAdminWallet } from '@/lib/admin'
 import { auth } from '@/lib/auth'
+import { isWindMarketResourcePath } from '@/lib/windmarket/resources'
 
 import { routing } from './i18n/routing'
 
 const intlMiddleware = createMiddleware(routing)
+// These editorial pages publish only their actual English/Chinese translations in HTML.
+const resourceIntlMiddleware = createMiddleware({ ...routing, alternateLinks: false })
 const protectedPrefixes = ['/settings', '/portfolio', '/admin']
 type Locale = (typeof routing.locales)[number]
 
@@ -49,6 +52,9 @@ export default async function proxy(request: NextRequest) {
   const isProtected = protectedPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
 
   if (!isProtected) {
+    if (isWindMarketResourcePath(pathname)) {
+      return resourceIntlMiddleware(request)
+    }
     return intlMiddleware(request)
   }
 

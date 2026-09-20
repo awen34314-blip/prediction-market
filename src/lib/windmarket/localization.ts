@@ -20,9 +20,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Join community',
     depositSupport: 'Deposit support',
     depositSupportDetail: 'Get help with your deposit · Telegram',
-    title: 'WindMarket | Prediction Markets for Real-World Events',
+    title: 'WindMarket | Prediction Markets for Southeast Asia',
     description:
-      'Explore prediction markets for real-world events on WindMarket. View market probabilities and learn about event rules and settlement.',
+      'WindMarket is a real-world event prediction platform for Southeast Asian communities. Explore market probabilities, rules and settlement with English and Chinese guides.',
     ogLocale: 'en_US',
   },
   zh: {
@@ -31,9 +31,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: '加入社区',
     depositSupport: '充值客服',
     depositSupportDetail: '联系客户服务 · Telegram',
-    title: 'WindMarket 风向市场｜真实世界事件预测市场',
+    title: '风向市场 WindMarket｜东南亚预测市场',
     description:
-      'WindMarket 风向市场是一个真实世界事件预测平台。浏览市场概率，了解事件规则与结算方式，与社区交流你的判断。',
+      '风向市场 WindMarket 是面向东南亚社区的真实世界事件预测平台。浏览市场概率，学习价格、规则、时区与结算方式，通过中英文指南了解预测市场。',
     ogLocale: 'zh_CN',
   },
   de: {
@@ -42,9 +42,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Beitreten',
     depositSupport: 'Hilfe bei Einzahlungen',
     depositSupportDetail: 'Support kontaktieren · Telegram',
-    title: 'WindMarket | Prognosemärkte für reale Ereignisse',
+    title: 'WindMarket | Prognosemärkte für Südostasien',
     description:
-      'Entdecke Prognosemärkte für reale Ereignisse auf WindMarket. Sieh dir Marktwahrscheinlichkeiten an und informiere dich über Regeln und Abrechnung.',
+      'WindMarket ist eine Plattform für Prognosemärkte mit Fokus auf Communitys in Südostasien. Entdecke Marktwahrscheinlichkeiten, Regeln und Abrechnung sowie Leitfäden auf Englisch und Chinesisch.',
     ogLocale: 'de_DE',
   },
   es: {
@@ -53,9 +53,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Unirse',
     depositSupport: 'Ayuda con depósitos',
     depositSupportDetail: 'Contactar con soporte · Telegram',
-    title: 'WindMarket | Mercados de predicción sobre eventos reales',
+    title: 'WindMarket | Mercados de predicción para el Sudeste Asiático',
     description:
-      'Explora mercados de predicción sobre eventos reales en WindMarket. Consulta las probabilidades del mercado y conoce las reglas y la liquidación.',
+      'WindMarket es una plataforma de predicción de eventos reales centrada en las comunidades del Sudeste Asiático. Explora probabilidades, reglas y liquidación, con guías en inglés y chino.',
     ogLocale: 'es_ES',
   },
   pt: {
@@ -64,9 +64,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Participar',
     depositSupport: 'Ajuda com depósitos',
     depositSupportDetail: 'Fale com o suporte · Telegram',
-    title: 'WindMarket | Mercados de previsão sobre eventos reais',
+    title: 'WindMarket | Mercados de previsão para o Sudeste Asiático',
     description:
-      'Explore mercados de previsão sobre eventos reais na WindMarket. Veja as probabilidades do mercado e conheça as regras e a liquidação.',
+      'WindMarket é uma plataforma de previsão de eventos reais voltada às comunidades do Sudeste Asiático. Explore probabilidades, regras e liquidação, com guias em inglês e chinês.',
     ogLocale: 'pt_BR',
   },
   fr: {
@@ -75,9 +75,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Rejoindre',
     depositSupport: 'Aide aux dépôts',
     depositSupportDetail: 'Contacter le support · Telegram',
-    title: 'WindMarket | Marchés prédictifs sur des événements réels',
+    title: 'WindMarket | Marchés prédictifs pour l’Asie du Sud-Est',
     description:
-      'Explorez les marchés prédictifs sur des événements réels avec WindMarket. Consultez les probabilités et découvrez les règles et le règlement des marchés.',
+      'WindMarket est une plateforme de prédiction axée sur les communautés d’Asie du Sud-Est. Découvrez les probabilités, les règles et le règlement des marchés, avec des guides en anglais et en chinois.',
     ogLocale: 'fr_FR',
   },
   ja: {
@@ -86,9 +86,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: '参加する',
     depositSupport: '入金サポート',
     depositSupportDetail: 'サポートに問い合わせ · Telegram',
-    title: 'WindMarket | 現実の出来事を対象とした予測市場',
+    title: 'WindMarket | 東南アジアのコミュニティに向けた予測市場',
     description:
-      'WindMarket で現実の出来事を対象とした予測市場を探しましょう。市場の確率を確認し、イベントのルールや決済方法について知ることができます。',
+      'WindMarket は東南アジアのコミュニティに向けた、現実の出来事を対象とする予測市場プラットフォームです。市場の確率、ルール、決済の仕組みを確認でき、英語と中国語の入門ガイドも用意しています。',
     ogLocale: 'ja_JP',
   },
   ar: {
@@ -97,9 +97,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'انضم للمجتمع',
     depositSupport: 'مساعدة في الإيداع',
     depositSupportDetail: 'تواصل مع الدعم · Telegram',
-    title: 'WindMarket | أسواق التوقعات للأحداث الواقعية',
+    title: 'WindMarket | أسواق التوقعات لمجتمعات جنوب شرق آسيا',
     description:
-      'استكشف أسواق التوقعات للأحداث الواقعية على WindMarket. اطّلع على احتمالات السوق وتعرّف على قواعد الأحداث وآلية التسوية.',
+      'WindMarket منصة لتوقع الأحداث الواقعية تركز على مجتمعات جنوب شرق آسيا. استكشف احتمالات السوق والقواعد والتسوية، مع أدلة بالإنجليزية والصينية.',
     ogLocale: 'ar_SA',
   },
   ru: {
@@ -108,9 +108,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Присоединиться',
     depositSupport: 'Помощь с пополнением',
     depositSupportDetail: 'Связаться с поддержкой · Telegram',
-    title: 'WindMarket | Рынки прогнозов на реальные события',
+    title: 'WindMarket | Рынки прогнозов для Юго-Восточной Азии',
     description:
-      'Изучайте рынки прогнозов на реальные события на WindMarket. Просматривайте рыночные вероятности и узнавайте правила событий и порядок расчётов.',
+      'WindMarket — платформа прогнозов на реальные события для сообществ Юго-Восточной Азии. Изучайте вероятности, правила и расчёты, а также руководства на английском и китайском языках.',
     ogLocale: 'ru_RU',
   },
   it: {
@@ -119,9 +119,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Unisciti',
     depositSupport: 'Assistenza depositi',
     depositSupportDetail: 'Contatta il supporto · Telegram',
-    title: 'WindMarket | Mercati di previsione su eventi reali',
+    title: 'WindMarket | Mercati di previsione per il Sud-est asiatico',
     description:
-      'Esplora i mercati di previsione su eventi reali su WindMarket. Consulta le probabilità di mercato e scopri le regole degli eventi e le modalità di liquidazione.',
+      'WindMarket è una piattaforma di previsione di eventi reali rivolta alle comunità del Sud-est asiatico. Esplora probabilità, regole e liquidazione, con guide in inglese e cinese.',
     ogLocale: 'it_IT',
   },
   pl: {
@@ -130,9 +130,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Dołącz',
     depositSupport: 'Pomoc z wpłatami',
     depositSupportDetail: 'Skontaktuj się z pomocą · Telegram',
-    title: 'WindMarket | Rynki prognostyczne dotyczące rzeczywistych wydarzeń',
+    title: 'WindMarket | Rynki prognostyczne dla Azji Południowo-Wschodniej',
     description:
-      'Odkrywaj rynki prognostyczne dotyczące rzeczywistych wydarzeń na WindMarket. Sprawdzaj prawdopodobieństwa rynkowe, zasady wydarzeń i sposób rozliczania.',
+      'WindMarket to platforma prognoz dotyczących rzeczywistych wydarzeń dla społeczności Azji Południowo-Wschodniej. Poznaj prawdopodobieństwa, zasady i rozliczanie oraz poradniki po angielsku i chińsku.',
     ogLocale: 'pl_PL',
   },
   ko: {
@@ -141,9 +141,9 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: '참여하기',
     depositSupport: '입금 지원',
     depositSupportDetail: '고객 지원 문의 · Telegram',
-    title: 'WindMarket | 실제 사건을 위한 예측 시장',
+    title: 'WindMarket | 동남아시아 커뮤니티를 위한 예측 시장',
     description:
-      'WindMarket에서 실제 사건에 대한 예측 시장을 살펴보세요. 시장 확률을 확인하고 사건의 규칙과 정산 방식을 알아보세요.',
+      'WindMarket은 동남아시아 커뮤니티를 위한 실제 사건 예측 플랫폼입니다. 시장 확률, 규칙, 정산 방식을 살펴보고 영어와 중국어 입문 가이드를 읽어 보세요.',
     ogLocale: 'ko_KR',
   },
 }

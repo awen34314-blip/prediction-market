@@ -18,6 +18,7 @@ import {
   getSitemapIds,
   PREDICTIONS_SITEMAP_PREFIX,
 } from '@/lib/sitemap'
+import { buildWindMarketResourceSitemap } from '@/lib/windmarket/resource-seo'
 
 const BASE_PATHS = ['/', '/activity', '/leaderboard', '/mentions', '/portfolio', '/predictions', '/tos'] as const
 
@@ -46,7 +47,10 @@ async function buildSitemapEntries(
   enabledLocales: SupportedLocale[],
 ): Promise<MetadataRoute.Sitemap> {
   if (sitemapId === BASE_SITEMAP_ID) {
-    return buildPathEntries(BASE_PATHS, siteUrl, lastModified, enabledLocales)
+    return [
+      ...buildPathEntries(BASE_PATHS, siteUrl, lastModified, enabledLocales),
+      ...buildWindMarketResourceSitemap(siteUrl, enabledLocales),
+    ]
   }
 
   if (sitemapId === DOCS_SITEMAP_ID) {

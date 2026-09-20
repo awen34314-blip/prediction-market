@@ -83,7 +83,7 @@ describe('WindMarket localized homepage SEO', () => {
       zh: `${siteUrl}/zh`,
       'x-default': `${siteUrl}/`,
     })
-    expect(chinese.title).toEqual({ absolute: 'WindMarket 风向市场｜真实世界事件预测市场' })
+    expect(chinese.title).toEqual({ absolute: '风向市场 WindMarket｜东南亚预测市场' })
     expect(chinese.description).not.toBe(english.description)
     expect(chinese.openGraph).toMatchObject({ url: `${siteUrl}/zh`, locale: 'zh_CN', alternateLocale: ['en_US'] })
   })

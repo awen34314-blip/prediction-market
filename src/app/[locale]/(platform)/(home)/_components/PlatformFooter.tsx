@@ -22,6 +22,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import ResourceLinks from '@/components/windmarket/ResourceLinks'
 import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { LOCALE_LABELS, normalizeEnabledLocales, SUPPORTED_LOCALES } from '@/i18n/locales'
 import { Link, usePathname } from '@/i18n/navigation'
@@ -553,6 +554,7 @@ export default function PlatformFooter({
           <span>{site.name}</span>
         </Link>
         <p className="mt-3 max-w-xl text-base font-medium text-foreground/90">{site.description}</p>
+        <ResourceLinks locale={locale} />
       </div>
 
       <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-1 sm:gap-12 lg:grid-cols-12">
