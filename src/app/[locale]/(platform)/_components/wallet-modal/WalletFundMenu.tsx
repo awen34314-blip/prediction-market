@@ -1,7 +1,7 @@
 'use client'
 
 import { CircleDollarSignIcon, CreditCardIcon, ExternalLinkIcon, WalletIcon } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useExtracted, useLocale } from 'next-intl'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 
@@ -12,6 +12,7 @@ import {
   TRANSFER_PAYMENT_METHODS,
 } from '@/app/[locale]/(platform)/_components/wallet-modal/utils'
 import { Skeleton } from '@/components/ui/skeleton'
+import DepositSupport from '@/components/windmarket/DepositSupport'
 import { IS_TEST_MODE } from '@/lib/network'
 import { cn } from '@/lib/utils'
 
@@ -37,6 +38,7 @@ function WalletFundMenu({
   isBalanceLoading?: boolean
 }) {
   const t = useExtracted()
+  const locale = useLocale()
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   const logoVariant = isDark ? 'dark' : 'light'
@@ -48,7 +50,7 @@ function WalletFundMenu({
   const formattedWalletBalance = walletBalance && walletBalance !== '' ? walletBalance : '0.00'
 
   return (
-    <div className="grid gap-2">
+    <div className="wm-wallet-fund-menu grid gap-2">
       {IS_TEST_MODE && (
         <a
           href={TEST_MODE_DISCORD_URL}
@@ -186,6 +188,7 @@ function WalletFundMenu({
           ))}
         </div>
       </button>
+      <DepositSupport locale={locale} />
     </div>
   )
 }
