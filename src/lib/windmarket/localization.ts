@@ -22,7 +22,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Get help with your deposit · Telegram',
     title: 'Prediction Markets for Southeast Asia | WindMarket',
     description:
-      'WindMarket is a prediction market platform focused on Southeast Asian communities. Explore real-world events, probabilities, rules and settlement with English and Chinese guides.',
+      'WindMarket is a prediction market platform for Southeast Asia. Start with current markets and learn about planned categories including stocks, gold and more.',
     ogLocale: 'en_US',
   },
   zh: {
@@ -33,7 +33,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: '联系客户服务 · Telegram',
     title: '东南亚预测市场｜风向市场 WindMarket',
     description:
-      '风向市场 WindMarket 专注东南亚预测市场，提供真实世界事件的市场概率、规则与结算信息。通过中英文入门指南，了解如何阅读市场、核对当地时区与充值网络。',
+      '风向市场 WindMarket 专注东南亚预测市场。浏览当前市场，了解市场概率、规则与结算；后续计划扩展股票、黄金及更多事件类别。',
     ogLocale: 'zh_CN',
   },
   de: {

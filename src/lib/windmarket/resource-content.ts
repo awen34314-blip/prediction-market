@@ -21,7 +21,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
   about: {
     zh: {
       intro:
-        '风向市场（WindMarket）专注东南亚预测市场，围绕真实世界事件，为东南亚社区提供市场信息、中英文入门指南和交流入口。我们希望让读者用清晰的问题、可核对的规则和市场概率，理解正在发生的事情。',
+        '风向市场（WindMarket）面向东南亚社区，打造多品类预测市场。我们的发展方向包括加密货币、股票、黄金及其他真实世界事件，并通过中英文指南，帮助读者理解市场概率与判定规则。',
       takeaway: '先理解问题，再看概率。每个市场的具体规则，比标题更重要。',
       sections: [
         {
@@ -31,6 +31,15 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
             '新闻讨论常常停留在“我觉得会发生”。预测市场进一步明确：发生什么、在什么时间之前、用什么来源判断结果。参与者对不同结果的买卖形成市场价格，让分散的判断以一种可观察的方式呈现。',
             '风向市场提供浏览事件、阅读规则和查看市场价格的入口。价格反映参与者当下的判断，也会受流动性、买卖价差和新信息影响；它不是对结果的保证。',
           ],
+        },
+        {
+          id: 'market-scope',
+          heading: '从首批市场，逐步拓展更多品类',
+          paragraphs: [
+            '首批市场从 BTC 开始，后续计划扩展股票、黄金及更多事件类别。具体已经开放哪些事件，请查看当前市场列表；计划中的品类会在实际开放后展示。',
+            '每个市场都有自己的问题、数据来源、时间区间和结算条件。BTC 专题中的 4 小时周期和价格来源仅适用于对应事件，未来股票、黄金等市场需要分别阅读各自的规则。',
+          ],
+          links: [{ label: '浏览所有已开放市场', href: '/' }],
         },
         {
           id: 'community',
@@ -68,7 +77,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
     },
     en: {
       intro:
-        'WindMarket focuses on prediction markets for Southeast Asian communities, bringing together real-world event markets, English and Chinese guides, and a place to discuss what is happening. Clearly defined questions, verifiable rules and market probabilities help readers understand each event.',
+        'WindMarket is building a multi-category prediction market platform for Southeast Asian communities. Our direction spans crypto, stocks, gold and other real-world events, with English and Chinese guides that explain market probabilities and rules.',
       takeaway:
         'Understand the question before reading the probability. The detailed rules matter more than the headline.',
       sections: [
@@ -79,6 +88,15 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
             'A discussion often starts with “I think this will happen.” A prediction market makes the question more precise: what must happen, by when, and which source determines the result? Buying and selling different outcomes gives participants a way to express their views through observable market prices.',
             'WindMarket provides a place to browse events, read their rules and view prices. Those prices reflect current participant views, but also respond to liquidity, bid–ask spreads and new information. They are not guarantees about the outcome.',
           ],
+        },
+        {
+          id: 'market-scope',
+          heading: 'More categories as the platform grows',
+          paragraphs: [
+            'The first markets focus on Bitcoin. We plan to add stock, gold and other event categories over time. The current market list shows which events are open; planned categories will appear when they become available.',
+            'Each market has its own question, data source, time window and settlement conditions. The four-hour format and price source in our BTC guide apply to the corresponding event. Future stock or gold markets will need to be read according to their own rules.',
+          ],
+          links: [{ label: 'Browse all available markets', href: '/' }],
         },
         {
           id: 'community',
@@ -305,7 +323,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           id: 'reading',
           heading: '建立自己的市场阅读顺序',
           paragraphs: [
-            '无论关注全球新闻、体育还是加密资产相关事件，都可以用同一套顺序检查页面。实际有哪些市场，应以当前市场列表为准。',
+            '无论关注加密货币、股票、黄金、全球新闻还是体育相关事件，都可以用同一套顺序检查页面。这些是可能的事件类别，实际已开放的市场以当前市场列表为准。',
           ],
           points: [
             '问题：这个市场如何定义“发生”或“未发生”？',
@@ -375,7 +393,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           id: 'reading',
           heading: 'Build a consistent reading routine',
           paragraphs: [
-            'Whether following global news, sport or crypto-related events, you can use the same sequence to read a market. Refer to the current market list for events actually available.',
+            'Whether following crypto, stocks, gold, global news or sport-related events, you can use the same sequence to read a market. These are possible event categories; refer to the current market list for events actually available.',
           ],
           points: [
             'Question: what exactly counts as the event happening or not happening?',
@@ -391,7 +409,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
   'bitcoin-up-or-down': {
     en: {
       intro:
-        'A Bitcoin Up or Down market asks a precise question about a defined time window. Reading it means separating the BTC reference price, the price of an outcome share and the rules that determine the result. This guide explains those differences using WindMarket’s 4-hour market format and local-time examples for Southeast Asian readers.',
+        'A Bitcoin Up or Down market asks a precise question about a defined time window. Reading it means separating the BTC reference price, the price of an outcome share and the rules that determine the result. This guide uses a 4-hour BTC market as one example within WindMarket’s broader prediction-market direction, with local-time examples for Southeast Asian readers. Other markets can have different time windows, data sources and settlement conditions.',
       takeaway:
         'The event title defines the time window. Rules & Resolution defines the price source and winning condition. Your purchase time does not reset either of them.',
       sections: [
@@ -475,13 +493,13 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
             'Convert the deadline using the correct date and time zone.',
             'Check executable prices, fees and the official result before relying on an expected payout.',
           ],
-          links: [{ label: 'Browse the current crypto market list', href: '/crypto' }],
+          links: [{ label: 'Browse all available markets', href: '/' }],
         },
       ],
     },
     zh: {
       intro:
-        'BTC 涨跌预测市场围绕一个有明确时间区间的问题展开。读懂它，需要把比特币参考价格、结果份额的报价和最终判定规则分开。这篇指南结合风向市场的 4 小时市场形式，用东南亚当地时间示例解释这些信息。',
+        'BTC 涨跌预测市场围绕一个有明确时间区间的问题展开。读懂它，需要把比特币参考价格、结果份额的报价和最终判定规则分开。这篇指南选用 4 小时 BTC 市场作为风向市场多品类方向中的一个示例，并对照东南亚当地时间说明。其他市场可以有不同的时间区间、数据来源和结算条件。',
       takeaway: '事件标题确定观察区间，“规则与结算”确定数据来源和获胜条件。你的买入时间不会重新设置这两项。',
       sections: [
         {
@@ -557,7 +575,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
             '结合实际日期和时区换算截止时间。',
             '核对可成交报价、费用和官方结果，再理解预期兑付。',
           ],
-          links: [{ label: '浏览当前加密市场列表', href: '/crypto' }],
+          links: [{ label: '浏览所有已开放市场', href: '/' }],
         },
       ],
     },

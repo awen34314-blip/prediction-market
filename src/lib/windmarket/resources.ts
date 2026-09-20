@@ -26,14 +26,14 @@ export const windmarketResources: Record<
         title: '关于风向市场 WindMarket｜东南亚预测市场与社区',
         heading: '面向东南亚的预测市场：风向市场',
         description:
-          '认识风向市场 WindMarket，了解我们专注东南亚预测市场的方向：真实世界事件、清晰的市场规则、中英文入门指南与官方社区。',
+          '认识风向市场 WindMarket：面向东南亚社区的预测市场平台，了解加密货币、股票、黄金等多品类市场的发展方向，以及市场规则、中英文指南与社区。',
       },
       en: {
         label: 'About WindMarket',
         title: 'About WindMarket | Prediction Markets for Southeast Asia',
         heading: 'Prediction markets for Southeast Asia',
         description:
-          'Meet WindMarket and our focus on prediction markets for Southeast Asian communities: real-world events, clear market rules, English and Chinese guides, and community support.',
+          'Meet WindMarket, a prediction market platform for Southeast Asia, and our plans for markets spanning crypto, stocks, gold and other real-world events.',
       },
     },
   },
