@@ -23,8 +23,8 @@ describe('WindMarket editorial SEO', () => {
   it('publishes only actual translations, with matching sitemap and HTML canonicals', () => {
     const enabledLocales = [...SUPPORTED_LOCALES]
     const sitemap = buildWindMarketResourceSitemap(siteUrl, enabledLocales)
-    expect(sitemap).toHaveLength(6)
-    expect(new Set(sitemap.map((entry) => entry.url)).size).toBe(6)
+    expect(sitemap).toHaveLength(8)
+    expect(new Set(sitemap.map((entry) => entry.url)).size).toBe(8)
     for (const id of ids) {
       const english = buildWindMarketResourceMetadata({ id, locale: 'en', siteUrl, enabledLocales, inherited })
       const chinese = buildWindMarketResourceMetadata({ id, locale: 'zh', siteUrl, enabledLocales, inherited })
@@ -44,7 +44,7 @@ describe('WindMarket editorial SEO', () => {
   it('does not advertise disabled Chinese pages and always retains English fallback', () => {
     for (const enabledLocales of [[], ['en'], ['de']] as const) {
       const sitemap = buildWindMarketResourceSitemap(siteUrl, [...enabledLocales])
-      expect(sitemap).toHaveLength(3)
+      expect(sitemap).toHaveLength(4)
       for (const entry of sitemap) {
         expect(entry.alternates?.languages).toEqual({ en: entry.url, 'x-default': entry.url })
         expect(entry.url).not.toContain('/zh/')
@@ -52,9 +52,10 @@ describe('WindMarket editorial SEO', () => {
     }
   })
 
-  it('limits the alternate-header exception to the three editorial routes', () => {
+  it('limits the alternate-header exception to the four editorial routes', () => {
     expect(isWindMarketResourcePath('/about')).toBe(true)
     expect(isWindMarketResourcePath('/learn/southeast-asia/')).toBe(true)
+    expect(isWindMarketResourcePath('/learn/bitcoin-up-or-down')).toBe(true)
     for (const path of [
       '/',
       '/admin',

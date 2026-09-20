@@ -388,6 +388,180 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
       ],
     },
   },
+  'bitcoin-up-or-down': {
+    en: {
+      intro:
+        'A Bitcoin Up or Down market asks a precise question about a defined time window. Reading it means separating the BTC reference price, the price of an outcome share and the rules that determine the result. This guide explains those differences using WindMarket’s 4-hour market format and local-time examples for Southeast Asian readers.',
+      takeaway:
+        'The event title defines the time window. Rules & Resolution defines the price source and winning condition. Your purchase time does not reset either of them.',
+      sections: [
+        {
+          id: 'window',
+          heading: '1. What does a 4-hour market mean?',
+          paragraphs: [
+            'The “4h” label describes the event’s fixed four-hour observation window, with a start and end time shown on its page. It does not mean that every buyer receives four hours from the moment they enter. Someone viewing the market near its deadline is looking at the same event window as someone who arrived earlier.',
+            'Read the full date, start time, end time and time zone together. Different intervals or successive rounds are separate questions; check the selected event’s title again after navigating between them. The duration label alone does not tell you whether a market is currently open.',
+          ],
+        },
+        {
+          id: 'prices',
+          heading: '2. Price To Beat is different from a share price',
+          paragraphs: [
+            'Price To Beat is the BTC reference baseline shown for the event. The current-price display tracks the reference market data. Up and Down shares have their own order-book prices, which represent what participants are offering or asking for those outcomes. Buying an Up share does not buy Bitcoin itself.',
+            'A 60¢ Up quote is often read as an implied probability of about 60%, subject to the quoting method and available liquidity. It is not a forecast that Bitcoin will rise by 60%. The order preview and executable bids and asks determine the cost of an order.',
+          ],
+          example: {
+            label: 'Illustrative numbers, not a live quote',
+            text: 'A page might show a BTC baseline of $80,000 alongside an Up share priced at $0.60. The first number helps define the event’s comparison; the second is a price for one outcome share. They describe different things, so neither can be substituted for the other.',
+          },
+          links: [{ label: 'How prediction market prices work', href: '/learn/prediction-markets' }],
+        },
+        {
+          id: 'source',
+          heading: '3. Which Bitcoin price determines the outcome?',
+          paragraphs: [
+            'Open Rules & Resolution on the selected event. Check the named source, comparison method, observation times and how an exactly equal price is treated. A price moving above the baseline during the event is not, by itself, proof of the final result.',
+            'For example, the WindMarket BTC market dated 19 September 2026, 4–8 PM ET, names a Chainlink BTC/USD TWAP data stream. TWAP means time-weighted average price. That rule refers to a specific price measure, rather than whichever spot exchange or chart a reader happens to be watching. The event window and a data stream’s averaging period are separate concepts.',
+            'That example’s written comparison includes equality on the Up side. Read each event’s own rules before applying that condition elsewhere. If the averaging period or observation details are unclear, consult the named source and official support instead of inferring a formula from the “4h” label.',
+          ],
+          links: [{ label: 'Read the dated example’s Rules & Resolution', href: '/event/btc-updown-4h-1789848000' }],
+        },
+        {
+          id: 'timezones',
+          heading: '4. Read the event window in your local time',
+          paragraphs: [
+            'ET means US Eastern Time, which changes with daylight saving time. Use the event’s actual date when converting it. The example below is a hypothetical window on 21 September 2026; it is not an announcement of a live market or a recurring local schedule.',
+            'For that date, 4–8 AM in New York is 08:00–12:00 UTC. All local times in this table fall on 21 September. A different event date or window can produce different offsets or cross midnight.',
+          ],
+          table: {
+            caption: 'Example only: 21 September 2026, 4–8 AM ET',
+            headers: ['City / location', 'Local observation window'],
+            rows: [
+              ['Manila, Philippines', '16:00–20:00'],
+              ['Singapore', '16:00–20:00'],
+              ['Kuala Lumpur, Malaysia', '16:00–20:00'],
+              ['Bangkok, Thailand', '15:00–19:00'],
+              ['Ho Chi Minh City, Vietnam', '15:00–19:00'],
+              ['Jakarta, Indonesia', '15:00–19:00'],
+              ['Bali, Indonesia', '16:00–20:00'],
+            ],
+          },
+          links: [{ label: 'More Southeast Asia time-zone and language guidance', href: '/learn/southeast-asia' }],
+        },
+        {
+          id: 'settlement',
+          heading: '5. What happens when the countdown ends?',
+          paragraphs: [
+            'The observation window ending, a final price becoming available and the official result being recorded are different steps. A finished countdown or a chart label alone does not establish that shares are ready to redeem. Check the event’s resolution status and your position’s available actions.',
+            'Under the platform’s standard binary settlement, a winning share redeems for $1 and a losing share for $0. Trading costs depend on your fill price and fees; an unresolved, cancelled or exceptional outcome follows its applicable rules. Selling before resolution also requires an available buyer and does not guarantee a particular exit price.',
+          ],
+          links: [
+            {
+              label: 'Official market resolution documentation',
+              href: '/docs/resolution-settlement/market-resolution',
+            },
+          ],
+        },
+        {
+          id: 'check',
+          heading: 'A quick reading checklist',
+          paragraphs: [
+            'Use this order when reviewing a BTC event. The guide explains how to read the page; it does not predict the next move.',
+          ],
+          points: [
+            'Confirm the event date, observation window and current status.',
+            'Separate the BTC baseline from the Up and Down share quotes.',
+            'Read the exact resolution source, comparison and equality rule.',
+            'Convert the deadline using the correct date and time zone.',
+            'Check executable prices, fees and the official result before relying on an expected payout.',
+          ],
+          links: [{ label: 'Browse the current crypto market list', href: '/crypto' }],
+        },
+      ],
+    },
+    zh: {
+      intro:
+        'BTC 涨跌预测市场围绕一个有明确时间区间的问题展开。读懂它，需要把比特币参考价格、结果份额的报价和最终判定规则分开。这篇指南结合风向市场的 4 小时市场形式，用东南亚当地时间示例解释这些信息。',
+      takeaway: '事件标题确定观察区间，“规则与结算”确定数据来源和获胜条件。你的买入时间不会重新设置这两项。',
+      sections: [
+        {
+          id: 'window',
+          heading: '1. 4 小时市场是什么意思？',
+          paragraphs: [
+            '“4h”表示该事件有一个固定的四小时观察区间，起止时间写在页面上。它不代表每个人买入后都会再获得四小时。接近截止时间才打开页面的人，看到的仍然是同一个事件区间。',
+            '把完整日期、开始时间、结束时间和时区一起核对。不同周期或连续轮次对应不同的问题；切换后重新确认所选事件的标题。仅凭“4h”标签，不能判断这个市场是否还在交易中。',
+          ],
+        },
+        {
+          id: 'prices',
+          heading: '2. 基准价格和份额价格有什么区别？',
+          paragraphs: [
+            'Price To Beat（基准价格）是该事件展示的比特币参考基准，“当前价格”展示参考行情。“上涨”和“下跌”份额则有各自的订单簿报价，表示参与者愿意为对应结果支付或接受的价格。买入“上涨”份额不等于买入比特币。',
+            '“上涨”报价为 60 美分时，通常会被解读为约 60% 的隐含概率，还需要结合报价方式与流动性理解。它不是说比特币会涨 60%。订单预览和实际可成交的买卖报价决定交易成本。',
+          ],
+          example: {
+            label: '假设示例，不是实时行情',
+            text: '页面可能同时显示 80,000 美元的 BTC 基准价格，以及每份 0.60 美元的“上涨”报价。前者用于理解事件比较的基准，后者是一份结果份额的价格，两者不能互相代替。',
+          },
+          links: [{ label: '了解预测市场的价格与概率', href: '/learn/prediction-markets' }],
+        },
+        {
+          id: 'source',
+          heading: '3. 到底使用哪个比特币价格判定结果？',
+          paragraphs: [
+            '打开所选事件的“规则与结算”，核对指定数据源、比较方法、观察时间，以及价格恰好相等时如何处理。观察期间一度高于基准，并不能单独证明最终结果。',
+            '例如，风向市场 2026 年 9 月 19 日美东时间下午 4–8 点的 BTC 市场，指定了 Chainlink BTC/USD TWAP 数据流。TWAP 指时间加权平均价格。这里使用的是规则指定的价格指标，不能随意换成某家交易所的即时价格或另一张图表。事件的观察区间和数据流的平均计算周期是两个概念。',
+            '该示例市场的书面条件把价格相等归入“上涨”。其他事件仍需分别阅读自己的规则。若平均计算周期或观察细节不清楚，应查看指定来源并向官方支持核实，不要仅凭“4h”推测计算公式。',
+          ],
+          links: [{ label: '查看上述日期市场的规则与结算', href: '/event/btc-updown-4h-1789848000' }],
+        },
+        {
+          id: 'timezones',
+          heading: '4. 换算成东南亚当地时间',
+          paragraphs: [
+            'ET 是美国东部时间，会随夏令时改变。换算时要带上事件的实际日期。下表使用 2026 年 9 月 21 日的一个假设区间，不代表正在开放的市场或固定的当地排期。',
+            '在这个日期，纽约上午 4–8 点对应 UTC 08:00–12:00。表内当地时间都在 9 月 21 日；换成其他日期或时间段，时差可能不同，也可能跨越午夜。',
+          ],
+          table: {
+            caption: '仅作示例：2026 年 9 月 21 日美东时间上午 4–8 点',
+            headers: ['城市 / 地区', '当地观察时间'],
+            rows: [
+              ['菲律宾 · 马尼拉', '16:00–20:00'],
+              ['新加坡', '16:00–20:00'],
+              ['马来西亚 · 吉隆坡', '16:00–20:00'],
+              ['泰国 · 曼谷', '15:00–19:00'],
+              ['越南 · 胡志明市', '15:00–19:00'],
+              ['印尼 · 雅加达', '15:00–19:00'],
+              ['印尼 · 巴厘岛', '16:00–20:00'],
+            ],
+          },
+          links: [{ label: '更多东南亚时区与语言说明', href: '/learn/southeast-asia' }],
+        },
+        {
+          id: 'settlement',
+          heading: '5. 倒计时结束后会发生什么？',
+          paragraphs: [
+            '观察区间结束、最终参考价格可用、官方结果被记录，是不同的步骤。倒计时归零或图表出现最终价格，并不能单独证明份额已经可以兑付。需要查看事件的结算状态和持仓中实际可用的操作。',
+            '按照平台标准二元结算规则，获胜份额每份兑付 1 美元，失败份额兑付 0 美元。交易成本取决于实际成交价和费用；未决、取消或特殊结果按对应规则处理。结算前卖出还需要可成交的买方，不保证能以某个价格退出。',
+          ],
+          links: [{ label: '官方市场结算文档（英文）', href: '/docs/resolution-settlement/market-resolution' }],
+        },
+        {
+          id: 'check',
+          heading: '快速阅读清单',
+          paragraphs: ['查看 BTC 事件时可以按以下顺序核对。这篇指南解释页面信息，不预测下一次价格走势。'],
+          points: [
+            '确认事件日期、观察区间和当前状态。',
+            '区分 BTC 基准价格与“上涨、下跌”份额报价。',
+            '核对准确的数据来源、比较条件及相等时的处理方式。',
+            '结合实际日期和时区换算截止时间。',
+            '核对可成交报价、费用和官方结果，再理解预期兑付。',
+          ],
+          links: [{ label: '浏览当前加密市场列表', href: '/crypto' }],
+        },
+      ],
+    },
+  },
 }
 
 export function getWindMarketResourceContent(id: WindMarketResourceId, locale: WindMarketResourceLocale) {

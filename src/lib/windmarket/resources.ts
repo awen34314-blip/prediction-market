@@ -4,7 +4,7 @@ import { normalizeEnabledLocales } from '@/i18n/locales'
 import { withLocalePrefix } from '@/lib/locale-path'
 
 export type WindMarketResourceLocale = 'en' | 'zh'
-export type WindMarketResourceId = 'about' | 'prediction-markets' | 'southeast-asia'
+export type WindMarketResourceId = 'about' | 'prediction-markets' | 'southeast-asia' | 'bitcoin-up-or-down'
 
 interface ResourceCopy {
   label: string
@@ -74,6 +74,26 @@ export const windmarketResources: Record<
         heading: 'A prediction market guide for Southeast Asia',
         description:
           'A practical guide for Southeast Asian readers: compare local time zones, read market rules in context, and understand deposit networks and service availability.',
+      },
+    },
+  },
+  'bitcoin-up-or-down': {
+    path: '/learn/bitcoin-up-or-down',
+    updated: '2026-09-21',
+    copy: {
+      en: {
+        label: 'Bitcoin Up or Down guide',
+        title: 'Bitcoin Up or Down: 4-Hour Prediction Market Guide | WindMarket',
+        heading: 'How to read a Bitcoin Up or Down market',
+        description:
+          'Understand a 4-hour Bitcoin prediction market: Price To Beat, Up and Down share prices, Chainlink TWAP rules, settlement and Southeast Asian time zones.',
+      },
+      zh: {
+        label: 'BTC 涨跌市场指南',
+        title: 'BTC 涨跌预测怎么看？4 小时市场与结算指南｜风向市场',
+        heading: '读懂 BTC 涨跌预测的 4 小时市场',
+        description:
+          '了解 BTC 涨跌预测市场的固定观察区间、基准价格、份额报价、Chainlink TWAP 数据与结算状态，并对照东南亚当地时区阅读市场规则。',
       },
     },
   },
