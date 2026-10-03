@@ -23,32 +23,30 @@ describe('WindMarket editorial SEO', () => {
   it('publishes only actual translations, with matching sitemap and HTML canonicals', () => {
     const enabledLocales = [...SUPPORTED_LOCALES]
     const sitemap = buildWindMarketResourceSitemap(siteUrl, enabledLocales)
-    expect(sitemap).toHaveLength(8)
-    expect(new Set(sitemap.map((entry) => entry.url)).size).toBe(8)
+    expect(sitemap).toHaveLength(12)
+    expect(new Set(sitemap.map((entry) => entry.url)).size).toBe(12)
     for (const id of ids) {
       const english = buildWindMarketResourceMetadata({ id, locale: 'en', siteUrl, enabledLocales, inherited })
       const chinese = buildWindMarketResourceMetadata({ id, locale: 'zh', siteUrl, enabledLocales, inherited })
       expect(english.alternates?.languages).toEqual(chinese.alternates?.languages)
-      expect(Object.keys(english.alternates?.languages ?? {})).toEqual(['en', 'zh', 'x-default'])
+      expect(Object.keys(english.alternates?.languages ?? {})).toEqual(['zh-hant', 'en', 'zh', 'x-default'])
       expect(english.description).not.toBe(chinese.description)
       for (const metadata of [english, chinese]) {
         const entry = sitemap.find((item) => item.url === metadata.alternates?.canonical)
         expect(entry?.lastModified).toBe(windmarketResources[id].updated)
         expect(entry?.alternates?.languages).toEqual(metadata.alternates?.languages)
       }
-      expect(english.alternates?.canonical).toBe(`${siteUrl}${windmarketResources[id].path}`)
+      expect(english.alternates?.canonical).toBe(`${siteUrl}/en${windmarketResources[id].path}`)
       expect(chinese.alternates?.canonical).toBe(`${siteUrl}/zh${windmarketResources[id].path}`)
     }
   })
 
-  it('does not advertise disabled Chinese pages and always retains English fallback', () => {
-    for (const enabledLocales of [[], ['en'], ['de']] as const) {
-      const sitemap = buildWindMarketResourceSitemap(siteUrl, [...enabledLocales])
-      expect(sitemap).toHaveLength(4)
-      for (const entry of sitemap) {
-        expect(entry.alternates?.languages).toEqual({ en: entry.url, 'x-default': entry.url })
-        expect(entry.url).not.toContain('/zh/')
-      }
+  it('retains the default Traditional Chinese pages when other languages are disabled', () => {
+    const sitemap = buildWindMarketResourceSitemap(siteUrl, [])
+    expect(sitemap).toHaveLength(4)
+    for (const entry of sitemap) {
+      expect(entry.alternates?.languages).toEqual({ 'zh-hant': entry.url, 'x-default': entry.url })
+      expect(entry.url).not.toContain('/zh/')
     }
   })
 
@@ -75,11 +73,14 @@ describe('WindMarket editorial SEO', () => {
 
   it('serves readable content and navigation without client rendering', () => {
     for (const id of ids) {
-      for (const locale of ['en', 'zh'] as const) {
-        const html = renderToStaticMarkup(<ResourceArticle id={id} locale={locale} languages={['en', 'zh']} />)
+      for (const locale of ['en', 'zh', 'zh-hant'] as const) {
+        const html = renderToStaticMarkup(<ResourceArticle id={id} locale={locale} languages={['en', 'zh', 'zh-hant']} />)
         expect(html.match(/<h1>/g)).toHaveLength(1)
         expect(html).toContain(windmarketResources[id].copy[locale].heading)
         expect(html).toContain('<article')
+        expect(html).toContain(`href="https://windmarket.top${locale === 'zh-hant' ? '/' : locale === 'zh' ? '/zh' : '/en'}"`)
+        expect(html).toContain(`href="https://windmarket.top${locale === 'en' ? '' : '/zh'}/blog"`)
+        expect(html).not.toContain('/zh/https:')
         expect(html).toContain('https://t.me/WindMarketOfficial')
         expect(html).toContain(`href="/zh${windmarketResources[id].path}"`)
         expect(html).toContain(`href="${windmarketResources[id].path}"`)
@@ -89,7 +90,7 @@ describe('WindMarket editorial SEO', () => {
     const oneLanguage = renderToStaticMarkup(<ResourceArticle id="about" locale="en" languages={['en']} />)
     expect(oneLanguage).not.toContain('href="/zh/about"')
     const germanFooter = renderToStaticMarkup(<ResourceLinks locale="de" />)
-    expect(germanFooter).toContain('href="/learn/southeast-asia" hrefLang="en"')
+    expect(germanFooter).toContain('href="/en/learn/southeast-asia" hrefLang="en"')
     expect(germanFooter).not.toContain('/de/learn/')
   })
 

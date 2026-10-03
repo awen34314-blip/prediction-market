@@ -1,3 +1,4 @@
+import { withLocalePrefix } from '@/lib/locale-path'
 import type { Metadata, MetadataRoute, ResolvedMetadata } from 'next'
 
 import type { SupportedLocale } from '@/i18n/locales'
@@ -98,8 +99,8 @@ export function buildWindMarketResourceStructuredData(
           {
             '@type': 'ListItem',
             position: 1,
-            name: locale === 'zh' ? '风向市场' : 'WindMarket',
-            item: new URL(locale === 'zh' ? '/zh' : '/', siteUrl).toString(),
+            name: locale === 'zh-hant' ? '風向市場' : locale === 'zh' ? '风向市场' : 'WindMarket',
+            item: new URL(withLocalePrefix('/', locale), siteUrl).toString(),
           },
           { '@type': 'ListItem', position: 2, name: copy.label, item: url },
         ],

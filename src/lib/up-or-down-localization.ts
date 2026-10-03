@@ -12,6 +12,7 @@ const UP_OR_DOWN_SUBJECT_TRANSLATIONS: Record<string, Partial<Record<SupportedLo
     pl: 'Poparcie dla Trumpa',
     pt: 'Aprovação de Trump',
     ru: 'Одобрение Трампа',
+    'zh-hant': '特朗普支持率',
     zh: '特朗普支持率',
   },
 }
@@ -88,6 +89,8 @@ function formatUpOrDownPhrase(locale: SupportedLocale, subject: string) {
       return `${localizedSubject} sobe ou desce`
     case 'ru':
       return `${localizedSubject} вырастет или упадет`
+    case 'zh-hant':
+      return `${localizedSubject}會上漲還是下跌`
     case 'zh':
       return `${localizedSubject}会上涨还是下跌`
     case 'en':
@@ -123,6 +126,8 @@ export function formatDatedUpOrDownTitle(locale: SupportedLocale, subject: strin
       return `${localizedSubject} sobe ou desce em ${date}?`
     case 'ru':
       return `${localizedSubject} вырастет или упадет ${date}?`
+    case 'zh-hant':
+      return `${date}${localizedSubject}會上漲還是下跌？`
     case 'zh':
       return `${date}${localizedSubject}会上涨还是下跌？`
     case 'en':
@@ -154,6 +159,8 @@ export function formatWeeklyUpOrDownTitle(locale: SupportedLocale, subject: stri
       return `${localizedSubject} sobe ou desce esta semana?`
     case 'ru':
       return `${localizedSubject} вырастет или упадет на этой неделе?`
+    case 'zh-hant':
+      return `本週${localizedSubject}會上漲還是下跌？`
     case 'zh':
       return `本周${localizedSubject}会上涨还是下跌？`
     case 'en':
@@ -162,6 +169,6 @@ export function formatWeeklyUpOrDownTitle(locale: SupportedLocale, subject: stri
 }
 
 export function formatTimedUpOrDownTitle(locale: SupportedLocale, subject: string, date: string, time: string) {
-  const separator = locale === 'ar' ? '، ' : locale === 'ja' || locale === 'ko' || locale === 'zh' ? ' ' : ', '
+  const separator = locale === 'ar' ? '، ' : locale === 'ja' || locale === 'ko' || (locale === 'zh' || locale === 'zh-hant') ? ' ' : ', '
   return `${formatUpOrDownPhrase(locale, subject)} — ${date}${separator}${time} ET`
 }

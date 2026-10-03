@@ -3,9 +3,9 @@ import type { WindMarketResourceId } from '@/lib/windmarket/resources'
 import { getWindMarketResourceHref, windmarketResources } from '@/lib/windmarket/resources'
 
 export default function ResourceLinks({ locale, current }: { locale: string; current?: WindMarketResourceId }) {
-  const language = locale === 'zh' ? 'zh' : 'en'
+  const language = locale === 'zh-hant' ? 'zh-hant' : locale === 'zh' ? 'zh' : 'en'
   return (
-    <nav className="wm-resource-links" aria-label={language === 'zh' ? '了解风向市场' : 'Learn about WindMarket'}>
+    <nav className="wm-resource-links" aria-label={language === 'zh-hant' ? '瞭解風向市場' : language === 'zh' ? '了解风向市场' : 'Learn about WindMarket'}>
       {(Object.keys(windmarketResources) as WindMarketResourceId[]).map((id) => (
         <a
           key={id}

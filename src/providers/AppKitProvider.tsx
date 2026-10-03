@@ -29,6 +29,7 @@ import { authClient } from '@/lib/auth-client'
 import { IS_BROWSER } from '@/lib/constants'
 import { clearBrowserStorage, clearNonHttpOnlyCookies } from '@/lib/utils'
 import { WAGMI_STATE_COOKIE_NAME } from '@/lib/wagmi-storage'
+import { AppKitLocaleSynchronizer } from '@/providers/AppKitLocaleSynchronizer'
 import { mergeSessionUserState, useUser } from '@/stores/useUser'
 
 let hasInitializedAppKit = false
@@ -748,6 +749,7 @@ export default function AppKitProvider({ children, wagmiCookie }: { children: Re
   return (
     <WagmiProvider config={wagmiConfig} initialState={initialState}>
       <AppKitContext value={appKitValue}>
+        <AppKitLocaleSynchronizer />
         <PolymarketWalletConnectionRestorer />
         {instance && siweClient && <AutoSiweAuthentication siweClient={siweClient} />}
         {children}

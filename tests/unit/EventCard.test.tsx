@@ -7,7 +7,7 @@ const mocks = hoisted(() => ({
   buildHomeSportsMoneylineModel: mock(),
   dynamicSportsCard: mock(),
   eventCardHeader: mock(),
-  locale: 'en-US',
+  locale: 'en',
   singleMarketActions: mock(),
   useXTrackerTweetCount: mock(),
 }))
@@ -108,7 +108,7 @@ describe('eventCard', () => {
     mocks.buildHomeSportsMoneylineModel.mockReset()
     mocks.dynamicSportsCard.mockReset()
     mocks.eventCardHeader.mockReset()
-    mocks.locale = 'en-US'
+    mocks.locale = 'en'
     mocks.singleMarketActions.mockReset()
     mocks.useXTrackerTweetCount.mockReset()
     mocks.useXTrackerTweetCount.mockReturnValue({ data: null })

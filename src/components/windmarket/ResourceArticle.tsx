@@ -1,3 +1,4 @@
+import { localizeChineseText } from '@/lib/traditional-chinese'
 import { ArrowRightIcon, ArrowUpRightIcon, BookOpenIcon, ChevronRightIcon } from 'lucide-react'
 
 import type { WindMarketResourceId, WindMarketResourceLocale } from '@/lib/windmarket/resources'
@@ -17,30 +18,31 @@ export default function ResourceArticle({
   locale: WindMarketResourceLocale
   languages: WindMarketResourceLocale[]
 }) {
-  const zh = locale === 'zh'
+  const zh = locale === 'zh' || locale === 'zh-hant'
+  const text = (value: string) => localizeChineseText(value, locale)
   const resource = windmarketResources[id]
   const copy = resource.copy[locale]
   const content = getWindMarketResourceContent(id, locale)
   return (
     <main className="wm-resource" lang={locale}>
-      <nav className="wm-resource-breadcrumb" aria-label={zh ? '面包屑导航' : 'Breadcrumb'}>
-        <a href={withLocalePrefix('/', locale)}>{zh ? '风向市场' : 'WindMarket'}</a>
+      <nav className="wm-resource-breadcrumb" aria-label={zh ? text('面包屑导航') : 'Breadcrumb'}>
+        <a href={withLocalePrefix('/', locale)}>{zh ? text('风向市场') : 'WindMarket'}</a>
         <ChevronRightIcon size={13} aria-hidden="true" />
         <span aria-current="page">{copy.label}</span>
       </nav>
       <header className="wm-resource-header">
         <div className="wm-resource-eyebrow">
           <BookOpenIcon size={16} aria-hidden="true" />
-          {zh ? '了解风向市场' : 'WINDMARKET GUIDES'}
+          {zh ? text('了解风向市场') : 'WINDMARKET GUIDES'}
         </div>
         <h1>{copy.heading}</h1>
         <p className="wm-resource-intro">{content.intro}</p>
         <div className="wm-resource-meta">
           <span>
-            {zh ? '更新于 ' : 'Updated '}
+            {zh ? text('更新于 ') : 'Updated '}
             <time dateTime={resource.updated}>{resource.updated}</time>
           </span>
-          <nav aria-label={zh ? '文章语言' : 'Article language'}>
+          <nav aria-label={zh ? text('文章语言') : 'Article language'}>
             {languages.map((language) => (
               <a
                 key={language}
@@ -49,7 +51,7 @@ export default function ResourceArticle({
                 lang={language}
                 aria-current={language === locale ? 'page' : undefined}
               >
-                {language === 'zh' ? '中文' : 'English'}
+                {language === 'zh-hant' ? '繁體中文' : language === 'zh' ? '简体中文' : 'English'}
               </a>
             ))}
           </nav>
@@ -111,7 +113,7 @@ export default function ResourceArticle({
               {section.links && (
                 <div className="wm-resource-references">
                   {section.links.map((link) => (
-                    <a key={link.href} href={withLocalePrefix(link.href, locale)}>
+                    <a key={link.href} href={link.href.startsWith('/') ? withLocalePrefix(link.href, locale) : link.href}>
                       {link.label}
                       <ArrowRightIcon size={14} aria-hidden="true" />
                     </a>
@@ -121,9 +123,9 @@ export default function ResourceArticle({
             </section>
           ))}
         </article>
-        <aside className="wm-resource-toc" aria-label={zh ? '本页目录' : 'On this page'}>
+        <aside className="wm-resource-toc" aria-label={zh ? text('本页目录') : 'On this page'}>
           <div>
-            <p>{zh ? '本页内容' : 'ON THIS PAGE'}</p>
+            <p>{zh ? text('本页内容') : 'ON THIS PAGE'}</p>
             <nav>
               {content.sections.map((section) => (
                 <a key={section.id} href={`#${section.id}`}>
@@ -135,16 +137,24 @@ export default function ResourceArticle({
         </aside>
       </div>
       <footer className="wm-resource-footer">
-        <h2>{zh ? '继续了解' : 'Keep exploring'}</h2>
+        <h2>{zh ? text('继续了解') : 'Keep exploring'}</h2>
         <ResourceLinks locale={locale} current={id} />
         <div className="wm-resource-actions">
+          <a href={`${windmarket.website}${locale === 'zh-hant' ? '/' : locale === 'zh' ? '/zh' : '/en'}`}>
+            {zh ? text('WindMarket 风向市场品牌官网') : 'WindMarket official website'}
+            <ArrowUpRightIcon size={15} aria-hidden="true" />
+          </a>
+          <a href={`${windmarket.website}${zh ? text('/zh') : ''}/blog`}>
+            {zh ? text('预测市场科普博客') : 'Prediction market blog'}
+            <ArrowUpRightIcon size={15} aria-hidden="true" />
+          </a>
           <a href={withLocalePrefix('/', locale)} className="wm-resource-market-link">
-            {zh ? '浏览当前市场' : 'Browse current markets'}
+            {zh ? text('浏览当前市场') : 'Browse current markets'}
             <ArrowRightIcon size={16} aria-hidden="true" />
           </a>
           {windmarket.community.enabled && (
             <a href={windmarket.community.url} target="_blank" rel="noopener noreferrer">
-              {zh ? '官方 Telegram 社区' : 'Official Telegram community'}
+              {zh ? text('官方 Telegram 社区') : 'Official Telegram community'}
               <ArrowUpRightIcon size={15} aria-hidden="true" />
             </a>
           )}

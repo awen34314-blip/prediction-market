@@ -53,7 +53,7 @@ export default async function proxy(request: NextRequest) {
 
   if (!isProtected) {
     if (isWindMarketResourcePath(pathname)) {
-      if (locale !== 'en' && locale !== 'zh') {
+      if (locale !== 'en' && locale !== 'zh' && locale !== 'zh-hant') {
         url.pathname = pathname
         return NextResponse.redirect(url, 308)
       }

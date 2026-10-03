@@ -75,23 +75,25 @@ describe('WindMarket localized homepage SEO', () => {
   it('gives English and Chinese their own canonical URLs and reciprocal language links', () => {
     const english = buildWindMarketHomeMetadata({ locale: 'en', enabledLocales: ['en', 'zh'], siteUrl, inherited })
     const chinese = buildWindMarketHomeMetadata({ locale: 'zh', enabledLocales: ['en', 'zh'], siteUrl, inherited })
-    expect(english.alternates?.canonical).toBe(`${siteUrl}/`)
+    expect(english.alternates?.canonical).toBe(`${siteUrl}/en`)
     expect(chinese.alternates?.canonical).toBe(`${siteUrl}/zh`)
     expect(chinese.alternates?.languages).toEqual(english.alternates?.languages)
     expect(chinese.alternates?.languages).toEqual({
-      en: `${siteUrl}/`,
+      en: `${siteUrl}/en`,
+      'zh-hant': `${siteUrl}/`,
       zh: `${siteUrl}/zh`,
       'x-default': `${siteUrl}/`,
     })
     expect(chinese.title).toEqual({ absolute: '东南亚预测市场｜风向市场 WindMarket' })
     expect(chinese.description).not.toBe(english.description)
-    expect(chinese.openGraph).toMatchObject({ url: `${siteUrl}/zh`, locale: 'zh_CN', alternateLocale: ['en_US'] })
+    expect(chinese.openGraph).toMatchObject({ url: `${siteUrl}/zh`, locale: 'zh_CN', alternateLocale: ['zh_TW', 'en_US'] })
   })
 
   it('does not advertise disabled language routes', () => {
     const metadata = buildWindMarketHomeMetadata({ locale: 'en', enabledLocales: ['en'], siteUrl, inherited })
-    expect(metadata.alternates?.languages).toEqual({ en: `${siteUrl}/`, 'x-default': `${siteUrl}/` })
-    expect(metadata.openGraph).toMatchObject({ alternateLocale: [] })
+    expect(metadata.alternates?.languages).toEqual({ en: `${siteUrl}/en`,
+      'zh-hant': `${siteUrl}/`, 'x-default': `${siteUrl}/` })
+    expect(metadata.openGraph).toMatchObject({ alternateLocale: ['zh_TW'] })
   })
 
   it('has translated metadata for every supported locale', () => {
@@ -105,7 +107,7 @@ describe('WindMarket localized homepage SEO', () => {
       })
       expect(metadata.description).toBeTruthy()
       descriptions.add(metadata.description!)
-      expect(metadata.alternates?.canonical).toBe(locale === 'en' ? `${siteUrl}/` : `${siteUrl}/${locale}`)
+      expect(metadata.alternates?.canonical).toBe(locale === 'zh-hant' ? `${siteUrl}/` : `${siteUrl}/${locale}`)
     }
     expect(descriptions.size).toBe(SUPPORTED_LOCALES.length)
   })

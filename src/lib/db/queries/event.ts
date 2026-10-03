@@ -1,3 +1,4 @@
+import { marketTranslationLocales, localizeChineseText } from '@/lib/traditional-chinese'
 import {
   Column,
   SQL,
@@ -35,7 +36,7 @@ import type {
   SportsSegmentScore,
 } from '@/types'
 
-import { DEFAULT_LOCALE, NON_DEFAULT_LOCALES } from '@/i18n/locales'
+import { DEFAULT_LOCALE, SOURCE_LOCALE, NON_DEFAULT_LOCALES } from '@/i18n/locales'
 import { cacheTags } from '@/lib/cache-tags'
 import { resolveClobUrl } from '@/lib/clob'
 import { OUTCOME_INDEX } from '@/lib/constants'
@@ -620,7 +621,7 @@ interface RelatedEvent {
 }
 
 async function getLocalizedTagNamesById(tagIds: number[], locale: SupportedLocale): Promise<Map<number, string>> {
-  if (!tagIds.length || locale === DEFAULT_LOCALE) {
+  if (!tagIds.length || locale === SOURCE_LOCALE) {
     return new Map()
   }
 
@@ -630,13 +631,14 @@ async function getLocalizedTagNamesById(tagIds: number[], locale: SupportedLocal
       name: tag_translations.name,
     })
     .from(tag_translations)
-    .where(and(inArray(tag_translations.tag_id, tagIds), eq(tag_translations.locale, locale)))
+    .where(and(inArray(tag_translations.tag_id, tagIds), inArray(tag_translations.locale, marketTranslationLocales(locale))))
+    .orderBy(sql`${tag_translations.locale} = ${locale}`)
 
-  return new Map(rows.map((row) => [row.tag_id, row.name]))
+  return new Map(rows.map((row) => [row.tag_id, localizeChineseText(row.name, locale)]))
 }
 
 async function getLocalizedEventTitlesById(eventIds: string[], locale: SupportedLocale): Promise<Map<string, string>> {
-  if (!eventIds.length || locale === DEFAULT_LOCALE) {
+  if (!eventIds.length || locale === SOURCE_LOCALE) {
     return new Map()
   }
 
@@ -650,15 +652,16 @@ async function getLocalizedEventTitlesById(eventIds: string[], locale: Supported
     .where(
       and(
         inArray(event_translations.event_id, eventIds),
-        eq(event_translations.locale, locale),
+        inArray(event_translations.locale, marketTranslationLocales(locale)),
         sql`NULLIF(TRIM(COALESCE(${event_translations.source_hash}, '')), '') IS NOT NULL`,
       ),
     )
+    .orderBy(sql`${event_translations.locale} = ${locale}`)
 
   return new Map(
     rows
       .filter((row): row is typeof row & { title: string } => typeof row.title === 'string' && Boolean(row.source_hash))
-      .map((row) => [row.event_id, row.title]),
+      .map((row) => [row.event_id, localizeChineseText(row.title, locale)]),
   )
 }
 
@@ -666,7 +669,7 @@ async function getLocalizedEventAdditionalContextsById(
   eventIds: string[],
   locale: SupportedLocale,
 ): Promise<Map<string, { value: string; sourceHash: string | null }>> {
-  if (!eventIds.length || locale === DEFAULT_LOCALE) {
+  if (!eventIds.length || locale === SOURCE_LOCALE) {
     return new Map()
   }
 
@@ -680,10 +683,11 @@ async function getLocalizedEventAdditionalContextsById(
     .where(
       and(
         inArray(event_translations.event_id, eventIds),
-        eq(event_translations.locale, locale),
+        inArray(event_translations.locale, marketTranslationLocales(locale)),
         sql`NULLIF(TRIM(COALESCE(${event_translations.additional_context}, '')), '') IS NOT NULL`,
       ),
     )
+    .orderBy(sql`${event_translations.locale} = ${locale}`)
 
   return new Map(
     rows
@@ -691,7 +695,7 @@ async function getLocalizedEventAdditionalContextsById(
       .map((row) => [
         row.event_id,
         {
-          value: row.additional_context.trim(),
+          value: localizeChineseText(row.additional_context.trim(), locale),
           sourceHash: typeof row.source_hash === 'string' ? row.source_hash : null,
         },
       ]),
@@ -702,7 +706,7 @@ async function getLocalizedEventRulesById(
   eventIds: string[],
   locale: SupportedLocale,
 ): Promise<Map<string, { value: string; sourceHash: string | null }>> {
-  if (!eventIds.length || locale === DEFAULT_LOCALE) {
+  if (!eventIds.length || locale === SOURCE_LOCALE) {
     return new Map()
   }
 
@@ -716,10 +720,11 @@ async function getLocalizedEventRulesById(
     .where(
       and(
         inArray(event_translations.event_id, eventIds),
-        eq(event_translations.locale, locale),
+        inArray(event_translations.locale, marketTranslationLocales(locale)),
         sql`NULLIF(TRIM(COALESCE(${event_translations.rules}, '')), '') IS NOT NULL`,
       ),
     )
+    .orderBy(sql`${event_translations.locale} = ${locale}`)
 
   return new Map(
     rows
@@ -727,7 +732,7 @@ async function getLocalizedEventRulesById(
       .map((row) => [
         row.event_id,
         {
-          value: row.rules.trim(),
+          value: localizeChineseText(row.rules.trim(), locale),
           sourceHash: typeof row.source_hash === 'string' ? row.source_hash : null,
         },
       ]),
@@ -3846,7 +3851,7 @@ export const EventRepository = {
         throw new Error('Event not found')
       }
 
-      if (locale === DEFAULT_LOCALE) {
+      if (locale === SOURCE_LOCALE) {
         return { data: { title: eventRow.title }, error: null }
       }
 

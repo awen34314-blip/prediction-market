@@ -52,7 +52,7 @@ describe('updateLocalesSettingsAction', () => {
     await expect(updateLocalesSettingsAction({ error: null }, formData)).resolves.toEqual({ error: null })
 
     expect(mocks.updateSettings).toHaveBeenCalledWith([
-      { group: 'i18n', key: 'enabled_locales', value: '["en","pt"]' },
+      { group: 'i18n', key: 'enabled_locales', value: '["zh-hant","en","pt"]' },
       { group: 'i18n', key: 'automatic_translations_enabled', value: 'false' },
       { group: 'i18n', key: 'rules_translations_enabled', value: 'false' },
     ])
@@ -68,11 +68,11 @@ describe('updateLocalesSettingsAction', () => {
     await updateLocalesSettingsAction({ error: null }, formData)
 
     expect(mocks.updateSettings).toHaveBeenCalledWith([
-      { group: 'i18n', key: 'enabled_locales', value: '["en","pt"]' },
+      { group: 'i18n', key: 'enabled_locales', value: '["zh-hant","en","pt"]' },
       {
         group: 'i18n',
         key: 'locale_order',
-        value: '["en","pt","de","es","fr","zh","ja","ar","ru","it","pl","ko"]',
+        value: '["zh-hant","en","pt","de","es","fr","zh","ja","ar","ru","it","pl","ko"]',
       },
       { group: 'i18n', key: 'automatic_translations_enabled', value: 'false' },
       { group: 'i18n', key: 'rules_translations_enabled', value: 'false' },

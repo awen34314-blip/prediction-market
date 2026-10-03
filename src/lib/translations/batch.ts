@@ -51,6 +51,7 @@ const DATE_FORMATTER_LOCALES: Record<NonDefaultLocale, string> = {
   pt: 'pt',
   ru: 'ru',
   zh: 'zh',
+  'zh-hant': 'zh-Hant',
 }
 const dateFormatters = new Map<string, Intl.DateTimeFormat>()
 const TRANSLATION_SCRIPT_RULES: TranslationScriptRule[] = [
@@ -58,7 +59,7 @@ const TRANSLATION_SCRIPT_RULES: TranslationScriptRule[] = [
   { allowedLocales: ['ru'], label: 'Cyrillic', pattern: /\p{Script=Cyrillic}/u },
   { allowedLocales: ['ko'], label: 'Hangul', pattern: /\p{Script=Hangul}/u },
   { allowedLocales: ['ja'], label: 'Japanese kana', pattern: /[\p{Script=Hiragana}\p{Script=Katakana}]/u },
-  { allowedLocales: ['zh', 'ja'], label: 'Han', pattern: /\p{Script=Han}/u },
+  { allowedLocales: ['zh', 'zh-hant', 'ja'], label: 'Han', pattern: /\p{Script=Han}/u },
 ]
 
 export function groupTranslationsByLocale<T extends TranslationLocaleRow>(rows: readonly T[]) {

@@ -12,7 +12,7 @@ export function getSitePresentation<T extends { name: string; description: strin
 
   return {
     ...site,
-    name: resolveSupportedLocale(locale) === 'zh' ? '风向市场' : 'WindMarket',
+    name: locale === 'zh-hant' ? '風向市場' : resolveSupportedLocale(locale) === 'zh' ? '风向市场' : 'WindMarket',
     description: getWindMarketCopy(locale).description,
   }
 }

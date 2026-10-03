@@ -19,9 +19,66 @@ interface ResourceContent {
 // Editorial content is imported by the server-rendered resource pages, not the trading UI.
 const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, ResourceContent>> = {
   about: {
+    'zh-hant': {
+      intro:
+        '風向市場（WindMarket）面向東南亞社區，打造多品類預測市場。市場類別涵蓋加密貨幣、股票、黃金及其他真實世界事件，並通過中英文指南，幫助讀者理解市場概率與判定規則。',
+      takeaway: '先理解問題，再看概率。每個市場的具體規則，比標題更重要。',
+      sections: [
+        {
+          id: 'purpose',
+          heading: '把事件變成一個可以討論的問題',
+          paragraphs: [
+            '新聞討論常常停留在“我覺得會發生”。預測市場進一步明確：發生什麼、在什麼時間之前、用什麼來源判斷結果。參與者對不同結果的買賣形成市場價格，讓分散的判斷以一種可觀察的方式呈現。',
+            '風向市場提供瀏覽事件、閱讀規則和查看市場價格的入口。價格反映參與者當下的判斷，也會受流動性、買賣價差和新信息影響；它不是對結果的保證。',
+          ],
+        },
+        {
+          id: 'market-scope',
+          heading: '加密貨幣、股票、黃金等多品類市場',
+          paragraphs: [
+            '風向市場涵蓋加密貨幣、股票、黃金及其他真實世界事件。你可以按關注的類別瀏覽市場，瞭解不同事件的市場概率與交易規則。',
+            '每個市場都有自己的問題、數據來源、時間區間和結算條件。BTC 專題中的 4 小時週期和價格來源僅適用於對應事件，股票、黃金等市場也需要分別閱讀各自的規則。',
+          ],
+          links: [{ label: '瀏覽所有已開放市場', href: '/' }],
+        },
+        {
+          id: 'community',
+          heading: '為什麼面向東南亞社區',
+          paragraphs: [
+            '東南亞讀者可能使用不同語言、生活在不同時區，也可能第一次接觸鏈上錢包。我們把這些實際閱讀與使用問題放進入門內容：如何把事件時間換算到本地、如何區分價格與概率、如何核對充值幣種和網絡。',
+            '目前這套品牌介紹和入門指南提供完整中文與英文版本。你可以先閱讀指南，再根據自己的情況瞭解平臺。面向東南亞社區是內容與產品方向，具體地區的賬戶、交易和支付服務是否可用，以當前服務條款與頁面提示為準。',
+          ],
+        },
+        {
+          id: 'start',
+          heading: '第一次來，可以從這裡開始',
+          paragraphs: [
+            '不需要先做交易決定。先學會讀懂一個市場，可以幫助你識別模糊的條件、理解費用，以及判斷頁面上的信息是否足夠。',
+          ],
+          points: [
+            '讀入門指南，理解價格、買賣價差與最終結算。',
+            '讀東南亞指南，核對時區、語言、充值資產和網絡。',
+            '打開感興趣的市場，逐條查看判定條件、截止時間與結果來源。',
+          ],
+        },
+        {
+          id: 'platform',
+          heading: '平臺與官方入口',
+          paragraphs: [
+            '風向市場使用 Kuest 白標基礎設施，提供自己的品牌界面和社區內容。具體市場、訂單、資產與結算信息，以平臺實際展示的規則和記錄為準。',
+            '品牌官網 windmarket.top 用於瞭解 WindMarket 風向市場和閱讀科普博客；市場應用 app.windmarket.top 用於查看具體市場與規則。官方 Telegram 社區為 @WindMarketOfficial，可用於討論市場和獲取使用幫助。',
+          ],
+          links: [
+            { label: '瞭解 WindMarket 風向市場：品牌官網', href: 'https://windmarket.top/zh' },
+            { label: '閱讀平臺服務條款', href: '/tos' },
+            { label: '查看平臺使用文檔（英文）', href: '/docs' },
+          ],
+        },
+      ],
+    },
     zh: {
       intro:
-        '风向市场（WindMarket）面向东南亚社区，打造多品类预测市场。我们的发展方向包括加密货币、股票、黄金及其他真实世界事件，并通过中英文指南，帮助读者理解市场概率与判定规则。',
+        '风向市场（WindMarket）面向东南亚社区，打造多品类预测市场。市场类别涵盖加密货币、股票、黄金及其他真实世界事件，并通过中英文指南，帮助读者理解市场概率与判定规则。',
       takeaway: '先理解问题，再看概率。每个市场的具体规则，比标题更重要。',
       sections: [
         {
@@ -34,10 +91,10 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'market-scope',
-          heading: '从首批市场，逐步拓展更多品类',
+          heading: '加密货币、股票、黄金等多品类市场',
           paragraphs: [
-            '首批市场从 BTC 开始，后续计划扩展股票、黄金及更多事件类别。具体已经开放哪些事件，请查看当前市场列表；计划中的品类会在实际开放后展示。',
-            '每个市场都有自己的问题、数据来源、时间区间和结算条件。BTC 专题中的 4 小时周期和价格来源仅适用于对应事件，未来股票、黄金等市场需要分别阅读各自的规则。',
+            '风向市场涵盖加密货币、股票、黄金及其他真实世界事件。你可以按关注的类别浏览市场，了解不同事件的市场概率与交易规则。',
+            '每个市场都有自己的问题、数据来源、时间区间和结算条件。BTC 专题中的 4 小时周期和价格来源仅适用于对应事件，股票、黄金等市场也需要分别阅读各自的规则。',
           ],
           links: [{ label: '浏览所有已开放市场', href: '/' }],
         },
@@ -66,9 +123,10 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           heading: '平台与官方入口',
           paragraphs: [
             '风向市场使用 Kuest 白标基础设施，提供自己的品牌界面和社区内容。具体市场、订单、资产与结算信息，以平台实际展示的规则和记录为准。',
-            '本站地址为 app.windmarket.top。官方 Telegram 社区为 @WindMarketOfficial，可用于讨论市场和获取使用帮助。请从本站的社区入口访问，涉及充值时核对账户内展示的信息。',
+            '品牌官网 windmarket.top 用于了解 WindMarket 风向市场和阅读科普博客；市场应用 app.windmarket.top 用于查看具体市场与规则。官方 Telegram 社区为 @WindMarketOfficial，可用于讨论市场和获取使用帮助。',
           ],
           links: [
+            { label: '了解 WindMarket 风向市场：品牌官网', href: 'https://windmarket.top/zh' },
             { label: '阅读平台服务条款', href: '/tos' },
             { label: '查看平台使用文档（英文）', href: '/docs' },
           ],
@@ -77,7 +135,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
     },
     en: {
       intro:
-        'WindMarket is building a multi-category prediction market platform for Southeast Asian communities. Our direction spans crypto, stocks, gold and other real-world events, with English and Chinese guides that explain market probabilities and rules.',
+        'WindMarket is a multi-category prediction market platform for Southeast Asian communities. Our markets cover crypto, stocks, gold and other real-world events, with English and Chinese guides that explain market probabilities and rules.',
       takeaway:
         'Understand the question before reading the probability. The detailed rules matter more than the headline.',
       sections: [
@@ -91,10 +149,10 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'market-scope',
-          heading: 'More categories as the platform grows',
+          heading: 'Crypto, stocks, gold and more',
           paragraphs: [
-            'The first markets focus on Bitcoin. We plan to add stock, gold and other event categories over time. The current market list shows which events are open; planned categories will appear when they become available.',
-            'Each market has its own question, data source, time window and settlement conditions. The four-hour format and price source in our BTC guide apply to the corresponding event. Future stock or gold markets will need to be read according to their own rules.',
+            'WindMarket covers crypto, stocks, gold and other real-world events. Browse the categories you follow to explore market probabilities and trading rules.',
+            'Each market has its own question, data source, time window and settlement conditions. The four-hour format and price source in our BTC guide apply to the corresponding event. Stock and gold markets also have their own rules to read.',
           ],
           links: [{ label: 'Browse all available markets', href: '/' }],
         },
@@ -123,9 +181,10 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           heading: 'Platform and official links',
           paragraphs: [
             'WindMarket uses Kuest white-label infrastructure with its own brand interface and community content. Refer to the platform’s actual rules and records for market, order, asset and settlement details.',
-            'Our website is app.windmarket.top. The official Telegram community, @WindMarketOfficial, is a place for market discussion and help using the platform. Follow the community link on this website and check the information shown in your account when arranging a deposit.',
+            'Visit windmarket.top for the WindMarket brand website and educational blog, and app.windmarket.top to inspect individual markets and their rules. Our official Telegram community, @WindMarketOfficial, is a place for market discussion and help using the platform.',
           ],
           links: [
+            { label: 'Meet WindMarket on our official website', href: 'https://windmarket.top/' },
             { label: 'Read the platform terms', href: '/tos' },
             { label: 'Explore the platform documentation', href: '/docs' },
           ],
@@ -134,6 +193,69 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
     },
   },
   'prediction-markets': {
+    'zh-hant': {
+      intro:
+        '預測市場圍繞一個有明確判定條件的未來事件，讓參與者買賣不同結果的份額。入門的關鍵是同時理解問題、價格和規則，而不是隻看一個百分比。',
+      takeaway: '屏幕上的概率、實際成交價格、最終結算結果，是三個不同的信息。',
+      sections: [
+        {
+          id: 'question',
+          heading: '1. 一個市場到底在問什麼',
+          paragraphs: [
+            '二元市場通常只有兩個結果，例如“是”和“否”，或“上漲”和“下跌”。多結果市場會列出多個選項。標題方便瀏覽，完整規則則決定什麼情況算作某個結果。',
+            '先確認事件對象、比較基準、觀察區間和結果來源。例如“價格會上漲嗎”並不完整，還需要知道比較哪個起始價格、在哪一刻觀察、使用哪個數據源。這些都應從該市場的規則中核對。',
+          ],
+        },
+        {
+          id: 'price',
+          heading: '2. 價格為什麼經常顯示為概率',
+          paragraphs: [
+            '在通常的二元市場中，最終獲勝的一份份額按 1 美元結算，失敗的一份按 0 美元結算。因此，0.60 美元的份額價格常被解讀為約 60% 的隱含概率。這是一種讀懂市場報價的方法，並非統計學上已被證實的成功率。',
+            '頁面展示的概率可能來自最近成交價、中間價或其他報價方式。訂單能否成交、實際成本是多少，還要看當時可成交的訂單和費用。特殊、取消或爭議情形應按對應市場的規則處理。',
+          ],
+          example: {
+            label: '僅用於理解的假設示例',
+            text: '假設以每份 0.60 美元買入 10 份“是”，成本為 6 美元。若“是”最終獲勝，結算價值為 10 美元；若失敗，結算價值為 0。該示例不計手續費，也不代表任何當前市場、收益承諾或交易建議。',
+          },
+        },
+        {
+          id: 'execution',
+          heading: '3. 買入價和賣出價為什麼不一樣',
+          paragraphs: [
+            '訂單簿裡，買方願意支付的最高價格稱為買價，賣方願意接受的最低價格稱為賣價。兩者之間的差額是買賣價差。立即買入通常需要匹配賣方訂單，立即賣出通常需要匹配買方訂單。',
+            '某一價格上可成交的數量有限。訂單較大時，可能匹配多個價格，實際平均成交價會與最先看到的價格不同。限價單可以限定可接受的價格，但不保證成交。提交前查看訂單預覽中的數量、價格與費用。',
+          ],
+          links: [
+            { label: '價格說明（英文）', href: '/docs/exploring-markets/understanding-prices' },
+            { label: '訂單類型（英文）', href: '/docs/exploring-markets/order-types' },
+          ],
+        },
+        {
+          id: 'resolution',
+          heading: '4. 截止時間不等於結算完成',
+          paragraphs: [
+            '交易截止、事件結束、結果確認和資產結算可能發生在不同時間。某個事件已結束，並不意味著結果已經確認或餘額已經可以使用。',
+            '市場會依據寫明的判定條件與結果來源進行處理。查看事件頁面的狀態與規則，瞭解何時停止交易、如何確定結果，以及存在爭議時的處理方式。',
+          ],
+          links: [{ label: '結果確認與結算文檔（英文）', href: '/docs/resolution-settlement/market-resolution' }],
+        },
+        {
+          id: 'check',
+          heading: '5. 使用前核對這幾項',
+          paragraphs: ['信息不完整時，先閱讀規則或通過官方社區諮詢。理解市場並不要求你立刻充值或下單。'],
+          points: [
+            '資格與地區：查看當前服務條款及賬戶提示。',
+            '費用與成交：以訂單預覽和最終成交記錄為準，價差也會影響成本。',
+            '充值資產與網絡：逐項核對充值頁面，USDT 與 USDC、TRON 與 Polygon 都不是同一項。',
+            '風險：結果判斷錯誤時，相關份額可能損失全部價值。',
+          ],
+          links: [
+            { label: '交易費用文檔（英文）', href: '/docs/fees-limits/trading-fees' },
+            { label: '充值使用文檔（英文）', href: '/docs/getting-started/how-to-deposit' },
+          ],
+        },
+      ],
+    },
     zh: {
       intro:
         '预测市场围绕一个有明确判定条件的未来事件，让参与者买卖不同结果的份额。入门的关键是同时理解问题、价格和规则，而不是只看一个百分比。',
@@ -265,6 +387,76 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
     },
   },
   'southeast-asia': {
+    'zh-hant': {
+      intro:
+        '同一個全球事件，在馬尼拉可能已是晚上，在曼谷卻還早一個小時。這份指南從時區、語言與充值信息出發，幫助東南亞讀者更準確地理解預測市場。',
+      takeaway: '先核對時間、判定來源、幣種與網絡，再考慮下一步。',
+      sections: [
+        {
+          id: 'timezones',
+          heading: '把事件時間換算成自己的本地時間',
+          paragraphs: [
+            '市場標題或規則可能使用 UTC，也可能使用 ET 等當地時間。先找到原始時區，再轉換到自己的城市；不要只根據日期或“上午、下午”判斷截止時間。',
+            '下表以同一天 12:00 UTC 為例。印尼有三個時區，雅加達與巴厘島並不是同一時間。美國東部時間 ET 會隨夏令時變化，不能全年固定按一個偏移量換算。',
+          ],
+          table: {
+            caption: '示例：當 UTC 時間為 12:00',
+            headers: ['城市 / 地區', '時區', '本地時間'],
+            rows: [
+              ['菲律賓 · 馬尼拉', 'UTC+8', '20:00'],
+              ['新加坡', 'UTC+8', '20:00'],
+              ['馬來西亞 · 吉隆坡', 'UTC+8', '20:00'],
+              ['泰國 · 曼谷', 'UTC+7', '19:00'],
+              ['越南 · 胡志明市', 'UTC+7', '19:00'],
+              ['印尼 · 雅加達', 'UTC+7', '19:00'],
+              ['印尼 · 巴厘島', 'UTC+8', '20:00'],
+              ['印尼 · 查亞普拉', 'UTC+9', '21:00'],
+            ],
+          },
+        },
+        {
+          id: 'language',
+          heading: '中文與英文：讀懂規則比翻譯標題更重要',
+          paragraphs: [
+            '風向市場的這套入門內容有中文與英文版本。遇到事件標題、來源報道和結算規則語言不同的情況，應逐項核對人物、地點、數值、日期，以及“之前”“達到”“高於”等關鍵條件。',
+            '界面語言切換不會改變市場的實際判定條件。如果譯文和原始來源看起來有差異，先查看該市場的完整規則及指定來源，再向官方支持核實。',
+          ],
+        },
+        {
+          id: 'deposits',
+          heading: '充值要同時核對幣種、網絡和到賬資產',
+          paragraphs: [
+            '錢包或交易所裡持有 USDT，並不代表可以把它直接轉到任何充值地址。USDT 與 USDC 是不同資產，同一種資產也可能存在於不同區塊鏈上。TRC20 通常指 TRON 上的代幣標準；Polygon 是另一條網絡。',
+            '如果充值頁面顯示接收 Polygon USDC，就應按照該頁面指定的資產、網絡和地址操作。需要兌換或跨鏈時，查看當前實際提供的充值選項，以及報價中的費用、最低金額、預期到賬資產和時間。不要把 TRON 上的 USDT 直接發送到 Polygon USDC 充值地址。',
+            '銀行卡、本地貨幣或其他支付方式是否顯示，可能取決於地區、服務商和身份驗證要求。某個國家的貨幣或支付工具出現在介紹材料裡，不等於你的賬戶一定能夠使用；以實際充值頁面為準。',
+          ],
+          links: [{ label: '查看充值文檔（英文）', href: '/docs/getting-started/how-to-deposit' }],
+        },
+        {
+          id: 'availability',
+          heading: '社區方向與地區服務可用性',
+          paragraphs: [
+            '我們面向東南亞社區提供預測市場內容，但不同地區的賬戶、交易和支付服務可能有不同限制。這份時區與閱讀指南不是某個國家的服務開放清單，也不代表當地許可或支付方式的承諾。',
+            '使用前查看當前服務條款、頁面地區提示和所選支付服務商的要求。如果頁面顯示某項服務不可用，通過官方支持瞭解原因；不要依據其他地區用戶的操作截圖判斷自己的可用性。',
+          ],
+          links: [{ label: '查看服務條款', href: '/tos' }],
+        },
+        {
+          id: 'reading',
+          heading: '建立自己的市場閱讀順序',
+          paragraphs: [
+            '無論關注加密貨幣、股票、黃金、全球新聞還是體育相關事件，都可以用同一套順序檢查頁面。選擇你關注的類別，再查看對應事件的具體規則。',
+          ],
+          points: [
+            '問題：這個市場如何定義“發生”或“未發生”？',
+            '時間：觀察時間和交易截止時間是什麼，換算到本地是幾點？',
+            '證據：使用哪個來源確認結果？',
+            '價格：顯示概率與實際可成交價格有什麼差別？',
+            '成本與狀態：訂單預覽有哪些費用，市場是交易中、等待結果還是已結算？',
+          ],
+        },
+      ],
+    },
     zh: {
       intro:
         '同一个全球事件，在马尼拉可能已是晚上，在曼谷却还早一个小时。这份指南从时区、语言与充值信息出发，帮助东南亚读者更准确地理解预测市场。',
@@ -323,7 +515,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           id: 'reading',
           heading: '建立自己的市场阅读顺序',
           paragraphs: [
-            '无论关注加密货币、股票、黄金、全球新闻还是体育相关事件，都可以用同一套顺序检查页面。这些是可能的事件类别，实际已开放的市场以当前市场列表为准。',
+            '无论关注加密货币、股票、黄金、全球新闻还是体育相关事件，都可以用同一套顺序检查页面。选择你关注的类别，再查看对应事件的具体规则。',
           ],
           points: [
             '问题：这个市场如何定义“发生”或“未发生”？',
@@ -393,7 +585,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           id: 'reading',
           heading: 'Build a consistent reading routine',
           paragraphs: [
-            'Whether following crypto, stocks, gold, global news or sport-related events, you can use the same sequence to read a market. These are possible event categories; refer to the current market list for events actually available.',
+            'Whether following crypto, stocks, gold, global news or sport-related events, you can use the same sequence to read a market. Choose the category you follow, then read the rules of the individual event.',
           ],
           points: [
             'Question: what exactly counts as the event happening or not happening?',
@@ -494,6 +686,88 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
             'Check executable prices, fees and the official result before relying on an expected payout.',
           ],
           links: [{ label: 'Browse all available markets', href: '/' }],
+        },
+      ],
+    },
+    'zh-hant': {
+      intro:
+        'BTC 漲跌預測市場圍繞一個有明確時間區間的問題展開。讀懂它，需要把比特幣參考價格、結果份額的報價和最終判定規則分開。這篇指南選用 4 小時 BTC 市場作為風向市場多品類方向中的一個示例，並對照東南亞當地時間說明。其他市場可以有不同的時間區間、數據來源和結算條件。',
+      takeaway: '事件標題確定觀察區間，“規則與結算”確定數據來源和獲勝條件。你的買入時間不會重新設置這兩項。',
+      sections: [
+        {
+          id: 'window',
+          heading: '1. 4 小時市場是什麼意思？',
+          paragraphs: [
+            '“4h”表示該事件有一個固定的四小時觀察區間，起止時間寫在頁面上。它不代表每個人買入後都會再獲得四小時。接近截止時間才打開頁面的人，看到的仍然是同一個事件區間。',
+            '把完整日期、開始時間、結束時間和時區一起核對。不同週期或連續輪次對應不同的問題；切換後重新確認所選事件的標題。僅憑“4h”標籤，不能判斷這個市場是否還在交易中。',
+          ],
+        },
+        {
+          id: 'prices',
+          heading: '2. 基準價格和份額價格有什麼區別？',
+          paragraphs: [
+            'Price To Beat（基準價格）是該事件展示的比特幣參考基準，“當前價格”展示參考行情。“上漲”和“下跌”份額則有各自的訂單簿報價，表示參與者願意為對應結果支付或接受的價格。買入“上漲”份額不等於買入比特幣。',
+            '“上漲”報價為 60 美分時，通常會被解讀為約 60% 的隱含概率，還需要結合報價方式與流動性理解。它不是說比特幣會漲 60%。訂單預覽和實際可成交的買賣報價決定交易成本。',
+          ],
+          example: {
+            label: '假設示例，不是實時行情',
+            text: '頁面可能同時顯示 80,000 美元的 BTC 基準價格，以及每份 0.60 美元的“上漲”報價。前者用於理解事件比較的基準，後者是一份結果份額的價格，兩者不能互相代替。',
+          },
+          links: [{ label: '瞭解預測市場的價格與概率', href: '/learn/prediction-markets' }],
+        },
+        {
+          id: 'source',
+          heading: '3. 到底使用哪個比特幣價格判定結果？',
+          paragraphs: [
+            '打開所選事件的“規則與結算”，核對指定數據源、比較方法、觀察時間，以及價格恰好相等時如何處理。觀察期間一度高於基準，並不能單獨證明最終結果。',
+            '例如，風向市場 2026 年 9 月 19 日美東時間下午 4–8 點的 BTC 市場，指定了 Chainlink BTC/USD TWAP 數據流。TWAP 指時間加權平均價格。這裡使用的是規則指定的價格指標，不能隨意換成某家交易所的即時價格或另一張圖表。事件的觀察區間和數據流的平均計算週期是兩個概念。',
+            '該示例市場的書面條件把價格相等歸入“上漲”。其他事件仍需分別閱讀自己的規則。若平均計算週期或觀察細節不清楚，應查看指定來源並向官方支持核實，不要僅憑“4h”推測計算公式。',
+          ],
+          links: [{ label: '查看上述日期市場的規則與結算', href: '/event/btc-updown-4h-1789848000' }],
+        },
+        {
+          id: 'timezones',
+          heading: '4. 換算成東南亞當地時間',
+          paragraphs: [
+            'ET 是美國東部時間，會隨夏令時改變。換算時要帶上事件的實際日期。下表使用 2026 年 9 月 21 日的一個假設區間，不代表正在開放的市場或固定的當地排期。',
+            '在這個日期，紐約上午 4–8 點對應 UTC 08:00–12:00。表內當地時間都在 9 月 21 日；換成其他日期或時間段，時差可能不同，也可能跨越午夜。',
+          ],
+          table: {
+            caption: '僅作示例：2026 年 9 月 21 日美東時間上午 4–8 點',
+            headers: ['城市 / 地區', '當地觀察時間'],
+            rows: [
+              ['菲律賓 · 馬尼拉', '16:00–20:00'],
+              ['新加坡', '16:00–20:00'],
+              ['馬來西亞 · 吉隆坡', '16:00–20:00'],
+              ['泰國 · 曼谷', '15:00–19:00'],
+              ['越南 · 胡志明市', '15:00–19:00'],
+              ['印尼 · 雅加達', '15:00–19:00'],
+              ['印尼 · 巴厘島', '16:00–20:00'],
+            ],
+          },
+          links: [{ label: '更多東南亞時區與語言說明', href: '/learn/southeast-asia' }],
+        },
+        {
+          id: 'settlement',
+          heading: '5. 倒計時結束後會發生什麼？',
+          paragraphs: [
+            '觀察區間結束、最終參考價格可用、官方結果被記錄，是不同的步驟。倒計時歸零或圖表出現最終價格，並不能單獨證明份額已經可以兌付。需要查看事件的結算狀態和持倉中實際可用的操作。',
+            '按照平臺標準二元結算規則，獲勝份額每份兌付 1 美元，失敗份額兌付 0 美元。交易成本取決於實際成交價和費用；未決、取消或特殊結果按對應規則處理。結算前賣出還需要可成交的買方，不保證能以某個價格退出。',
+          ],
+          links: [{ label: '官方市場結算文檔（英文）', href: '/docs/resolution-settlement/market-resolution' }],
+        },
+        {
+          id: 'check',
+          heading: '快速閱讀清單',
+          paragraphs: ['查看 BTC 事件時可以按以下順序核對。這篇指南解釋頁面信息，不預測下一次價格走勢。'],
+          points: [
+            '確認事件日期、觀察區間和當前狀態。',
+            '區分 BTC 基準價格與“上漲、下跌”份額報價。',
+            '核對準確的數據來源、比較條件及相等時的處理方式。',
+            '結合實際日期和時區換算截止時間。',
+            '核對可成交報價、費用和官方結果，再理解預期兌付。',
+          ],
+          links: [{ label: '瀏覽所有已開放市場', href: '/' }],
         },
       ],
     },

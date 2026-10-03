@@ -47,6 +47,7 @@ const HOURLY_LABELS: Record<SupportedLocale, string> = {
   pl: 'Cogodzinny',
   pt: 'Por hora',
   ru: 'Ежечасно',
+  'zh-hant': '每小時',
   zh: '每小时',
 }
 const DAILY_LABELS: Record<SupportedLocale, string> = {
@@ -61,6 +62,7 @@ const DAILY_LABELS: Record<SupportedLocale, string> = {
   pl: 'Codziennie',
   pt: 'Diário',
   ru: 'Ежедневно',
+  'zh-hant': '每日',
   zh: '每日',
 }
 
@@ -333,7 +335,7 @@ function formatCryptoCadenceWindow(
       localizedTimeRangeFormatters.set(locale, timeFormatter)
     }
 
-    const separator = locale === 'ar' ? '، ' : locale === 'ja' || locale === 'ko' || locale === 'zh' ? ' ' : ', '
+    const separator = locale === 'ar' ? '، ' : locale === 'ja' || locale === 'ko' || (locale === 'zh' || locale === 'zh-hant') ? ' ' : ', '
     return `${dateLabel}${separator}${timeFormatter.formatRange(startDate, endDate)} ET`
   }
 
@@ -356,7 +358,7 @@ function resolveCryptoCadenceTitleSuffix(cadence: (typeof CRYPTO_CADENCE_ROUTES)
   if (cadence.cadence === 'daily') {
     return DAILY_LABELS[locale]
   }
-  if (locale === 'zh') {
+  if ((locale === 'zh' || locale === 'zh-hant')) {
     return resolveCryptoCadenceSidebarLabel(cadence, locale)
   }
   return cadence.titleSuffix

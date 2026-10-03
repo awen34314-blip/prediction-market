@@ -1,6 +1,7 @@
 /** Public WindMarket presentation settings. No credentials or wallet addresses belong here. */
 export const windmarket = {
   name: 'WindMarket 风向市场',
+  website: 'https://windmarket.top',
   alternateNames: ['WindMarket', '风向市场'],
   community: {
     enabled: true,

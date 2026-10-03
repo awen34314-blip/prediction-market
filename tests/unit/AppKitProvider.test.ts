@@ -86,6 +86,7 @@ void mock.module('next-themes', () => ({
 }))
 
 void mock.module('next-intl', () => ({
+  useLocale: () => 'zh-hant',
   useExtracted: () => (value: string) => value,
 }))
 

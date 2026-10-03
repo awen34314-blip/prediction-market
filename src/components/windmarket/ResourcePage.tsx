@@ -17,7 +17,7 @@ const getResourceContext = cache(async (id: WindMarketResourceId) => {
   const [requestedLocale, enabledLocales] = await Promise.all([getRootLocale(), loadEnabledLocales()])
   const languages = getWindMarketResourceLocales(enabledLocales)
   if (
-    (requestedLocale !== 'en' && requestedLocale !== 'zh') ||
+    (requestedLocale !== 'en' && requestedLocale !== 'zh' && requestedLocale !== 'zh-hant') ||
     !languages.some((locale) => locale === requestedLocale)
   ) {
     permanentRedirect(windmarketResources[id].path as Route)
