@@ -56,6 +56,7 @@ import {
   UMA_NEG_RISK_ADAPTER_ADDRESS,
   ZERO_ADDRESS,
 } from '@/lib/contracts'
+import { DEPOSIT_MODAL_OPEN_EVENT } from '@/lib/custom-javascript-code'
 import { fetchReferralLocked } from '@/lib/exchange'
 import { SUMSUB_ENFORCEMENTS } from '@/lib/sumsub/types'
 import {
@@ -457,7 +458,12 @@ function isSumsubVerificationStatus(value: unknown): value is SumsubVerification
   )
 }
 
+function isPaymentsEnabledResponse(value: unknown): value is { enabled: boolean } {
+  return typeof value === 'object' && value !== null && 'enabled' in value && typeof value.enabled === 'boolean'
+}
+
 function TradingOnboardingProviderContent({ children, user }: TradingOnboardingProviderContentProps) {
+  const userId = user?.id
   const [activeModal, setActiveModal] = useState<OnboardingModal>(null)
   const [dismissedModal, setDismissedModal] = useState<OnboardingModal>(null)
   const [fundModalOpen, setFundModalOpen] = useState(false)
@@ -489,6 +495,9 @@ function TradingOnboardingProviderContent({ children, user }: TradingOnboardingP
   })
   const [sumsubLoaded, setSumsubLoaded] = useState(false)
   const [sumsubObserveDismissed, setSumsubObserveDismissed] = useState(false)
+  const [paymentsEnabled, setPaymentsEnabled] = useState(false)
+  const [paymentsEnabledUserId, setPaymentsEnabledUserId] = useState<string | null>(null)
+  const paymentsEnabledRefreshRef = useRef<(() => void) | null>(null)
   const pendingTradingReadyActionRef = useRef<(() => void) | null>(null)
   const pendingTradingReadyFlowStartedRef = useRef(false)
   const referralSetupVerificationVersionRef = useRef(0)
@@ -508,6 +517,7 @@ function TradingOnboardingProviderContent({ children, user }: TradingOnboardingP
   const { open: openAppKit } = useAppKit()
   const refreshSessionUserState = useSessionRefresher()
   const { communityUrl, polygonRpcUrl } = usePublicRuntimeConfig()
+
   const allowsRouteTradingAuthPrompt = useRouteTradingAuthPrompt()
   const communityApiUrl = communityUrl
   const viemRpcUrls = useMemo(() => resolveViemRpcUrls(polygonRpcUrl), [polygonRpcUrl])
@@ -1782,6 +1792,13 @@ function TradingOnboardingProviderContent({ children, user }: TradingOnboardingP
     user,
   ])
 
+  const handleDepositModalOpenChange = useCallback((open: boolean) => {
+    setDepositModalOpen(open)
+    if (open) {
+      window.dispatchEvent(new Event(DEPOSIT_MODAL_OPEN_EVENT))
+    }
+  }, [])
+
   const openWalletModal = useCallback(() => {
     if (!user) {
       void openAppKit()
@@ -1791,8 +1808,9 @@ function TradingOnboardingProviderContent({ children, user }: TradingOnboardingP
       openNextRequirement()
       return
     }
-    setDepositModalOpen(true)
-  }, [openAppKit, openNextRequirement, status.hasDeployedDepositWallet, user])
+    paymentsEnabledRefreshRef.current?.()
+    handleDepositModalOpenChange(true)
+  }, [handleDepositModalOpenChange, openAppKit, openNextRequirement, status.hasDeployedDepositWallet, user])
 
   const startDepositFlow = useCallback(() => {
     if (!user) {
@@ -1801,13 +1819,14 @@ function TradingOnboardingProviderContent({ children, user }: TradingOnboardingP
     }
 
     if (status.hasDeployedDepositWallet) {
-      setDepositModalOpen(true)
+      paymentsEnabledRefreshRef.current?.()
+      handleDepositModalOpenChange(true)
       return
     }
 
     setShouldShowFundAfterTradingReady(true)
     openNextRequirement()
-  }, [openAppKit, openNextRequirement, status.hasDeployedDepositWallet, user])
+  }, [handleDepositModalOpenChange, openAppKit, openNextRequirement, status.hasDeployedDepositWallet, user])
 
   const startWithdrawFlow = useCallback(() => {
     if (!user) {
@@ -1853,17 +1872,75 @@ function TradingOnboardingProviderContent({ children, user }: TradingOnboardingP
     ],
   )
 
-  const meldUrl = useMemo(() => {
-    if (!status.hasDeployedDepositWallet || !user?.deposit_wallet_address) {
-      return null
+  useEffect(() => {
+    if (!userId) {
+      return
     }
-    const params = new URLSearchParams({
-      destinationCurrencyCodeLocked: 'USDC_POLYGON',
-      walletAddressLocked: user.deposit_wallet_address,
-      publicKey: 'WXETMuFUQmqqybHuRkSgxv:25B8LJHSfpG6LVjR2ytU5Cwh7Z4Sch2ocoU',
-    })
-    return `https://meldcrypto.com/?${params.toString()}`
-  }, [status.hasDeployedDepositWallet, user])
+
+    let isActive = true
+    let requestController: AbortController | null = null
+
+    async function refreshPaymentsEnabled() {
+      requestController?.abort()
+      const controller = new AbortController()
+      requestController = controller
+      setPaymentsEnabled(false)
+      setPaymentsEnabledUserId(null)
+
+      try {
+        const response = await fetch('/api/payments/meld/enabled', {
+          cache: 'no-store',
+          signal: controller.signal,
+        })
+        const payload: unknown = response.ok ? await response.json().catch(() => null) : null
+        if (isActive && !controller.signal.aborted) {
+          setPaymentsEnabled(isPaymentsEnabledResponse(payload) && payload.enabled)
+          setPaymentsEnabledUserId(userId ?? null)
+        }
+      } catch {
+        if (isActive && !controller.signal.aborted) {
+          setPaymentsEnabled(false)
+          setPaymentsEnabledUserId(null)
+        }
+      }
+    }
+
+    function onWindowFocus() {
+      void refreshPaymentsEnabled()
+    }
+
+    function refreshPaymentsEnabledForWalletOpen() {
+      void refreshPaymentsEnabled()
+    }
+
+    function onVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        void refreshPaymentsEnabled()
+      }
+    }
+
+    paymentsEnabledRefreshRef.current = refreshPaymentsEnabledForWalletOpen
+    void refreshPaymentsEnabled()
+    window.addEventListener('focus', onWindowFocus)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+
+    return () => {
+      isActive = false
+      requestController?.abort()
+      window.removeEventListener('focus', onWindowFocus)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      if (paymentsEnabledRefreshRef.current === refreshPaymentsEnabledForWalletOpen) {
+        paymentsEnabledRefreshRef.current = null
+      }
+    }
+  }, [userId])
+
+  const canBuyMeld = Boolean(
+    paymentsEnabled &&
+    paymentsEnabledUserId === userId &&
+    status.hasDeployedDepositWallet &&
+    user?.deposit_wallet_address,
+  )
 
   return (
     <TradingOnboardingContext value={contextValue}>
@@ -1907,11 +1984,11 @@ function TradingOnboardingProviderContent({ children, user }: TradingOnboardingP
           openWalletModal()
         }}
         depositModalOpen={depositModalOpen}
-        onDepositOpenChange={setDepositModalOpen}
+        onDepositOpenChange={handleDepositModalOpenChange}
         withdrawModalOpen={withdrawModalOpen}
         onWithdrawOpenChange={setWithdrawModalOpen}
         user={user}
-        meldUrl={meldUrl}
+        canBuyMeld={canBuyMeld}
       />
     </TradingOnboardingContext>
   )

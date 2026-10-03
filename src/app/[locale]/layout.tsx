@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
 import { NextIntlClientProvider } from 'next-intl'
-import { cacheTag } from 'next/cache'
+import { cacheLife, cacheTag } from 'next/cache'
 import { notFound } from 'next/navigation'
 
 import type { SupportedLocale } from '@/i18n/locales'
@@ -41,6 +41,11 @@ export async function generateViewport(): Promise<Viewport> {
   cacheTag(cacheTags.settings)
 
   const runtimeTheme = await loadRuntimeThemeState()
+  if (runtimeTheme.cacheable) {
+    cacheLife('max')
+  } else {
+    cacheLife('default')
+  }
   const { lightSurface, darkSurface } = resolvePwaThemeColors(runtimeTheme.theme)
 
   return {
@@ -56,6 +61,11 @@ export async function generateMetadata(): Promise<Metadata> {
   cacheTag(cacheTags.settings)
 
   const runtimeTheme = await loadRuntimeThemeState()
+  if (runtimeTheme.cacheable) {
+    cacheLife('max')
+  } else {
+    cacheLife('default')
+  }
   const site = runtimeTheme.site
   const siteUrl = resolveSiteUrl(process.env)
   const locale = await getRootLocale()
@@ -123,7 +133,7 @@ interface LocaleBodyProps extends LocaleDocumentProps {
 interface LocaleRuntimeData {
   globalAnnouncement: Awaited<ReturnType<typeof loadGlobalAnnouncementSettings>>
   hasGlobalAnnouncement: boolean
-  publicRuntimeConfig: ReturnType<typeof getPublicRuntimeConfig>
+  publicRuntimeConfig: Awaited<ReturnType<typeof getPublicRuntimeConfig>>
   runtimeTheme: RuntimeThemeState
 }
 
@@ -136,7 +146,7 @@ async function loadLocaleRuntimeData(locale: SupportedLocale): Promise<LocaleRun
   }
 
   const runtimeTheme = await loadRuntimeThemeState()
-  const publicRuntimeConfig = getPublicRuntimeConfig()
+  const publicRuntimeConfig = await getPublicRuntimeConfig()
   const globalAnnouncement = await loadGlobalAnnouncementSettings()
   const hasGlobalAnnouncement = globalAnnouncement.message.trim().length > 0
 

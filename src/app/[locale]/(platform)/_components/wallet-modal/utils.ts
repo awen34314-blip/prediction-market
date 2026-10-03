@@ -74,15 +74,16 @@ type WalletDepositView = 'fund' | 'receive' | 'wallets' | 'amount' | 'confirm' |
 export interface WalletDepositModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onBridge: () => void
   isMobile: boolean
   walletAddress?: string | null
   walletEoaAddress?: string | null
   siteName?: string
-  meldUrl: string | null
+  canBuyMeld: boolean
   hasDeployedDepositWallet: boolean
   view: WalletDepositView
   onViewChange: (view: WalletDepositView) => void
-  onBuy: (url: string) => void
+  onBuy: () => void
   depositWalletBalance?: string | null
   isDepositWalletBalanceLoading?: boolean
   walletBalance?: string | null

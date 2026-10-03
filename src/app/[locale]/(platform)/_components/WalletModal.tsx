@@ -27,7 +27,7 @@ import { useLiFiWalletTokens } from '@/hooks/useLiFiWalletTokens'
 import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { formatDisplayAmount } from '@/lib/amount-input'
 import { COLLATERAL_TOKEN_ADDRESS } from '@/lib/contracts'
-import { DEFAULT_CHAIN_ID, IS_TEST_MODE } from '@/lib/network'
+import { DEFAULT_CHAIN_ID, IS_TEST_MODE, POLYGON_MAINNET_CHAIN_ID } from '@/lib/network'
 import { cn } from '@/lib/utils'
 import { defaultViemNetwork } from '@/lib/viem-network'
 
@@ -38,11 +38,12 @@ export function WalletDepositModal(props: WalletDepositModalProps) {
   const {
     open,
     onOpenChange,
+    onBridge,
     isMobile,
     walletAddress,
     walletEoaAddress,
     siteName,
-    meldUrl,
+    canBuyMeld,
     hasDeployedDepositWallet,
     view,
     onViewChange,
@@ -57,6 +58,8 @@ export function WalletDepositModal(props: WalletDepositModalProps) {
   const site = useSitePresentation()
   const siteLabel = siteName ?? site.name
   const isDirectTestModeDeposit = IS_TEST_MODE
+  const canUseLiFiBridge =
+    DEFAULT_CHAIN_ID === POLYGON_MAINNET_CHAIN_ID && hasDeployedDepositWallet && Boolean(walletAddress)
   const tokensQueryEnabled = open && (view === 'wallets' || view === 'amount' || view === 'confirm')
   const { balance: directWalletBalance, isLoadingBalance: isLoadingDirectWalletBalance } = useBalance({
     depositWalletAddress: walletEoaAddress,
@@ -152,14 +155,13 @@ export function WalletDepositModal(props: WalletDepositModalProps) {
   const content =
     view === 'fund' ? (
       <WalletFundMenu
-        onBuy={(url) => {
-          onBuy(url)
-        }}
+        onBuy={onBuy}
+        onBridge={onBridge}
         onReceive={() => onViewChange('receive')}
         onWallet={() => onViewChange('wallets')}
-        disabledBuy={!meldUrl}
+        canBridge={canUseLiFiBridge}
         disabledReceive={!hasDeployedDepositWallet}
-        meldUrl={meldUrl}
+        canBuyMeld={canBuyMeld}
         walletEoaAddress={walletEoaAddress}
         walletBalance={effectiveWalletBalance}
         isBalanceLoading={isEffectiveWalletBalanceLoading}

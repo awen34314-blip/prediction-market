@@ -7,6 +7,11 @@ const mocks = hoisted(() => ({
   loadOpenRouterProviderSettings: mock(),
   updateSettings: mock(),
   revalidatePath: mock(),
+  after: mock(),
+}))
+
+void mock.module('next/server', () => ({
+  after: (...args: any[]) => mocks.after(...args),
 }))
 
 void mock.module('next/cache', () => ({
@@ -90,5 +95,6 @@ describe('updateLocalesSettingsAction', () => {
     expect(mocks.updateSettings).toHaveBeenCalledWith(
       expect.arrayContaining([{ group: 'i18n', key: 'rules_translations_enabled', value: 'true' }]),
     )
+    expect(mocks.after).toHaveBeenCalledTimes(1)
   })
 })
