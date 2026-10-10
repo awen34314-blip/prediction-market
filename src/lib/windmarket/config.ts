@@ -2,7 +2,7 @@
 export const windmarket = {
   name: 'WindMarket 风向市场',
   website: 'https://windmarket.top',
-  alternateNames: ['WindMarket', '风向市场'],
+  alternateNames: ['WindMarket', '風向市場', '风向市场', 'WindMarket 風向市場', 'WindMarket 风向市场'],
   community: {
     enabled: true,
     url: 'https://t.me/WindMarketOfficial',
