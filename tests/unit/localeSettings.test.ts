@@ -18,7 +18,7 @@ import {
 describe('locale settings helpers', () => {
   it('preserves enabled locale order and keeps default first', () => {
     const input = ['fr', 'en', 'es']
-    expect(normalizeEnabledLocales(input)).toEqual([DEFAULT_LOCALE, 'fr', 'es'])
+    expect(normalizeEnabledLocales(input)).toEqual([DEFAULT_LOCALE, 'fr', 'en', 'es'])
   })
 
   it('adds default locale when missing', () => {
@@ -26,7 +26,7 @@ describe('locale settings helpers', () => {
   })
 
   it('parses enabled locales from JSON', () => {
-    expect(parseEnabledLocales('["fr","en","de"]')).toEqual([DEFAULT_LOCALE, 'fr', 'de'])
+    expect(parseEnabledLocales('["fr","en","de"]')).toEqual([DEFAULT_LOCALE, 'fr', 'en', 'de'])
   })
 
   it('uses the stored order for enabled locales', () => {
@@ -39,7 +39,7 @@ describe('locale settings helpers', () => {
           },
         },
       }),
-    ).toEqual([DEFAULT_LOCALE, 'pt', 'de'])
+    ).toEqual([DEFAULT_LOCALE, 'pt', 'en', 'de'])
   })
 
   it('uses the stored order for all locales', () => {
@@ -52,7 +52,7 @@ describe('locale settings helpers', () => {
           },
         },
       }),
-    ).toEqual(['en', 'pt', 'de', 'es', 'fr', 'zh', 'ja', 'ar', 'ru', 'it', 'pl', 'ko'])
+    ).toEqual(['zh-hant', 'pt', 'en', 'de', 'es', 'fr', 'zh', 'ja', 'ar', 'ru', 'it', 'pl', 'ko'])
   })
 
   it('filters disabled locales while preserving the configured order', () => {
@@ -69,7 +69,7 @@ describe('locale settings helpers', () => {
           },
         },
       }),
-    ).toEqual(['en', 'zh', 'pt'])
+    ).toEqual(['zh-hant', 'zh', 'en', 'pt'])
   })
 
   it('falls back to the enabled order when the full order is not stored', () => {

@@ -864,6 +864,7 @@ describe('updateGeneralSettingsAction', () => {
       pt: '# Termos de Uso da Kuest\n\nConteúdo em português.',
       fr: '# Conditions d’utilisation de Kuest\n\nContenu français.',
       zh: '# Kuest 使用条款\n\n中文内容。',
+      'zh-hant': '# Kuest 使用條款\n\n中文內容。',
       ja: '# Kuest 利用規約\n\n日本語の内容。',
       ar: '# شروط استخدام Kuest\n\nمحتوى عربي.',
       ru: '# Условия использования Kuest\n\nСодержимое на русском языке.',
@@ -902,6 +903,7 @@ describe('updateGeneralSettingsAction', () => {
     formData.set(
       'terms_of_service_translations_json',
       JSON.stringify({
+        'zh-hant': '# 使用條款',
         en: '# Terms of Use',
         pt: '# Termos de Uso',
       }),
@@ -910,6 +912,7 @@ describe('updateGeneralSettingsAction', () => {
     const result = await updateGeneralSettingsAction({ error: null }, formData)
     expect(result).toEqual({ error: null })
     expect(mocks.updateSettingsWithTermsOfService).toHaveBeenCalledWith(expect.any(Array), {
+      'zh-hant': '# 使用條款',
       en: '# Terms of Use',
       pt: '# Termos de Uso',
     })
@@ -930,6 +933,7 @@ describe('updateGeneralSettingsAction', () => {
     formData.set(
       'terms_of_service_translations_json',
       JSON.stringify({
+        'zh-hant': '# 使用條款',
         en: '# Terms of Use',
         de: '# Nutzungsbedingungen',
         es: '# Términos de uso',
@@ -968,7 +972,7 @@ describe('updateGeneralSettingsAction', () => {
     formData.set('terms_of_service_translations_json', JSON.stringify({ en: '# Terms of Use' }))
 
     const result = await updateGeneralSettingsAction({ error: null }, formData)
-    expect(result).toEqual({ error: 'Terms of Use content is missing for de.' })
+    expect(result).toEqual({ error: 'Terms of Use content is missing for zh-hant.' })
     expect(mocks.updateSettings).not.toHaveBeenCalled()
   })
 })

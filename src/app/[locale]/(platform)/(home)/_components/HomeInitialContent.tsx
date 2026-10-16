@@ -9,6 +9,7 @@ interface HomeInitialContentProps {
   deferRuntimePrerender?: boolean
   initialMainTag?: string
   initialTag?: string
+  showBrandIntroduction?: boolean
 }
 
 async function RuntimeHomeInitialContent(props: HomeInitialContentProps) {

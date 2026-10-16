@@ -6,7 +6,9 @@ import { FrameworkProvider } from 'fumadocs-core/framework'
 import { RootProvider } from 'fumadocs-ui/provider/base'
 import { useParams } from 'next/navigation'
 
+import CanonicalDocsLink from '@/components/DocsLink'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { isDocsPagePath } from '@/lib/docs-seo'
 import { stripLocalePrefix } from '@/lib/locale-path'
 
 interface DocsRootProviderProps {
@@ -18,6 +20,9 @@ function DocsLink({ href, prefetch, ...props }: ComponentProps<typeof Link>) {
   const normalizedPath = stripLocalePrefix(pathname)
   const isApiReference = normalizedPath === '/docs/api-reference' || normalizedPath.startsWith('/docs/api-reference/')
 
+  if (isDocsPagePath(pathname)) {
+    return <CanonicalDocsLink {...props} href={href} prefetch={isApiReference ? false : prefetch} />
+  }
   return <Link {...props} href={href} prefetch={isApiReference ? false : prefetch} />
 }
 

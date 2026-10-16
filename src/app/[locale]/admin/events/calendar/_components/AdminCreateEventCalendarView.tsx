@@ -14,6 +14,7 @@ import plLocale from '@fullcalendar/core/locales/pl'
 import ptLocale from '@fullcalendar/core/locales/pt-br'
 import ruLocale from '@fullcalendar/core/locales/ru'
 import zhLocale from '@fullcalendar/core/locales/zh-cn'
+import zhTwLocale from '@fullcalendar/core/locales/zh-tw'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
@@ -33,6 +34,7 @@ const CALENDAR_LOCALES = [
   ptLocale,
   ruLocale,
   zhLocale,
+  zhTwLocale,
 ]
 
 interface AdminCreateEventCalendarViewProps {
@@ -55,7 +57,7 @@ export default function AdminCreateEventCalendarView({
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
       locales={CALENDAR_LOCALES}
-      locale={locale === 'zh' ? 'zh-cn' : locale === 'pt' ? 'pt-br' : locale}
+      locale={locale === 'zh-hant' ? 'zh-tw' : locale === 'zh' ? 'zh-cn' : locale === 'pt' ? 'pt-br' : locale}
       initialView="dayGridMonth"
       height="auto"
       selectable

@@ -12,7 +12,7 @@ import { SearchResults } from '@/app/[locale]/(platform)/_components/SearchResul
 import { Input } from '@/components/ui/input'
 import { Kbd } from '@/components/ui/kbd'
 import { useSearch } from '@/hooks/useSearch'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { useRouter } from '@/i18n/navigation'
 import { buildPredictionResultsPath } from '@/lib/prediction-search'
 import { cn } from '@/lib/utils'
@@ -203,8 +203,8 @@ export default function HeaderSearch({
   const inputBorderClass = showAttachedDropdown ? 'border-border' : 'border-transparent'
   const inputHoverClass = showAttachedDropdown ? 'hover:bg-background' : 'hover:bg-secondary'
   const inputFocusClass = 'focus:bg-background focus-visible:bg-background'
-  const site = useSiteIdentity()
-  const sitename = `${site.name || 'events and profiles'}`.toLowerCase()
+  const site = useSitePresentation()
+  const sitename = site.name || 'events and profiles'
   const t = useExtracted()
   const shouldShowEmptyState = Boolean(emptyState) && query.trim().length === 0 && !showAttachedDropdown
 

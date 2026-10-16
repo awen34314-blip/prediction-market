@@ -11,6 +11,7 @@ import { hasDatabaseEnv } from '@/lib/db/env'
 import { terms_of_service_translations } from '@/lib/db/schema/legal/tables'
 import { runQuery } from '@/lib/db/utils/run-query'
 import { db } from '@/lib/drizzle'
+import { localizeChineseText } from '@/lib/traditional-chinese'
 
 type TermsOfServiceTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0]
 
@@ -67,6 +68,10 @@ async function getCachedTranslations(): Promise<QueryResult<TermsOfServiceTransl
         if (SUPPORTED_LOCALES.includes(row.locale as SupportedLocale)) {
           translations[row.locale as SupportedLocale] = row.content
         }
+      }
+
+      if (!translations['zh-hant']) {
+        translations['zh-hant'] = localizeChineseText(translations.zh || translations.en, 'zh-hant')
       }
 
       return { data: translations, error: null }

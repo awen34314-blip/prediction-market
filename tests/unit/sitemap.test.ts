@@ -21,6 +21,7 @@ void mock.module('@/lib/source', () => ({
 }))
 
 const { DOCS_SITEMAP_ID, buildDocsSitemapEntries, getDynamicSitemapEntriesById } = await import('@/lib/sitemap')
+const { default: sitemap } = await import('@/app/sitemaps/sitemap')
 
 describe('sitemap docs entries', () => {
   beforeEach(() => {
@@ -60,5 +61,20 @@ describe('sitemap docs entries', () => {
       { path: '/docs', lastModified: '2026-04-27' },
       { path: '/docs/api-reference/rate-limits', lastModified: '2026-04-27' },
     ])
+  })
+
+  it('publishes one URL per English document without false translations or fabricated modification dates', async () => {
+    mocks.getPages.mockReturnValue([{ url: '/docs' }, { url: '/docs/api-reference/rate-limits' }])
+    const entries = await sitemap({ id: Promise.resolve(DOCS_SITEMAP_ID) })
+    expect(entries.map((entry) => new URL(entry.url).pathname)).toEqual(['/docs', '/docs/api-reference/rate-limits'])
+    expect(entries.every((entry) => !entry.alternates && !entry.lastModified)).toBe(true)
+  })
+
+  it('does not submit private portfolio pages or mark static pages as updated on every request', async () => {
+    const entries = await sitemap({ id: Promise.resolve('base') })
+    expect(entries.some((entry) => new URL(entry.url).pathname.endsWith('/portfolio'))).toBe(false)
+    const homepage = entries.find((entry) => new URL(entry.url).pathname === '/')
+    expect(homepage).toBeDefined()
+    expect(homepage?.lastModified).toBeUndefined()
   })
 })

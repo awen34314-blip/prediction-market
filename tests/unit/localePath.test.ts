@@ -11,7 +11,7 @@ import {
 describe('locale path helpers', () => {
   it('extracts locale from pathname', () => {
     expect(getLocaleFromPathname('/pt/portfolio')).toBe('pt')
-    expect(getLocaleFromPathname('/portfolio')).toBe('en')
+    expect(getLocaleFromPathname('/portfolio')).toBe('zh-hant')
   })
 
   it('strips locale prefix from pathname', () => {
@@ -23,7 +23,7 @@ describe('locale path helpers', () => {
 
   it('builds locale-aware paths', () => {
     expect(withLocalePrefix('/2fa', 'pt')).toBe('/pt/2fa')
-    expect(withLocalePrefix('/2fa', 'en')).toBe('/2fa')
+    expect(withLocalePrefix('/2fa', 'en')).toBe('/en/2fa')
     expect(localizePathname('/auth/reset', '/fr/settings')).toBe('/fr/auth/reset')
     expect(localizePathname('/auth/reset', '/settings')).toBe('/auth/reset')
     expect(buildTwoFactorRedirectPath('/pt', '')).toBe('/pt/2fa?next=%2Fpt')

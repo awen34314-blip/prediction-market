@@ -1,10 +1,27 @@
-export const SUPPORTED_LOCALES = ['en', 'de', 'es', 'pt', 'fr', 'zh', 'ja', 'ar', 'ru', 'it', 'pl', 'ko'] as const
+export const SUPPORTED_LOCALES = [
+  'en',
+  'de',
+  'es',
+  'pt',
+  'fr',
+  'zh',
+  'zh-hant',
+  'ja',
+  'ar',
+  'ru',
+  'it',
+  'pl',
+  'ko',
+] as const
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 
-export const DEFAULT_LOCALE: SupportedLocale = 'en'
-export type NonDefaultLocale = Exclude<SupportedLocale, typeof DEFAULT_LOCALE>
-export const NON_DEFAULT_LOCALES = SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE) as NonDefaultLocale[]
+export const DEFAULT_LOCALE = 'zh-hant' as const
+// Imported market records remain English; changing the entry language must not
+// change which database records count as source text or need translation.
+export const SOURCE_LOCALE = 'en' as const
+export type NonDefaultLocale = Exclude<SupportedLocale, typeof SOURCE_LOCALE>
+export const NON_DEFAULT_LOCALES = SUPPORTED_LOCALES.filter((locale) => locale !== SOURCE_LOCALE) as NonDefaultLocale[]
 
 export function resolveSupportedLocale(locale: string | null | undefined): SupportedLocale {
   const normalized = locale?.trim().toLowerCase()
@@ -18,7 +35,8 @@ export const LOCALE_LABELS: Record<SupportedLocale, string> = {
   es: 'Español',
   pt: 'Português',
   fr: 'Français',
-  zh: '中文',
+  zh: '简体中文',
+  'zh-hant': '繁體中文',
   ja: '日本語',
   ar: 'العربية',
   ru: 'Русский',
@@ -38,6 +56,7 @@ export const LOOP_LABELS: Record<SupportedLocale, string> = {
   pt: 'Língua',
   fr: 'Langue',
   zh: '语言',
+  'zh-hant': '語言',
   ja: '言語',
   ar: 'اللغة',
   ru: 'Язык',

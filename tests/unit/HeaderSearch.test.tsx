@@ -6,6 +6,8 @@ import HeaderSearch from '@/app/[locale]/(platform)/_components/HeaderSearch'
 import { hoisted } from '../bun-test-helpers'
 
 const mocks = hoisted(() => ({
+  locale: 'en',
+  site: { name: 'Events and profiles', description: '' },
   clearSearch: mock(),
   handleQueryChange: mock(),
   hideResults: mock(),
@@ -16,6 +18,7 @@ const mocks = hoisted(() => ({
 }))
 
 void mock.module('next-intl', () => ({
+  useLocale: () => mocks.locale,
   useExtracted: () => (value: string) => value,
 }))
 
@@ -33,7 +36,7 @@ void mock.module('@/hooks/useSearch', () => ({
 }))
 
 void mock.module('@/hooks/useSiteIdentity', () => ({
-  useSiteIdentity: () => ({ name: 'Events and profiles' }),
+  useSiteIdentity: () => mocks.site,
 }))
 
 void mock.module('@/app/[locale]/(platform)/_components/SearchResults', () => ({
@@ -42,6 +45,8 @@ void mock.module('@/app/[locale]/(platform)/_components/SearchResults', () => ({
 
 describe('headerSearch', () => {
   beforeEach(() => {
+    mocks.locale = 'en'
+    mocks.site = { name: 'Events and profiles', description: '' }
     mocks.clearSearch.mockReset()
     mocks.handleQueryChange.mockReset()
     mocks.hideResults.mockReset()
@@ -67,6 +72,17 @@ describe('headerSearch', () => {
       showResults: false,
       showSearchResults: mocks.showSearchResults,
     })
+  })
+
+  it.each([
+    ['zh', '风向市场'],
+    ['en', 'WindMarket'],
+  ])('uses the complete %s brand in the search placeholder', (locale, expectedName) => {
+    mocks.locale = locale
+    mocks.site = { name: 'WindMarket 风向市场', description: 'Saved description' }
+    render(<HeaderSearch />)
+    expect(screen.getByTestId('header-search-input')).toHaveAttribute('placeholder', `Search ${expectedName}`)
+    expect(mocks.site.name).toBe('WindMarket 风向市场')
   })
 
   it('navigates to the prediction results page when enter is pressed', () => {
