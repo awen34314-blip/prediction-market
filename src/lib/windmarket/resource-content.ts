@@ -1,5 +1,7 @@
 import type { WindMarketResourceId, WindMarketResourceLocale } from '@/lib/windmarket/resources'
 
+import { userGuideContent } from '@/lib/windmarket/user-guide-content'
+
 interface ResourceSection {
   id: string
   heading: string
@@ -10,7 +12,7 @@ interface ResourceSection {
   links?: { label: string; href: string }[]
 }
 
-interface ResourceContent {
+export interface ResourceContent {
   intro: string
   takeaway: string
   sections: ResourceSection[]
@@ -18,6 +20,7 @@ interface ResourceContent {
 
 // Editorial content is imported by the server-rendered resource pages, not the trading UI.
 const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, ResourceContent>> = {
+  ...userGuideContent,
   about: {
     'zh-hant': {
       intro:
@@ -71,6 +74,11 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           links: [
             { label: '瞭解 WindMarket 風向市場：品牌官網', href: 'https://windmarket.top/zh' },
             { label: '閱讀平臺服務條款', href: '/tos' },
+            { label: '充值指南', href: '/learn/deposits' },
+            { label: '提現指南', href: '/learn/withdrawals' },
+            { label: '費用說明', href: '/learn/fees' },
+            { label: '結算與領取', href: '/learn/settlement' },
+            { label: '官方 X：@WindMarketHQ', href: 'https://x.com/WindMarketHQ' },
             { label: '查看平臺使用文檔（英文）', href: '/docs' },
           ],
         },
@@ -128,6 +136,11 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           links: [
             { label: '了解 WindMarket 风向市场：品牌官网', href: 'https://windmarket.top/zh' },
             { label: '阅读平台服务条款', href: '/tos' },
+            { label: '充值指南', href: '/learn/deposits' },
+            { label: '提现指南', href: '/learn/withdrawals' },
+            { label: '费用说明', href: '/learn/fees' },
+            { label: '结算与领取', href: '/learn/settlement' },
+            { label: '官方 X：@WindMarketHQ', href: 'https://x.com/WindMarketHQ' },
             { label: '查看平台使用文档（英文）', href: '/docs' },
           ],
         },
@@ -186,6 +199,11 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           links: [
             { label: 'Meet WindMarket on our official website', href: 'https://windmarket.top/' },
             { label: 'Read the platform terms', href: '/tos' },
+            { label: 'Deposit guide', href: '/learn/deposits' },
+            { label: 'Withdrawal guide', href: '/learn/withdrawals' },
+            { label: 'Fees explained', href: '/learn/fees' },
+            { label: 'Settlement and claims', href: '/learn/settlement' },
+            { label: 'Official X: @WindMarketHQ', href: 'https://x.com/WindMarketHQ' },
             { label: 'Explore the platform documentation', href: '/docs' },
           ],
         },
@@ -601,15 +619,15 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
   'bitcoin-up-or-down': {
     en: {
       intro:
-        'A Bitcoin Up or Down market asks a precise question about a defined time window. Reading it means separating the BTC reference price, the price of an outcome share and the rules that determine the result. This guide uses a 4-hour BTC market as one example within WindMarket’s broader prediction-market direction, with local-time examples for Southeast Asian readers. Other markets can have different time windows, data sources and settlement conditions.',
+        'A Bitcoin Up or Down market asks a precise question about a defined time window. This guide explains 5-minute, 15-minute and 4-hour windows, separates the BTC reference price from outcome-share prices, and shows how to check settlement rules and local times. Available markets and their individual rules determine which windows can currently be traded.',
       takeaway:
         'The event title defines the time window. Rules & Resolution defines the price source and winning condition. Your purchase time does not reset either of them.',
       sections: [
         {
           id: 'window',
-          heading: '1. What does a 4-hour market mean?',
+          heading: '1. How do 5-minute, 15-minute and 4-hour markets differ?',
           paragraphs: [
-            'The “4h” label describes the event’s fixed four-hour observation window, with a start and end time shown on its page. It does not mean that every buyer receives four hours from the moment they enter. Someone viewing the market near its deadline is looking at the same event window as someone who arrived earlier.',
+            'Labels such as “5m”, “15m” and “4h” describe fixed observation windows of five minutes, fifteen minutes and four hours. The start and end belong to the event, not the time you enter. Opening a 15-minute market two minutes before its deadline does not give you a new fifteen-minute window.',
             'Read the full date, start time, end time and time zone together. Different intervals or successive rounds are separate questions; check the selected event’s title again after navigating between them. The duration label alone does not tell you whether a market is currently open.',
           ],
         },
@@ -691,14 +709,14 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
     },
     'zh-hant': {
       intro:
-        'BTC 漲跌預測市場圍繞一個有明確時間區間的問題展開。讀懂它，需要把比特幣參考價格、結果份額的報價和最終判定規則分開。這篇指南選用 4 小時 BTC 市場作為風向市場多品類方向中的一個示例，並對照東南亞當地時間說明。其他市場可以有不同的時間區間、數據來源和結算條件。',
+        'BTC 漲跌預測市場圍繞一個有明確時間區間的問題展開。本指南說明 5 分鐘、15 分鐘與 4 小時週期的區別，區分比特幣參考價格和結果份額報價，並介紹如何核對結算規則與當地時間。當前可交易的週期，以實際開放市場及其各自規則為準。',
       takeaway: '事件標題確定觀察區間，“規則與結算”確定數據來源和獲勝條件。你的買入時間不會重新設置這兩項。',
       sections: [
         {
           id: 'window',
-          heading: '1. 4 小時市場是什麼意思？',
+          heading: '1. 5 分鐘、15 分鐘與 4 小時市場有什麼區別？',
           paragraphs: [
-            '“4h”表示該事件有一個固定的四小時觀察區間，起止時間寫在頁面上。它不代表每個人買入後都會再獲得四小時。接近截止時間才打開頁面的人，看到的仍然是同一個事件區間。',
+            '“5m”“15m”“4h”分別表示固定的 5 分鐘、15 分鐘和 4 小時觀察區間。起止時間屬於事件本身，不會因為你何時買入而重新計時。例如，在一個 15 分鐘市場截止前兩分鐘打開頁面，剩餘時間仍然只有兩分鐘。',
             '把完整日期、開始時間、結束時間和時區一起核對。不同週期或連續輪次對應不同的問題；切換後重新確認所選事件的標題。僅憑“4h”標籤，不能判斷這個市場是否還在交易中。',
           ],
         },
@@ -773,14 +791,14 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
     },
     zh: {
       intro:
-        'BTC 涨跌预测市场围绕一个有明确时间区间的问题展开。读懂它，需要把比特币参考价格、结果份额的报价和最终判定规则分开。这篇指南选用 4 小时 BTC 市场作为风向市场多品类方向中的一个示例，并对照东南亚当地时间说明。其他市场可以有不同的时间区间、数据来源和结算条件。',
+        'BTC 涨跌预测市场围绕一个有明确时间区间的问题展开。本指南说明 5 分钟、15 分钟与 4 小时周期的区别，区分比特币参考价格和结果份额报价，并介绍如何核对结算规则与当地时间。当前可交易的周期，以实际开放市场及其各自规则为准。',
       takeaway: '事件标题确定观察区间，“规则与结算”确定数据来源和获胜条件。你的买入时间不会重新设置这两项。',
       sections: [
         {
           id: 'window',
-          heading: '1. 4 小时市场是什么意思？',
+          heading: '1. 5 分钟、15 分钟与 4 小时市场有什么区别？',
           paragraphs: [
-            '“4h”表示该事件有一个固定的四小时观察区间，起止时间写在页面上。它不代表每个人买入后都会再获得四小时。接近截止时间才打开页面的人，看到的仍然是同一个事件区间。',
+            '“5m”“15m”“4h”分别表示固定的 5 分钟、15 分钟和 4 小时观察区间。起止时间属于事件本身，不会因为你何时买入而重新计时。例如，在一个 15 分钟市场截止前两分钟打开页面，剩余时间仍然只有两分钟。',
             '把完整日期、开始时间、结束时间和时区一起核对。不同周期或连续轮次对应不同的问题；切换后重新确认所选事件的标题。仅凭“4h”标签，不能判断这个市场是否还在交易中。',
           ],
         },
