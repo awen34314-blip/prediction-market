@@ -5,11 +5,22 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
 const script = resolve(import.meta.dir, '../../scripts/sync-upstream.sh')
+// Hooks export repository-local variables. A fixture's cwd alone does not override
+// GIT_DIR or GIT_COMMON_DIR, so remove them before creating or changing a test repo.
+const repositoryEnvKeys = new Set(
+  execFileSync('git', ['rev-parse', '--local-env-vars'], { encoding: 'utf8' }).trim().split('\n'),
+)
+const fixtureEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) => !repositoryEnvKeys.has(key)))
 let directory: string
 let baseline: string
 
 function git(...args: string[]) {
-  return execFileSync('git', args, { cwd: directory, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim()
+  return execFileSync('git', args, {
+    cwd: directory,
+    env: fixtureEnv,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  }).trim()
 }
 
 function write(path: string, content: string) {
@@ -32,7 +43,7 @@ function upstream(change: () => void) {
 }
 
 function sync() {
-  return spawnSync('bash', [script], { cwd: directory, encoding: 'utf8' })
+  return spawnSync('bash', [script], { cwd: directory, env: fixtureEnv, encoding: 'utf8' })
 }
 
 beforeEach(() => {
