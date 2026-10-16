@@ -21,6 +21,7 @@ import { cacheTags } from '@/lib/cache-tags'
 import { openSauceOne } from '@/lib/fonts'
 import { loadGlobalAnnouncementSettings } from '@/lib/global-announcement-settings'
 import { IS_TEST_MODE } from '@/lib/network'
+import { PUBLIC_CONFIG_FAILURE_CACHE_LIFE } from '@/lib/public-config-cache'
 import { getPublicRuntimeConfig } from '@/lib/public-runtime-config.server'
 import { deferPublicShellPrerenderIfNeeded, shouldPrerenderPublicShell } from '@/lib/public-shell-rendering'
 import { resolvePwaThemeColors } from '@/lib/pwa-colors'
@@ -44,7 +45,7 @@ export async function generateViewport(): Promise<Viewport> {
   if (runtimeTheme.cacheable) {
     cacheLife('max')
   } else {
-    cacheLife('default')
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
   }
   const { lightSurface, darkSurface } = resolvePwaThemeColors(runtimeTheme.theme)
 
@@ -64,7 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
   if (runtimeTheme.cacheable) {
     cacheLife('max')
   } else {
-    cacheLife('default')
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
   }
   const site = runtimeTheme.site
   const siteUrl = resolveSiteUrl(process.env)
@@ -153,7 +154,7 @@ async function loadLocalePublicData(locale: SupportedLocale): Promise<LocalePubl
   if (runtimeTheme.cacheable) {
     cacheLife('max')
   } else {
-    cacheLife('default')
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
   }
   const hasGlobalAnnouncement = globalAnnouncement.message.trim().length > 0
 

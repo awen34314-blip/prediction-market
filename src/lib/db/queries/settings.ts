@@ -10,6 +10,7 @@ import { upsertTermsOfServiceTranslationsInTransaction } from '@/lib/db/queries/
 import { settings } from '@/lib/db/schema/settings/tables'
 import { runQuery } from '@/lib/db/utils/run-query'
 import { db } from '@/lib/drizzle'
+import { PUBLIC_CONFIG_FAILURE_CACHE_LIFE } from '@/lib/public-config-cache'
 
 type SettingsMap = Record<string, Record<string, { value: string; updated_at: string }>>
 
@@ -45,7 +46,7 @@ async function getCachedSettings(): Promise<QueryResult<SettingsMap>> {
   })
 
   if (result.error) {
-    cacheLife('default')
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
   } else {
     cacheLife('max')
   }

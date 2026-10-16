@@ -42,6 +42,8 @@ describe('theme settings runtime resolver', () => {
     const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
     const state = await loadRuntimeThemeState()
 
+    expect(mocks.cacheLife).toHaveBeenCalledWith({ stale: 30, revalidate: 5, expire: 300 })
+    expect(state.cacheable).toBe(false)
     expect(state.source).toBe('default')
     expect(state.theme.presetId).toBe('default')
     expect(state.theme.radius).toBeNull()
@@ -88,6 +90,7 @@ describe('theme settings runtime resolver', () => {
     const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
     const state = await loadRuntimeThemeState()
 
+    expect(mocks.cacheLife).toHaveBeenCalledWith('max')
     expect(state.source).toBe('settings')
     expect(state.theme.presetId).toBe('lime')
     expect(state.theme.radius).toBe('12px')
