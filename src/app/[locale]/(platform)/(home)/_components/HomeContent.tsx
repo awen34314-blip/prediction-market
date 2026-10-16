@@ -5,7 +5,6 @@ import type { Event, HomeFeaturedEventCard, HomeFeaturedHotTopic, HomeFeaturedSi
 
 import HomeClient from '@/app/[locale]/(platform)/(home)/_components/HomeClient'
 import FaqStructuredData from '@/components/seo/FaqStructuredData'
-import HomeIntroduction from '@/components/windmarket/HomeIntroduction'
 import { getRootLocale } from '@/i18n/root-locale'
 import { cacheTags } from '@/lib/cache-tags'
 import { buildTranslatedCategoryFaqItems } from '@/lib/category-faq-server'
@@ -21,7 +20,7 @@ interface HomeContentProps {
   currentTimestamp: number | null
   initialTag?: string
   initialMainTag?: string
-  showBrandIntroduction?: boolean
+  withPageWrapper?: boolean
 }
 
 export default async function HomeContent({
@@ -29,7 +28,7 @@ export default async function HomeContent({
   currentTimestamp,
   initialTag,
   initialMainTag,
-  showBrandIntroduction = false,
+  withPageWrapper = true,
 }: HomeContentProps) {
   'use cache'
   cacheLife(PUBLIC_LISTING_PAGE_CACHE_LIFE)
@@ -132,23 +131,24 @@ export default async function HomeContent({
       })
     : []
 
+  const content = (
+    <HomeClient
+      categoryFaqItems={categoryFaqItems}
+      initialFeaturedEvents={initialFeaturedEvents}
+      initialFeaturedHotTopics={initialFeaturedHotTopics}
+      initialFeaturedSideCard={initialFeaturedSideCard}
+      initialEvents={initialEvents}
+      initialHasMore={initialHasMore}
+      initialCurrentTimestamp={initialCurrentTimestamp}
+      initialTag={initialTagSlug}
+      initialMainTag={initialMainTagSlug}
+    />
+  )
+
   return (
     <>
       <FaqStructuredData items={categoryFaqItems} />
-      <main className="container grid gap-4 py-4">
-        {showBrandIntroduction && <HomeIntroduction locale={resolvedLocale} />}
-        <HomeClient
-          categoryFaqItems={categoryFaqItems}
-          initialFeaturedEvents={initialFeaturedEvents}
-          initialFeaturedHotTopics={initialFeaturedHotTopics}
-          initialFeaturedSideCard={initialFeaturedSideCard}
-          initialEvents={initialEvents}
-          initialHasMore={initialHasMore}
-          initialCurrentTimestamp={initialCurrentTimestamp}
-          initialTag={initialTagSlug}
-          initialMainTag={initialMainTagSlug}
-        />
-      </main>
+      {withPageWrapper ? <main className="container grid gap-4 py-4">{content}</main> : content}
     </>
   )
 }

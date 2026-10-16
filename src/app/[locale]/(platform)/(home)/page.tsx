@@ -1,6 +1,10 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
+import { Suspense } from 'react'
+
+import EventsGridSkeleton from '@/app/[locale]/(platform)/(home)/_components/EventsGridSkeleton'
 import HomeInitialContent from '@/app/[locale]/(platform)/(home)/_components/HomeInitialContent'
+import HomeIntroduction from '@/components/windmarket/HomeIntroduction'
 import { loadEnabledLocales } from '@/i18n/locale-settings'
 import { getRootLocale } from '@/i18n/root-locale'
 import resolveSiteUrl from '@/lib/site-url'
@@ -14,5 +18,14 @@ export async function generateMetadata(_props: unknown, parent: ResolvingMetadat
 }
 
 export default async function HomePage() {
-  return <HomeInitialContent showBrandIntroduction />
+  const locale = await getRootLocale()
+
+  return (
+    <main className="container grid gap-4 py-4">
+      <HomeIntroduction locale={locale} />
+      <Suspense fallback={<EventsGridSkeleton />}>
+        <HomeInitialContent withPageWrapper={false} />
+      </Suspense>
+    </main>
+  )
 }
