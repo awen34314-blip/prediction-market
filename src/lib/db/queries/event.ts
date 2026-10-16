@@ -1856,6 +1856,36 @@ async function hydrateEventListResults({
     })
 }
 
+export async function hydrateEventListPrices(events: Event[]): Promise<Event[]> {
+  'use cache'
+  cacheLife({ stale: 30, revalidate: 30, expire: 120 })
+  cacheTag(cacheTags.eventsList)
+
+  if (events.length === 0) {
+    return events
+  }
+
+  const tokenIds = events.flatMap((event) =>
+    event.markets.flatMap((market) => market.outcomes.map((outcome) => outcome.token_id).filter(Boolean)),
+  )
+  const [priceMap, lastTradeMap] = await Promise.all([fetchOutcomePrices(tokenIds), fetchLastTradePrices(tokenIds)])
+
+  return events.map((event) => ({
+    ...event,
+    markets: event.markets.map((market) => {
+      const outcomes = market.outcomes.map((outcome) => ({
+        ...outcome,
+        buy_price: priceMap.get(outcome.token_id)?.buy,
+        sell_price: priceMap.get(outcome.token_id)?.sell,
+        last_trade_price: lastTradeMap.get(outcome.token_id),
+      }))
+      const price = resolveMarketDisplayPrice(outcomes)
+
+      return { ...market, outcomes, price, probability: price * 100 }
+    }),
+  }))
+}
+
 export const EventRepository = {
   async listAdminSeriesSlugs(creatorWalletAddresses: string[]): Promise<QueryResult<string[]>> {
     const creators = Array.from(

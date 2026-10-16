@@ -13,7 +13,6 @@ import type { Event, HomeFeaturedEventCard, HomeFeaturedHotTopic, HomeFeaturedSi
 
 import EventsGrid from '@/app/[locale]/(platform)/(home)/_components/EventsGrid'
 import FilterToolbar from '@/app/[locale]/(platform)/(home)/_components/FilterToolbar'
-import HomeFeaturedEventsCarousel from '@/app/[locale]/(platform)/(home)/_components/HomeFeaturedEventsCarousel'
 import HomeSecondaryNavigation from '@/app/[locale]/(platform)/(home)/_components/HomeSecondaryNavigation'
 import PlatformFooter from '@/app/[locale]/(platform)/(home)/_components/PlatformFooter'
 import { DEFAULT_FILTERS, useFilters } from '@/app/[locale]/(platform)/_providers/FilterProvider'
@@ -31,6 +30,10 @@ import { getDefaultHomeRouteSortBy } from '@/lib/home-route-sort'
 import { parsePlatformPathname, resolvePlatformNavigationSelection } from '@/lib/platform-navigation'
 import { buildDynamicHomeCategorySlugSet } from '@/lib/platform-routing'
 import { useUser } from '@/stores/useUser'
+
+const HomeFeaturedEventsCarousel = dynamic(
+  () => import('@/app/[locale]/(platform)/(home)/_components/HomeFeaturedEventsCarousel'),
+)
 
 const CategorySidebar = dynamic(() => import('@/app/[locale]/(platform)/(home)/_components/CategorySidebar'))
 

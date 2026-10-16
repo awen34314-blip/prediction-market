@@ -2,7 +2,7 @@ import type { SupportedLocale } from '@/i18n/locales'
 import type { EventListSortBy, EventListStatusFilter } from '@/lib/event-list-filters'
 import type { Event } from '@/types'
 
-import { EventRepository } from '@/lib/db/queries/event'
+import { EventRepository, hydrateEventListPrices } from '@/lib/db/queries/event'
 import { filterHomeEvents, HOME_EVENTS_PAGE_SIZE, isSportsPrimaryHomeEvent } from '@/lib/home-events'
 
 const HOME_EVENTS_QUERY_BATCH_SIZE = 128
@@ -73,6 +73,7 @@ async function loadHomeEventBatches({
       hideCrypto,
       hideEarnings,
       excludeSportsAuxiliary: true,
+      skipLivePricing: true,
     })
 
     if (error) {
@@ -138,8 +139,8 @@ async function loadHomeEventCandidates({
       hideCrypto,
       hideEarnings,
       excludeSportsAuxiliary: true,
-      preferResolvedDateOrder: true,
       skipLivePricing: true,
+      preferResolvedDateOrder: true,
     })
 
     return {
@@ -172,8 +173,8 @@ async function loadHomeEventCandidates({
         hideCrypto,
         hideEarnings,
         excludeSportsAuxiliary: true,
-        preferResolvedDateOrder: true,
         skipLivePricing: true,
+        preferResolvedDateOrder: true,
       })
 
       if (error) {
@@ -229,6 +230,7 @@ async function loadHomeEventCandidates({
       sportsSportSlug,
       sportsSection,
       excludeSportsAuxiliary: true,
+      skipLivePricing: true,
     })
 
     if (error) {
@@ -347,8 +349,13 @@ export async function listHomeEventsPage({
   const pageStart = status === 'resolved' && !hasHomeVisibilityFilters ? 0 : targetOffset
   const pageEnd = pageStart + HOME_EVENTS_PAGE_SIZE
 
+  const pageEvents = visibleEvents.slice(pageStart, pageEnd)
+  // Candidate scans can include many recurring events that never reach this page.
+  // Price only the final page; home filtering and ordering do not depend on prices.
+  const pricedEvents = status === 'resolved' ? pageEvents : await hydrateEventListPrices(pageEvents)
+
   return {
-    data: visibleEvents.slice(pageStart, pageEnd),
+    data: pricedEvents,
     error: null,
     currentTimestamp: resolvedCurrentTimestamp ?? null,
     hasMore: visibleEvents.length > pageEnd,
