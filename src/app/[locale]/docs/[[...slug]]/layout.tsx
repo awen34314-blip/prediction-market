@@ -7,6 +7,7 @@ import { BookOpenIcon, HomeIcon, SquareTerminalIcon } from 'lucide-react'
 import DiscordIcon from '@/components/icons/DiscordIcon'
 import SiteLogoIcon from '@/components/SiteLogoIcon'
 import { getRootLocale } from '@/i18n/root-locale'
+import resolveSiteUrl from '@/lib/site-url'
 import { source } from '@/lib/source'
 import { loadRuntimeThemeState } from '@/lib/theme-settings'
 import { getWindMarketResourceHref, windmarketResources } from '@/lib/windmarket/resources'
@@ -76,7 +77,8 @@ export default async function Layout({ children }: DocsSlugLayoutProps) {
       links={[
         ...(['deposits', 'withdrawals', 'fees', 'settlement'] as const).map((id) => ({
           type: 'main' as const,
-          url: getWindMarketResourceHref(id, locale),
+          // The documentation link provider adds a locale to relative paths.
+          url: new URL(getWindMarketResourceHref(id, locale), resolveSiteUrl()).toString(),
           text: windmarketResources[id].copy[locale].label,
           icon: <BookOpenIcon />,
         })),
