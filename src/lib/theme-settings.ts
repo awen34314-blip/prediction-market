@@ -9,6 +9,7 @@ import { DEFAULT_FEE_RECEIVER_WALLET_ADDRESS, ZERO_ADDRESS } from '@/lib/contrac
 import { validateCustomJavascriptCodesJson } from '@/lib/custom-javascript-code'
 import { hasDatabaseEnv } from '@/lib/db/env'
 import { SettingsRepository } from '@/lib/db/queries/settings'
+import { PUBLIC_CONFIG_FAILURE_CACHE_LIFE } from '@/lib/public-config-cache'
 import { getPublicAssetUrl } from '@/lib/storage'
 import {
   buildResolvedThemeConfig,
@@ -826,7 +827,7 @@ async function loadCachedRuntimeThemeState(): Promise<RuntimeThemeState> {
   const { data: allSettings, error } = await SettingsRepository.getSettings()
 
   if (error) {
-    cacheLife('default')
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
     return defaults
   }
 
@@ -905,7 +906,7 @@ async function loadCachedRuntimeThemeState(): Promise<RuntimeThemeState> {
   if (cacheable) {
     cacheLife('max')
   } else {
-    cacheLife('default')
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
   }
 
   return {

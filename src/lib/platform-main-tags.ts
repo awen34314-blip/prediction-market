@@ -1,10 +1,11 @@
-import { cacheTag } from 'next/cache'
+import { cacheLife, cacheTag } from 'next/cache'
 
 import type { SupportedLocale } from '@/i18n/locales'
 
 import { cacheTags } from '@/lib/cache-tags'
 import { hasDatabaseEnv } from '@/lib/db/env'
 import { TagRepository } from '@/lib/db/queries/tag'
+import { PUBLIC_CONFIG_FAILURE_CACHE_LIFE } from '@/lib/public-config-cache'
 
 type PlatformMainTagsResult = Awaited<ReturnType<typeof TagRepository.getMainTags>>
 
@@ -13,6 +14,10 @@ async function loadCachedPlatformMainTags(locale: SupportedLocale): Promise<Plat
   cacheTag(cacheTags.mainTags(locale))
 
   const result = await TagRepository.getMainTags(locale)
+
+  if (result.error) {
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
+  }
 
   return {
     ...result,

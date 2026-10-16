@@ -4,12 +4,14 @@ import { hoisted, stubEnv, unstubAllEnvs } from '../bun-test-helpers'
 
 const mocks = hoisted(() => ({
   cacheTag: mock(),
+  cacheLife: mock(),
   revalidatePath: mock(),
   runQuery: mock(),
 }))
 
 void mock.module('next/cache', () => ({
   cacheTag: (...args: any[]) => mocks.cacheTag(...args),
+  cacheLife: (...args: any[]) => mocks.cacheLife(...args),
   revalidatePath: (...args: any[]) => mocks.revalidatePath(...args),
 }))
 
@@ -25,6 +27,7 @@ describe('tagRepository.getMainTags', () => {
   beforeEach(() => {
     stubEnv('POSTGRES_URL', 'postgres://user:pass@localhost:5432/app')
     mocks.cacheTag.mockReset()
+    mocks.cacheLife.mockReset()
     mocks.revalidatePath.mockReset()
     mocks.runQuery.mockReset()
   })
@@ -70,6 +73,23 @@ describe('tagRepository.getMainTags', () => {
     expect(result.data?.map((tag) => tag.slug)).toEqual(['crypto'])
     expect(mocks.cacheTag).toHaveBeenCalledOnce()
     expect(mocks.runQuery).toHaveBeenCalledTimes(4)
+  })
+
+  it('revalidates failed main-category reads promptly', async () => {
+    mocks.runQuery.mockResolvedValueOnce({ data: null, error: 'Connection interrupted' })
+    const { TagRepository } = await import('@/lib/db/queries/tag')
+    expect((await TagRepository.getMainTags('en')).error).toBe('Connection interrupted')
+    expect(mocks.cacheLife).toHaveBeenCalledWith({ stale: 30, revalidate: 5, expire: 300 })
+  })
+
+  it('revalidates partial menus when the subcategory read fails', async () => {
+    mocks.runQuery
+      .mockResolvedValueOnce({ data: [{ id: 1, slug: 'crypto' }], error: null })
+      .mockResolvedValueOnce({ data: null, error: 'Connection interrupted' })
+    const { TagRepository } = await import('@/lib/db/queries/tag')
+    const result = await TagRepository.getMainTags('en')
+    expect(result.data?.map((tag) => tag.slug)).toEqual(['crypto'])
+    expect(mocks.cacheLife).toHaveBeenCalledWith({ stale: 30, revalidate: 5, expire: 300 })
   })
 
   it('keeps shared subcategories under each matching main category', async () => {
@@ -651,6 +671,7 @@ describe('tagRepository.getMainTags', () => {
 describe('tagRepository.listTags', () => {
   beforeEach(() => {
     mocks.cacheTag.mockReset()
+    mocks.cacheLife.mockReset()
     mocks.revalidatePath.mockReset()
     mocks.runQuery.mockReset()
   })
@@ -775,6 +796,7 @@ describe('tagRepository.listTags', () => {
 describe('tagRepository.updateMainCategoriesDisplayOrder', () => {
   beforeEach(() => {
     mocks.cacheTag.mockReset()
+    mocks.cacheLife.mockReset()
     mocks.revalidatePath.mockReset()
     mocks.runQuery.mockReset()
   })

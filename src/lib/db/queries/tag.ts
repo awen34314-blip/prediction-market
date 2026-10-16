@@ -1,6 +1,6 @@
 import { and, asc, count, desc, eq, exists, ilike, inArray, or, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { cacheTag } from 'next/cache'
+import { cacheLife, cacheTag } from 'next/cache'
 import { createHash } from 'node:crypto'
 
 import type { NonDefaultLocale, SupportedLocale } from '@/i18n/locales'
@@ -24,6 +24,7 @@ import {
   REWARDS_AUTOMATION_TAG_SLUG,
 } from '@/lib/event-visibility'
 import { filterHomeEvents } from '@/lib/home-events'
+import { PUBLIC_CONFIG_FAILURE_CACHE_LIFE } from '@/lib/public-config-cache'
 import { marketTranslationLocales, localizeChineseText } from '@/lib/traditional-chinese'
 
 const EXCLUDED_SUB_SLUGS = new Set([HIDE_FROM_NEW_TAG_SLUG, REWARDS_AUTOMATION_TAG_SLUG])
@@ -371,6 +372,7 @@ async function getCachedMainTags(locale: SupportedLocale): Promise<MainTagsResul
   })
 
   if (error || !mainTagsResult) {
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
     const errorMessage = typeof error === 'string' ? error : 'Unknown error'
     return { data: null, error: errorMessage, globalChilds: [] }
   }
@@ -400,6 +402,7 @@ async function getCachedMainTags(locale: SupportedLocale): Promise<MainTagsResul
   })
 
   if (viewError || !subcategoriesResult) {
+    cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
     const tagsWithChilds = mainVisibleTags.map((tag: any) => ({ ...tag, childs: [] }))
     const errorMessage = typeof viewError === 'string' ? viewError : 'Unknown error'
     return { data: tagsWithChilds, error: errorMessage, globalChilds: [] }

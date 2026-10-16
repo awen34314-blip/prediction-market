@@ -6,6 +6,7 @@ import { Suspense } from 'react'
 import { hoisted } from '../bun-test-helpers'
 
 const mocks = hoisted(() => ({
+  cacheLife: mock(),
   deferPublicShellPrerenderIfNeeded: mock(),
   getPublicRuntimeConfig: mock(),
   getRootLocale: mock(),
@@ -23,7 +24,7 @@ void mock.module('next-intl', () => ({
 }))
 
 void mock.module('next/cache', () => ({
-  cacheLife: mock(),
+  cacheLife: (...args: unknown[]) => mocks.cacheLife(...args),
   cacheTag: mock(),
 }))
 
@@ -182,6 +183,18 @@ describe('locale layout', () => {
     expect(body.props.syncRootPreset).toBe(true)
     expect(mocks.deferPublicShellPrerenderIfNeeded).toHaveBeenCalledOnce()
     expect(mocks.loadRuntimeThemeState).toHaveBeenCalledOnce()
+  })
+
+  it('lets a document with fallback site settings revalidate promptly', async () => {
+    mocks.loadRuntimeThemeState.mockResolvedValueOnce({
+      cacheable: false,
+      site: { customJavascriptCodes: [] },
+      theme: { cssText: '', presetId: 'default' },
+    })
+    const document = await renderLocaleDocument(<main>Visible homepage</main>)
+    expect(document.type).toBe('html')
+    expect(mocks.cacheLife).toHaveBeenCalledWith({ stale: 30, revalidate: 5, expire: 300 })
+    expect(mocks.cacheLife).not.toHaveBeenCalledWith('max')
   })
 
   it('prerenders a complete document and theme preset without runtime deferral', async () => {

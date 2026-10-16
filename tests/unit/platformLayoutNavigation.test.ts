@@ -4,6 +4,7 @@ import { hoisted, stubEnv, unstubAllEnvs } from '../bun-test-helpers'
 
 const mocks = hoisted(() => ({
   cacheTag: mock(),
+  cacheLife: mock(),
   getExtracted: mock(),
   getMainTags: mock(),
   io: mock(),
@@ -11,6 +12,7 @@ const mocks = hoisted(() => ({
 
 void mock.module('next/cache', () => ({
   cacheTag: mocks.cacheTag,
+  cacheLife: mocks.cacheLife,
   io: mocks.io,
 }))
 
@@ -27,6 +29,7 @@ const { loadPlatformMainTags } = await import('@/lib/platform-main-tags')
 
 beforeEach(() => {
   mocks.cacheTag.mockClear()
+  mocks.cacheLife.mockClear()
   mocks.getExtracted.mockReset()
   mocks.getExtracted.mockResolvedValue((message: string) => message)
   mocks.getMainTags.mockReset()
@@ -114,6 +117,15 @@ describe('platform layout navigation', () => {
     expect(result.data?.map((tag) => tag.slug)).toEqual(['crypto'])
     expect(mocks.cacheTag).toHaveBeenCalledOnce()
     expect(mocks.getMainTags).toHaveBeenCalledOnce()
+  })
+
+  it('does not keep a temporary empty navigation result for the default cache lifetime', async () => {
+    stubEnv('POSTGRES_URL', 'postgres://navigation-test')
+    mocks.getMainTags.mockResolvedValueOnce({ data: null, error: 'Connection interrupted', globalChilds: [] })
+
+    const result = await loadPlatformLayoutNavigation()
+    expect(result.tags.map((tag) => tag.slug)).toEqual(['trending', 'new'])
+    expect(mocks.cacheLife).toHaveBeenCalledWith({ stale: 30, revalidate: 5, expire: 300 })
   })
 
   it('keeps configured builds eligible for prerendering the complete menu', async () => {
