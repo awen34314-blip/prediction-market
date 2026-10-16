@@ -5,7 +5,7 @@ import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/layo
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { getExtracted } from 'next-intl/server'
 import { cacheLife, cacheTag } from 'next/cache'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 import type { SupportedLocale } from '@/i18n/locales'
 
@@ -23,8 +23,10 @@ import { SiteName } from '@/app/[locale]/docs/_components/SiteName'
 import { TradingFeeChart } from '@/app/[locale]/docs/_components/TradingFeeChart'
 import { WebSocketPlayground } from '@/app/[locale]/docs/_components/WebSocketPlayground'
 import { cacheTags } from '@/lib/cache-tags'
+import { getCanonicalDocsPath } from '@/lib/docs-seo'
 import { getEnglishDocsStaticParams } from '@/lib/docs-static-params'
 import { withLocalePrefix } from '@/lib/locale-path'
+import resolveSiteUrl from '@/lib/site-url'
 import { source } from '@/lib/source'
 import { loadRuntimeThemeState } from '@/lib/theme-settings'
 import { cn } from '@/lib/utils'
@@ -71,6 +73,7 @@ async function generateCachedDocsMetadata({ slug }: { slug?: string[] }): Promis
       absolute: `${pageTitle} | ${siteDocumentationTitle}`,
     },
     description: page.data.description,
+    alternates: { canonical: new URL(getCanonicalDocsPath(page.url), resolveSiteUrl(process.env)).toString() },
   }
 }
 
@@ -88,7 +91,7 @@ async function renderCachedDocsPage({ locale, slug }: { locale: string; slug?: s
 
   const page = source.getPage(slug)
   if (!page) {
-    redirect('/docs')
+    notFound()
   }
 
   const localizedPageUrl = withLocalePrefix(page.url, locale as SupportedLocale)
@@ -98,6 +101,7 @@ async function renderCachedDocsPage({ locale, slug }: { locale: string; slug?: s
 
   return (
     <DocsPage
+      lang="en"
       toc={page.data.toc}
       full={useFullLayout}
       tableOfContent={{

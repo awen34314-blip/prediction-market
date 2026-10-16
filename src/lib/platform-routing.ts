@@ -1,10 +1,12 @@
 import { normalizeAddress } from '@/lib/wallet'
 
 const PLATFORM_RESERVED_ROOT_SLUGS = new Set([
+  'about',
   'activity',
   'event',
   'esports',
   'leaderboard',
+  'learn',
   'mentions',
   'new',
   'portfolio',

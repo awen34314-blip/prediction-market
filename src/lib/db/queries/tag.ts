@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto'
 import type { NonDefaultLocale, SupportedLocale } from '@/i18n/locales'
 import type { PlatformCategorySidebarItem, PlatformNavigationChild } from '@/lib/platform-navigation'
 
-import { DEFAULT_LOCALE, NON_DEFAULT_LOCALES } from '@/i18n/locales'
+import { DEFAULT_LOCALE, SOURCE_LOCALE, NON_DEFAULT_LOCALES } from '@/i18n/locales'
 import { cacheTags } from '@/lib/cache-tags'
 import { getCategorySidebarConfiguredTagSlugs, resolveCategorySidebarData } from '@/lib/category-sidebar-config'
 import {
@@ -24,6 +24,7 @@ import {
   REWARDS_AUTOMATION_TAG_SLUG,
 } from '@/lib/event-visibility'
 import { filterHomeEvents } from '@/lib/home-events'
+import { marketTranslationLocales, localizeChineseText } from '@/lib/traditional-chinese'
 
 const EXCLUDED_SUB_SLUGS = new Set([HIDE_FROM_NEW_TAG_SLUG, REWARDS_AUTOMATION_TAG_SLUG])
 
@@ -225,7 +226,7 @@ async function getLocalizedNamesByTagId(
   data: Map<number, string>
   error: string | null
 }> {
-  if (locale === DEFAULT_LOCALE || tagIds.length === 0) {
+  if (locale === SOURCE_LOCALE || tagIds.length === 0) {
     return { data: new Map(), error: null }
   }
 
@@ -236,7 +237,13 @@ async function getLocalizedNamesByTagId(
         name: tag_translations.name,
       })
       .from(tag_translations)
-      .where(and(inArray(tag_translations.tag_id, tagIds), eq(tag_translations.locale, locale)))
+      .where(
+        and(
+          inArray(tag_translations.tag_id, tagIds),
+          inArray(tag_translations.locale, marketTranslationLocales(locale)),
+        ),
+      )
+      .orderBy(sql`${tag_translations.locale} = ${locale}`)
 
     return { data: result, error: null }
   })
@@ -250,7 +257,7 @@ async function getLocalizedNamesByTagId(
 
   const localized = new Map<number, string>()
   for (const row of data) {
-    localized.set(row.tag_id, row.name)
+    localized.set(row.tag_id, localizeChineseText(row.name, locale))
   }
 
   return { data: localized, error: null }
@@ -398,7 +405,7 @@ async function getCachedMainTags(locale: SupportedLocale): Promise<MainTagsResul
     return { data: tagsWithChilds, error: errorMessage, globalChilds: [] }
   }
 
-  const configuredSidebarTagSlugs = locale === DEFAULT_LOCALE ? [] : Array.from(getCategorySidebarConfiguredTagSlugs())
+  const configuredSidebarTagSlugs = locale === SOURCE_LOCALE ? [] : Array.from(getCategorySidebarConfiguredTagSlugs())
   const { data: configuredSidebarTags, error: configuredSidebarTagsError } =
     configuredSidebarTagSlugs.length === 0
       ? { data: [], error: null }

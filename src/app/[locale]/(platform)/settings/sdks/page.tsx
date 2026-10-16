@@ -8,8 +8,8 @@ import { isAddress, zeroAddress } from 'viem'
 import SettingsSdkApiKeysContent from '@/app/[locale]/(platform)/settings/_components/SettingsSdkApiKeysContent'
 import SettingsSdkDownloadsContent from '@/app/[locale]/(platform)/settings/_components/SettingsSdkDownloadsContent'
 import SettingsSdkMarketMakerDownloadsContent from '@/app/[locale]/(platform)/settings/_components/SettingsSdkMarketMakerDownloadsContent'
+import DocsLink from '@/components/DocsLink'
 import { Button } from '@/components/ui/button'
-import { Link } from '@/i18n/navigation'
 import { addressToBuilderCode } from '@/lib/builder-code'
 import { DEFAULT_FEE_RECEIVER_WALLET_ADDRESS } from '@/lib/contracts'
 import { SettingsRepository } from '@/lib/db/queries/settings'
@@ -177,10 +177,10 @@ export default async function SdkDownloadsSettingsPage() {
           className="w-full sm:w-auto"
           nativeButton={false}
           render={
-            <Link href="/docs/api-reference/clients-sdks">
+            <DocsLink href="/docs/api-reference/clients-sdks">
               {t('Open documentation')}
               <ArrowRightIcon className="size-4" />
-            </Link>
+            </DocsLink>
           }
         />
       </div>

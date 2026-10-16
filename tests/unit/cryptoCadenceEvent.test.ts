@@ -25,6 +25,21 @@ function normalizeWhitespace(value: string | null) {
 }
 
 describe('crypto cadence event presentation', () => {
+  it('renders Chinese cadence units without changing the event or its time window', () => {
+    const event = {
+      ...BASE_BTC_EVENT,
+      end_date: '2026-07-28T16:00:00.000Z',
+      series_slug: 'bitcoin-up-or-down-4h',
+    }
+    expect(resolveCryptoCadenceEventPresentation(event, 'zh')).toEqual({
+      title: 'BTC会上涨还是下跌 4小时',
+      subtitle: '7月28日 08:00 – 12:00 ET',
+    })
+    expect(resolveCryptoCadenceEventTitle(event, 'en')).toBe('BTC Up or Down 4h')
+    expect(event.title).toBe(BASE_BTC_EVENT.title)
+    expect(event.series_slug).toBe('bitcoin-up-or-down-4h')
+  })
+
   it.each([
     {
       routeSlug: '5M',
@@ -70,7 +85,7 @@ describe('crypto cadence event presentation', () => {
 
     expect(resolveCryptoCadenceRouteSlug(event)).toBe(routeSlug)
     expect(matchesCryptoCadenceRoute(event, routeSlug)).toBe(true)
-    expect(resolveCryptoCadenceEventPresentation(event)).toEqual({ title, subtitle })
+    expect(resolveCryptoCadenceEventPresentation(event, 'en')).toEqual({ title, subtitle })
     expect(resolveCryptoEventAsset(event)).toMatchObject({
       name: 'Bitcoin',
       slug: 'bitcoin',
@@ -125,7 +140,7 @@ describe('crypto cadence event presentation', () => {
       series_slug: 'btc-up-or-down-4h',
     }
 
-    expect(resolveCryptoCadenceEventPresentation(event)).toEqual({
+    expect(resolveCryptoCadenceEventPresentation(event, 'en')).toEqual({
       title: 'BTC Up or Down 4h',
       subtitle: 'July 28, 10PM-July 29, 2AM ET',
     })
@@ -138,12 +153,15 @@ describe('crypto cadence event presentation', () => {
 
   it('uses the same compact header title for 4-hour related rows', () => {
     expect(
-      resolveCryptoCadenceEventTitle({
-        ...BASE_BTC_EVENT,
-        title: 'Solana Up or Down - August 12, 12:00AM-4:00AM ET',
-        end_date: '2026-08-12T08:00:00.000Z',
-        series_slug: 'solana-up-or-down-4h',
-      }),
+      resolveCryptoCadenceEventTitle(
+        {
+          ...BASE_BTC_EVENT,
+          title: 'Solana Up or Down - August 12, 12:00AM-4:00AM ET',
+          end_date: '2026-08-12T08:00:00.000Z',
+          series_slug: 'solana-up-or-down-4h',
+        },
+        'en',
+      ),
     ).toBe('SOL Up or Down 4h')
   })
 

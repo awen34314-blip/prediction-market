@@ -5,6 +5,7 @@ import type { Event } from '@/types'
 import { OUTCOME_INDEX } from '@/lib/constants'
 import { buildEventStructuredData, buildSiteStructuredData } from '@/lib/structured-data'
 import { createDefaultThemeSiteIdentity } from '@/lib/theme-site-identity'
+import { buildWindMarketResourceStructuredData } from '@/lib/windmarket/resource-seo'
 
 const ORIGINAL_SITE_URL = process.env.SITE_URL
 
@@ -132,6 +133,35 @@ describe('structuredData', () => {
     expect(structuredData.website.publisher).toEqual({ '@id': 'https://kuest.example#organization' })
   })
 
+  it('connects WindMarket app, editorial pages and events to the marketing site organization', () => {
+    process.env.SITE_URL = 'https://app.windmarket.top'
+    const site = {
+      ...createDefaultThemeSiteIdentity(),
+      name: 'WindMarket 风向市场',
+      twitterLink: 'https://x.com/WindMarketHQ',
+    }
+    const { organization, website } = buildSiteStructuredData({ locale: 'zh', site })
+    const organizationId = 'https://windmarket.top/#organization'
+
+    expect(organization['@id']).toBe(organizationId)
+    expect(organization.url).toBe('https://windmarket.top/')
+    expect(organization.name).toBe('WindMarket')
+    expect(organization.sameAs).toEqual(['https://x.com/WindMarketHQ', 'https://t.me/WindMarketOfficial'])
+    expect(organization.alternateName).toContain('风向市场')
+    expect(organization.alternateName).toContain('風向市場')
+    expect(website.url).toBe('https://app.windmarket.top')
+    expect(website.publisher).toEqual({ '@id': organizationId })
+    const event = buildEventStructuredData({
+      event: createEventFixture(),
+      locale: 'zh',
+      pagePath: '/event/example',
+      site,
+    })
+    expect(event.event.organizer).toEqual({ '@id': organizationId })
+    const resource = buildWindMarketResourceStructuredData('about', 'zh', 'https://app.windmarket.top')
+    expect((resource['@graph'] as Array<Record<string, unknown>>)[0]?.about).toEqual({ '@id': organizationId })
+  })
+
   it('builds event, breadcrumb, and faq structured data for event pages', () => {
     process.env.SITE_URL = 'https://kuest.example'
 
@@ -153,7 +183,7 @@ describe('structuredData', () => {
       ],
     })
 
-    expect(structuredData.event.url).toBe('https://kuest.example/event/will-the-iranian-regime-fall-by-june-30')
+    expect(structuredData.event.url).toBe('https://kuest.example/en/event/will-the-iranian-regime-fall-by-june-30')
     expect(structuredData.event.eventStatus).toBe('https://schema.org/EventScheduled')
     expect(structuredData.event.offers).toMatchObject({
       '@type': 'Offer',
@@ -166,25 +196,25 @@ describe('structuredData', () => {
         '@type': 'ListItem',
         position: 1,
         name: 'Kuest',
-        item: 'https://kuest.example/',
+        item: 'https://kuest.example/en',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Politics',
-        item: 'https://kuest.example/politics',
+        item: 'https://kuest.example/en/politics',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'Iran',
-        item: 'https://kuest.example/politics/iran',
+        item: 'https://kuest.example/en/politics/iran',
       },
       {
         '@type': 'ListItem',
         position: 4,
         name: 'Will the Iranian regime fall by June 30?',
-        item: 'https://kuest.example/event/will-the-iranian-regime-fall-by-june-30',
+        item: 'https://kuest.example/en/event/will-the-iranian-regime-fall-by-june-30',
       },
     ])
 

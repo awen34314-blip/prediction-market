@@ -14,7 +14,7 @@ import {
   serializeEnabledLocales,
   serializeLocaleOrder,
 } from '@/i18n/locale-settings'
-import { DEFAULT_LOCALE, resolveSupportedLocale, SUPPORTED_LOCALES } from '@/i18n/locales'
+import { SOURCE_LOCALE, resolveSupportedLocale, SUPPORTED_LOCALES } from '@/i18n/locales'
 import { loadOpenRouterProviderSettings } from '@/lib/ai/market-context-config'
 import { DEFAULT_ERROR_MESSAGE } from '@/lib/constants'
 import { SettingsRepository } from '@/lib/db/queries/settings'
@@ -146,7 +146,7 @@ export async function updateLocalesSettingsAction(
   }
 
   if (
-    parsed.data.enabledLocales.some((enabledLocale) => enabledLocale !== DEFAULT_LOCALE) &&
+    parsed.data.enabledLocales.some((enabledLocale) => enabledLocale !== SOURCE_LOCALE) &&
     (normalizedAutomaticTranslationsEnabled || normalizedRulesTranslationsEnabled) &&
     (parsed.data.enabledLocales.some((enabledLocale) => !previouslyEnabledLocales.includes(enabledLocale)) ||
       (normalizedAutomaticTranslationsEnabled && !previouslyAutomaticTranslationsEnabled) ||

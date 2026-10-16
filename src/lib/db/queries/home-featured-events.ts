@@ -12,7 +12,7 @@ import type {
   QueryResult,
 } from '@/types'
 
-import { DEFAULT_LOCALE } from '@/i18n/locales'
+import { SOURCE_LOCALE } from '@/i18n/locales'
 import { cacheTags } from '@/lib/cache-tags'
 import { upsertTermsOfServiceTranslationsInTransaction } from '@/lib/db/queries/terms-of-service'
 import {
@@ -800,7 +800,7 @@ export const HomeFeaturedEventsRepository = {
     return runQuery(async () => {
       const now = new Date()
       const contextLocales =
-        options.includeDefaultFallback && locale !== DEFAULT_LOCALE ? [locale, DEFAULT_LOCALE] : [locale]
+        options.includeDefaultFallback && locale !== SOURCE_LOCALE ? [locale, SOURCE_LOCALE] : [locale]
       const eventIdsByFeaturedId = options.eventIdsByFeaturedId
       const allowedEventIds = Array.from(
         new Set(

@@ -1,11 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "bunVersion": "1.4.x",
-  "buildCommand": "bun run db:push && bun run build",
-  "ignoreCommand": "if [ \"$VERCEL_ENV\" = \"preview\" ] || git log -1 --pretty=%B | grep -q '\\[skip deploy\\]'; then exit 0; else exit 1; fi",
+  "buildCommand": "bun run build",
+  "ignoreCommand": "exit 1",
   "git": {
     "deploymentEnabled": {
       "main": true,
+      "codex/windmarket-production": true,
       "*": false
     }
   }

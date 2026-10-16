@@ -20,6 +20,7 @@ describe('global announcement settings helpers', () => {
       pt: 'Último aviso para migrar para a rede principal',
       fr: 'Dernier rappel pour passer au réseau principal',
       zh: '迁移至主网的最后提醒',
+      'zh-hant': '遷移至主網的最後提醒',
       ja: 'メインネット移行の最終案内',
       ar: 'التنبيه الأخير للانتقال إلى الشبكة الرئيسية',
       ru: 'Последнее напоминание о переходе в основную сеть',

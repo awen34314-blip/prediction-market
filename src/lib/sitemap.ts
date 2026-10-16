@@ -39,7 +39,7 @@ interface DynamicEventSitemaps {
 
 interface SitemapIndexEntry {
   id: string
-  lastmod: string
+  lastmod?: string
 }
 
 interface ClosedSitemapId {
@@ -93,7 +93,7 @@ function toOptionalStringArray(value: unknown) {
     .filter(Boolean)
 }
 
-export function formatDateForSitemap(date: Date): string {
+function formatDateForSitemap(date: Date): string {
   return date.toISOString().slice(0, 10)
 }
 
@@ -105,18 +105,15 @@ export async function getSitemapIds(): Promise<string[]> {
 export async function getSitemapIndexEntries(): Promise<SitemapIndexEntry[]> {
   const fallbackDate = formatDateForSitemap(new Date())
   const categoryEntries = await getCategorySitemapEntries()
-  const docsEntries = getDocsSitemapEntries(fallbackDate)
   const dynamicSitemaps = await getDynamicEventSitemaps()
   const predictionEntries = await getPredictionSitemapEntries()
   const chunkSize = await resolveLocalizedSitemapChunkSize()
   const entries: SitemapIndexEntry[] = [
     {
       id: BASE_SITEMAP_ID,
-      lastmod: fallbackDate,
     },
     {
       id: DOCS_SITEMAP_ID,
-      lastmod: getLatestLastModified(docsEntries, fallbackDate),
     },
     {
       id: CATEGORIES_SITEMAP_ID,

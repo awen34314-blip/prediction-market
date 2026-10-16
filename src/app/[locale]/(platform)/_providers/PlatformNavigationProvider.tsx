@@ -6,6 +6,8 @@ import { createContext, use, useMemo } from 'react'
 
 import type { PlatformNavigationTag } from '@/lib/platform-navigation'
 
+import { useCategoryLabel } from '@/hooks/useCategoryLabel'
+
 interface PlatformNavigationContextValue {
   childParentMap: Record<string, string>
   tags: PlatformNavigationTag[]
@@ -14,12 +16,17 @@ interface PlatformNavigationContextValue {
 const PlatformNavigationContext = createContext<PlatformNavigationContextValue | null>(null)
 
 function usePlatformNavigationContextValue({ childParentMap, tags }: PlatformNavigationContextValue) {
+  const localizeCategoryLabel = useCategoryLabel()
   return useMemo(
     () => ({
       childParentMap,
-      tags,
+      tags: tags.map((tag) => ({
+        ...tag,
+        name: localizeCategoryLabel(tag.name),
+        childs: tag.childs.map((child) => ({ ...child, name: localizeCategoryLabel(child.name) })),
+      })),
     }),
-    [childParentMap, tags],
+    [childParentMap, tags, localizeCategoryLabel],
   )
 }
 

@@ -28,6 +28,7 @@ import { createAppKitWagmiAdapter, defaultNetwork, networks } from '@/lib/appkit
 import { authClient } from '@/lib/auth-client'
 import { IS_BROWSER } from '@/lib/constants'
 import { clearBrowserStorage, clearNonHttpOnlyCookies } from '@/lib/utils'
+import { AppKitLocaleSynchronizer } from '@/providers/AppKitLocaleSynchronizer'
 import { mergeSessionUserState, useUser } from '@/stores/useUser'
 
 let hasInitializedAppKit = false
@@ -743,6 +744,7 @@ export default function AppKitProvider({ children }: { children: ReactNode }) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <AppKitContext value={appKitValue}>
+        <AppKitLocaleSynchronizer />
         <PolymarketWalletConnectionRestorer />
         {instance && siweClient && <AutoSiweAuthentication siweClient={siweClient} />}
         {children}

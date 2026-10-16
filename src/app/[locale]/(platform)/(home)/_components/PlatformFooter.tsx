@@ -13,6 +13,7 @@ import type { PlatformNavigationChild, PlatformNavigationTag } from '@/lib/platf
 import type { Event } from '@/types'
 
 import { usePlatformNavigationData } from '@/app/[locale]/(platform)/_providers/PlatformNavigationProvider'
+import DocsLink from '@/components/DocsLink'
 import LocaleFlag from '@/components/LocaleFlag'
 import SiteLogoIcon from '@/components/SiteLogoIcon'
 import SocialIcon from '@/components/SocialIcon'
@@ -23,7 +24,8 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useSiteIdentity } from '@/hooks/useSiteIdentity'
+import ResourceLinks from '@/components/windmarket/ResourceLinks'
+import { useSitePresentation } from '@/hooks/useSitePresentation'
 import { LOCALE_LABELS, normalizeEnabledLocales, SUPPORTED_LOCALES } from '@/i18n/locales'
 import { Link, usePathname } from '@/i18n/navigation'
 import { fetchHomeEventsPageApi } from '@/lib/events-api'
@@ -343,7 +345,7 @@ function CategoryMarketsFooter({
 
 function FooterNavigation({ links }: { links: FooterExternalLink[] }) {
   const t = useExtracted()
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const platformLinks = [
     { href: '/docs/api-reference' as Route, label: t('APIs') },
     { href: '/leaderboard' as Route, label: t('Leaderboard') },
@@ -371,15 +373,18 @@ function FooterNavigation({ links }: { links: FooterExternalLink[] }) {
       <section>
         <h2 className="mb-5 text-sm font-medium text-muted-foreground">{site.name}</h2>
         <div className="space-y-4">
-          {platformLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block w-fit text-sm font-medium text-foreground transition-colors hover:text-primary"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {platformLinks.map((link) => {
+            const NavigationLink = link.href.startsWith('/docs') ? DocsLink : Link
+            return (
+              <NavigationLink
+                key={link.href}
+                href={link.href}
+                className="block w-fit text-sm font-medium text-foreground transition-colors hover:text-primary"
+              >
+                {link.label}
+              </NavigationLink>
+            )
+          })}
         </div>
       </section>
     </div>
@@ -388,7 +393,7 @@ function FooterNavigation({ links }: { links: FooterExternalLink[] }) {
 
 function FooterBottom({ socialLinks }: { socialLinks: FooterExternalLink[] }) {
   const t = useExtracted()
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const year = useSyncExternalStore(subscribeToCurrentYear, getCurrentYearSnapshot, getServerYearSnapshot)
 
   return (
@@ -423,9 +428,9 @@ function FooterBottom({ socialLinks }: { socialLinks: FooterExternalLink[] }) {
             {t('Terms of Use')}
           </Link>
           <span aria-hidden="true">·</span>
-          <Link href="/docs" className="transition-colors hover:text-foreground">
+          <DocsLink href="/docs" className="transition-colors hover:text-foreground">
             {t('Docs')}
-          </Link>
+          </DocsLink>
         </div>
       </div>
 
@@ -452,7 +457,7 @@ export default function PlatformFooter({
 }: PlatformFooterProps) {
   const t = useExtracted()
   const locale = useLocale()
-  const site = useSiteIdentity()
+  const site = useSitePresentation()
   const { tags } = usePlatformNavigationData()
 
   const mainCategories = useMemo(() => tags.filter((tag) => tag.slug !== 'trending' && tag.slug !== 'new'), [tags])
@@ -554,6 +559,7 @@ export default function PlatformFooter({
           <span>{site.name}</span>
         </Link>
         <p className="mt-3 max-w-xl text-base font-medium text-foreground/90">{site.description}</p>
+        <ResourceLinks locale={locale} />
       </div>
 
       <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-1 sm:gap-12 lg:grid-cols-12">

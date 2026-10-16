@@ -1,0 +1,161 @@
+import type { SupportedLocale } from '@/i18n/locales'
+
+import { normalizeEnabledLocales } from '@/i18n/locales'
+import { withLocalePrefix } from '@/lib/locale-path'
+
+export type WindMarketResourceLocale = 'en' | 'zh' | 'zh-hant'
+export type WindMarketResourceId = 'about' | 'prediction-markets' | 'southeast-asia' | 'bitcoin-up-or-down'
+
+interface ResourceCopy {
+  label: string
+  title: string
+  heading: string
+  description: string
+}
+
+export const windmarketResources: Record<
+  WindMarketResourceId,
+  { path: string; updated: string; copy: Record<WindMarketResourceLocale, ResourceCopy> }
+> = {
+  about: {
+    path: '/about',
+    updated: '2026-09-28',
+    copy: {
+      'zh-hant': {
+        label: '關於風向市場',
+        title: '關於風向市場 WindMarket｜東南亞預測市場與社區',
+        heading: '面向東南亞的預測市場：風向市場',
+        description:
+          '認識風向市場 WindMarket：面向東南亞社區的預測市場平臺，瞭解加密貨幣、股票、黃金等多品類市場，以及市場規則、中英文指南與社區。',
+      },
+      zh: {
+        label: '关于风向市场',
+        title: '关于风向市场 WindMarket｜东南亚预测市场与社区',
+        heading: '面向东南亚的预测市场：风向市场',
+        description:
+          '认识风向市场 WindMarket：面向东南亚社区的预测市场平台，了解加密货币、股票、黄金等多品类市场，以及市场规则、中英文指南与社区。',
+      },
+      en: {
+        label: 'About WindMarket',
+        title: 'About WindMarket | Prediction Markets for Southeast Asia',
+        heading: 'Prediction markets for Southeast Asia',
+        description:
+          'Meet WindMarket, a prediction market platform for Southeast Asia, with markets spanning crypto, stocks, gold and other real-world events.',
+      },
+    },
+  },
+  'prediction-markets': {
+    path: '/learn/prediction-markets',
+    updated: '2026-09-22',
+    copy: {
+      'zh-hant': {
+        label: '預測市場入門',
+        title: '預測市場是什麼？價格、概率與結算入門｜風向市場 WindMarket',
+        heading: '預測市場，從讀懂一個問題開始',
+        description:
+          '預測市場價格代表什麼？通過簡單示例瞭解概率、買賣價差、成交價格、事件規則與結算，以及使用風向市場前需要核對的信息。',
+      },
+      zh: {
+        label: '预测市场入门',
+        title: '预测市场是什么？价格、概率与结算入门｜风向市场 WindMarket',
+        heading: '预测市场，从读懂一个问题开始',
+        description:
+          '预测市场价格代表什么？通过简单示例了解概率、买卖价差、成交价格、事件规则与结算，以及使用风向市场前需要核对的信息。',
+      },
+      en: {
+        label: 'Prediction market guide',
+        title: 'What Is a Prediction Market? Prices and Settlement | WindMarket',
+        heading: 'Start with the question, then read the market',
+        description:
+          'Learn how prediction markets work: implied probabilities, bid–ask spreads, execution prices, event rules and settlement, with a simple worked example.',
+      },
+    },
+  },
+  'southeast-asia': {
+    path: '/learn/southeast-asia',
+    updated: '2026-09-22',
+    copy: {
+      'zh-hant': {
+        label: '東南亞用戶指南',
+        title: '東南亞預測市場指南：時區、語言與充值須知｜風向市場',
+        heading: '東南亞預測市場指南',
+        description:
+          '為東南亞讀者整理的預測市場指南：對照菲律賓、新加坡、馬來西亞、泰國、越南與印尼時區，瞭解中英文閱讀、充值網絡與服務可用性。',
+      },
+      zh: {
+        label: '东南亚用户指南',
+        title: '东南亚预测市场指南：时区、语言与充值须知｜风向市场',
+        heading: '东南亚预测市场指南',
+        description:
+          '为东南亚读者整理的预测市场指南：对照菲律宾、新加坡、马来西亚、泰国、越南与印尼时区，了解中英文阅读、充值网络与服务可用性。',
+      },
+      en: {
+        label: 'Southeast Asia guide',
+        title: 'Prediction Markets in Southeast Asia: A User Guide | WindMarket',
+        heading: 'A prediction market guide for Southeast Asia',
+        description:
+          'A practical guide for Southeast Asian readers: compare local time zones, read market rules in context, and understand deposit networks and service availability.',
+      },
+    },
+  },
+  'bitcoin-up-or-down': {
+    path: '/learn/bitcoin-up-or-down',
+    updated: '2026-09-22',
+    copy: {
+      en: {
+        label: 'Bitcoin Up or Down guide',
+        title: 'Bitcoin Up or Down: 4-Hour Prediction Market Guide | WindMarket',
+        heading: 'How to read a Bitcoin Up or Down market',
+        description:
+          'Understand a 4-hour Bitcoin prediction market: Price To Beat, Up and Down share prices, Chainlink TWAP rules, settlement and Southeast Asian time zones.',
+      },
+      'zh-hant': {
+        label: 'BTC 漲跌市場指南',
+        title: 'BTC 漲跌預測怎麼看？4 小時市場與結算指南｜風向市場',
+        heading: '讀懂 BTC 漲跌預測的 4 小時市場',
+        description:
+          '瞭解 BTC 漲跌預測市場的固定觀察區間、基準價格、份額報價、Chainlink TWAP 數據與結算狀態，並對照東南亞當地時區閱讀市場規則。',
+      },
+      zh: {
+        label: 'BTC 涨跌市场指南',
+        title: 'BTC 涨跌预测怎么看？4 小时市场与结算指南｜风向市场',
+        heading: '读懂 BTC 涨跌预测的 4 小时市场',
+        description:
+          '了解 BTC 涨跌预测市场的固定观察区间、基准价格、份额报价、Chainlink TWAP 数据与结算状态，并对照东南亚当地时区阅读市场规则。',
+      },
+    },
+  },
+}
+
+export function getWindMarketResourceLocales(enabledLocales: SupportedLocale[]): WindMarketResourceLocale[] {
+  return normalizeEnabledLocales(enabledLocales).filter(
+    (locale): locale is WindMarketResourceLocale => locale === 'en' || locale === 'zh' || locale === 'zh-hant',
+  )
+}
+
+export function getWindMarketResourceHref(id: WindMarketResourceId, locale: string) {
+  return withLocalePrefix(
+    windmarketResources[id].path,
+    locale === 'zh-hant' ? 'zh-hant' : locale === 'zh' ? 'zh' : 'en',
+  )
+}
+
+export function getWindMarketResourceLanguages(
+  id: WindMarketResourceId,
+  enabledLocales: SupportedLocale[],
+  siteUrl: string,
+) {
+  const languages: Record<string, string> = Object.fromEntries(
+    getWindMarketResourceLocales(enabledLocales).map((locale) => [
+      locale,
+      new URL(getWindMarketResourceHref(id, locale), siteUrl).toString(),
+    ]),
+  )
+  languages['x-default'] = new URL(windmarketResources[id].path, siteUrl).toString()
+  return languages
+}
+
+export function isWindMarketResourcePath(pathname: string) {
+  const path = pathname.replace(/\/+$/, '')
+  return Object.values(windmarketResources).some((resource) => resource.path === path)
+}

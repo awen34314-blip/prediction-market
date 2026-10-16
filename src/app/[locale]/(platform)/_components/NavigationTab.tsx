@@ -31,6 +31,7 @@ export default function NavigationTab({
       <Link
         href={href}
         onClick={onClick}
+        aria-current={isActive ? 'page' : undefined}
         className={cn(
           'inline-flex h-full items-center justify-center rounded-md py-1 whitespace-nowrap',
           tabPaddingClass,
