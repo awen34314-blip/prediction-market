@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, mock } from 'bun:test'
 
 import { hoisted } from '../bun-test-helpers'
@@ -11,8 +11,8 @@ void mock.module('next-intl', () => ({
   useExtracted: () => (value: string) => value,
 }))
 
-void mock.module('next/dynamic', () => ({
-  default: () => () => <div data-testid="header-deposit-button" />,
+void mock.module('@/app/[locale]/(platform)/_components/HeaderDepositButton', () => ({
+  default: () => <div data-testid="header-deposit-button" />,
 }))
 
 void mock.module('@/i18n/navigation', () => ({
@@ -68,7 +68,7 @@ void mock.module('@/stores/useUser', () => ({
 const { default: HeaderMenu } = await import('@/app/[locale]/(platform)/_components/HeaderMenu')
 
 describe('HeaderMenu', () => {
-  it('keeps the skeleton visible until a logged-in session resolves', () => {
+  it('keeps the skeleton visible until a logged-in session resolves', async () => {
     mocks.useSession.mockReturnValue({ data: null, isPending: true })
 
     const view = render(<HeaderMenu />)
@@ -81,7 +81,9 @@ describe('HeaderMenu', () => {
 
     expect(screen.queryByTestId('header-menu-skeleton')).not.toBeInTheDocument()
     expect(screen.queryByTestId('header-login-button')).not.toBeInTheDocument()
-    expect(screen.getByTestId('header-auth-menu')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByTestId('header-auth-menu')).toBeInTheDocument())
+    expect(screen.getByTestId('header-notifications')).toBeInTheDocument()
+    expect(screen.getByTestId('header-portfolio')).toBeInTheDocument()
   })
 
   it('shows guest actions after an anonymous session resolves', () => {
@@ -91,5 +93,7 @@ describe('HeaderMenu', () => {
 
     expect(screen.queryByTestId('header-menu-skeleton')).not.toBeInTheDocument()
     expect(screen.getByTestId('header-login-button')).toBeInTheDocument()
+    expect(screen.queryByTestId('header-auth-menu')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('header-notifications')).not.toBeInTheDocument()
   })
 })

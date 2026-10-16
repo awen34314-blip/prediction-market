@@ -212,6 +212,30 @@ describe('tradingOnboardingProvider', () => {
     unstubAllGlobals()
   })
 
+  it('keeps public content available without wallet dialogs and loads them after sign-in', async () => {
+    render(
+      <TradingOnboardingProvider>
+        <div>Public market content</div>
+      </TradingOnboardingProvider>,
+    )
+
+    expect(screen.getByText('Public market content')).toBeInTheDocument()
+    expect(screen.queryByTestId('active-modal')).not.toBeInTheDocument()
+    expect(mocks.dialogProps).toBeNull()
+
+    await act(async () => {
+      useUser.setState(createUser())
+    })
+    await waitFor(() => expect(screen.getByTestId('active-modal')).toBeInTheDocument())
+    expect(screen.getByText('Public market content')).toBeInTheDocument()
+
+    await act(async () => {
+      useUser.setState(null)
+    })
+    expect(screen.queryByTestId('active-modal')).not.toBeInTheDocument()
+    expect(screen.getByText('Public market content')).toBeInTheDocument()
+  })
+
   it('places Required Sumsub after profile details and before wallet setup', async () => {
     mocked(fetch).mockResolvedValue(
       new Response(

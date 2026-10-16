@@ -6,8 +6,10 @@ import { BookOpenIcon, HomeIcon, SquareTerminalIcon } from 'lucide-react'
 
 import DiscordIcon from '@/components/icons/DiscordIcon'
 import SiteLogoIcon from '@/components/SiteLogoIcon'
+import { getRootLocale } from '@/i18n/root-locale'
 import { source } from '@/lib/source'
 import { loadRuntimeThemeState } from '@/lib/theme-settings'
+import { getWindMarketResourceHref, windmarketResources } from '@/lib/windmarket/resources'
 
 interface DocsSlugLayoutProps {
   params: Promise<{ locale: string; slug?: string[] }>
@@ -27,7 +29,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Layout({ children }: DocsSlugLayoutProps) {
-  const runtimeTheme = await loadRuntimeThemeState()
+  const [runtimeTheme, requestedLocale] = await Promise.all([loadRuntimeThemeState(), getRootLocale()])
+  const locale = requestedLocale === 'zh-hant' ? 'zh-hant' : requestedLocale === 'zh' ? 'zh' : 'en'
   const site = runtimeTheme.site
 
   return (
@@ -71,6 +74,12 @@ export default async function Layout({ children }: DocsSlugLayoutProps) {
         mode: 'light-dark-system',
       }}
       links={[
+        ...(['deposits', 'withdrawals', 'fees', 'settlement'] as const).map((id) => ({
+          type: 'main' as const,
+          url: getWindMarketResourceHref(id, locale),
+          text: windmarketResources[id].copy[locale].label,
+          icon: <BookOpenIcon />,
+        })),
         {
           type: 'main',
           url: '/',
