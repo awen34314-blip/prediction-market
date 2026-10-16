@@ -8,6 +8,7 @@ const mocks = hoisted(() => ({
   cacheTag: mock(),
   filterHomeEvents: mock(),
   listEvents: mock(),
+  hydrateEventListPrices: mock(),
 }))
 
 void mock.module('next/cache', () => ({
@@ -15,6 +16,7 @@ void mock.module('next/cache', () => ({
 }))
 
 void mock.module('@/lib/db/queries/event', () => ({
+  hydrateEventListPrices: (...args: any[]) => mocks.hydrateEventListPrices(...args),
   EventRepository: {
     listEvents: (...args: any[]) => mocks.listEvents(...args),
   },
@@ -34,6 +36,7 @@ describe('listHomeEventsPage', () => {
   beforeEach(() => {
     mocks.cacheTag.mockReset()
     mocks.listEvents.mockReset()
+    mocks.hydrateEventListPrices.mockReset().mockImplementation(async (events: any[]) => events)
     mocks.filterHomeEvents.mockReset()
   })
 
@@ -55,6 +58,7 @@ describe('listHomeEventsPage', () => {
     })
 
     expect(mocks.filterHomeEvents).not.toHaveBeenCalled()
+    expect(mocks.hydrateEventListPrices).not.toHaveBeenCalled()
     expect(mocks.listEvents).toHaveBeenCalledTimes(1)
     expect(mocks.listEvents).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -353,6 +357,39 @@ describe('listHomeEventsPage', () => {
       currentTimestamp: null,
       hasMore: true,
     })
+  })
+
+  it('prices only the visible page after scanning and filtering recurring candidates', async () => {
+    const firstPage = Array.from({ length: initialPageSize }, (_, index) => ({
+      id: `candidate-${index}`,
+      series_slug: 'recurring-series',
+    }))
+    const replacement = { id: 'current-series-event' }
+    mocks.listEvents
+      .mockResolvedValueOnce({ data: firstPage, error: null })
+      .mockResolvedValueOnce({ data: [replacement], error: null })
+    const visiblePage = [replacement, firstPage[3]]
+    mocks.filterHomeEvents.mockReturnValueOnce(visiblePage)
+    const pricedPage = visiblePage.map((event) => ({ ...event, markets: [{ price: 0.62 }] }))
+    mocks.hydrateEventListPrices.mockResolvedValueOnce(pricedPage)
+
+    const { listHomeEventsPage } = await import('@/lib/home-events-page')
+    const result = await listHomeEventsPage({
+      bookmarked: false,
+      locale: 'en',
+      mainTag: 'trending',
+      tag: 'trending',
+      userId: '',
+    })
+
+    expect(mocks.listEvents).toHaveBeenCalledTimes(2)
+    for (const [options] of mocks.listEvents.mock.calls) {
+      expect(options.skipLivePricing).toBe(true)
+    }
+    expect(mocks.hydrateEventListPrices).toHaveBeenCalledTimes(1)
+    expect(mocks.hydrateEventListPrices).toHaveBeenCalledWith(visiblePage)
+    expect(result.data).toEqual(pricedPage)
+    expect(result.hasMore).toBe(false)
   })
 
   it('forwards sortBy to the events repository', async () => {
