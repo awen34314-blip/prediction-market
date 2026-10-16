@@ -5,7 +5,7 @@ const XML_CONTENT_TYPE = 'application/xml; charset=utf-8'
 
 interface SitemapIndexEntry {
   id: string
-  lastmod: string
+  lastmod?: string
 }
 
 export async function GET() {
@@ -24,9 +24,12 @@ function buildSitemapIndexXml(siteUrl: string, entries: SitemapIndexEntry[]): st
   const xmlEntries = entries
     .map((entry) => {
       const loc = `${siteUrl}/sitemaps/${entry.id}.xml`
-      return ['  <sitemap>', `    <loc>${loc}</loc>`, `    <lastmod>${entry.lastmod}</lastmod>`, '  </sitemap>'].join(
-        '\n',
-      )
+      return [
+        '  <sitemap>',
+        `    <loc>${loc}</loc>`,
+        ...(entry.lastmod ? [`    <lastmod>${entry.lastmod}</lastmod>`] : []),
+        '  </sitemap>',
+      ].join('\n')
     })
     .join('\n')
 

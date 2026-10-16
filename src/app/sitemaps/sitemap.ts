@@ -5,6 +5,7 @@ import type { SupportedLocale } from '@/i18n/locales'
 import { loadEnabledLocales } from '@/i18n/locale-settings'
 import { DEFAULT_LOCALE } from '@/i18n/locales'
 import { hasDatabaseEnv } from '@/lib/db/env'
+import { buildCanonicalDocsSitemap } from '@/lib/docs-seo'
 import { withLocalePrefix } from '@/lib/locale-path'
 import resolveSiteUrl from '@/lib/site-url'
 import {
@@ -13,14 +14,13 @@ import {
   CATEGORIES_SITEMAP_ID,
   CLOSED_EVENTS_SITEMAP_PREFIX,
   DOCS_SITEMAP_ID,
-  formatDateForSitemap,
   getDynamicSitemapEntriesById,
   getSitemapIds,
   PREDICTIONS_SITEMAP_PREFIX,
 } from '@/lib/sitemap'
 import { buildWindMarketResourceSitemap } from '@/lib/windmarket/resource-seo'
 
-const BASE_PATHS = ['/', '/activity', '/leaderboard', '/mentions', '/portfolio', '/predictions', '/tos'] as const
+const BASE_PATHS = ['/', '/activity', '/leaderboard', '/mentions', '/predictions', '/tos'] as const
 
 export async function generateSitemaps() {
   const sitemapIds = await getSitemapIds()
@@ -34,28 +34,26 @@ interface Props {
 export default async function sitemap({ id }: Props): Promise<MetadataRoute.Sitemap> {
   const sitemapId = await id
   const siteUrl = resolveSiteUrl(process.env)
-  const fallbackLastModified = formatDateForSitemap(new Date())
   const enabledLocales = hasDatabaseEnv() ? await loadEnabledLocales() : [DEFAULT_LOCALE]
 
-  return buildSitemapEntries(sitemapId, siteUrl, fallbackLastModified, enabledLocales)
+  return buildSitemapEntries(sitemapId, siteUrl, enabledLocales)
 }
 
 async function buildSitemapEntries(
   sitemapId: string,
   siteUrl: string,
-  lastModified: string,
   enabledLocales: SupportedLocale[],
 ): Promise<MetadataRoute.Sitemap> {
   if (sitemapId === BASE_SITEMAP_ID) {
     return [
-      ...buildPathEntries(BASE_PATHS, siteUrl, lastModified, enabledLocales),
+      ...buildPathEntries(BASE_PATHS, siteUrl, enabledLocales),
       ...buildWindMarketResourceSitemap(siteUrl, enabledLocales),
     ]
   }
 
   if (sitemapId === DOCS_SITEMAP_ID) {
     const dynamicEntries = await getDynamicSitemapEntriesById(sitemapId)
-    return buildDynamicEntries(dynamicEntries, siteUrl, enabledLocales)
+    return buildCanonicalDocsSitemap(dynamicEntries, siteUrl)
   }
 
   if (sitemapId === CATEGORIES_SITEMAP_ID) {
@@ -84,10 +82,9 @@ async function buildSitemapEntries(
 function buildPathEntries(
   paths: readonly string[],
   siteUrl: string,
-  lastModified: string,
   enabledLocales: SupportedLocale[],
 ): MetadataRoute.Sitemap {
-  return paths.flatMap((path) => buildLocalizedSitemapEntries(path, lastModified, siteUrl, enabledLocales))
+  return paths.flatMap((path) => buildLocalizedSitemapEntries(path, undefined, siteUrl, enabledLocales))
 }
 
 function buildDynamicEntries(
@@ -102,7 +99,7 @@ function buildDynamicEntries(
 
 function buildLocalizedSitemapEntries(
   path: string,
-  lastModified: string,
+  lastModified: string | undefined,
   siteUrl: string,
   enabledLocales: SupportedLocale[],
 ): MetadataRoute.Sitemap {
@@ -111,7 +108,7 @@ function buildLocalizedSitemapEntries(
 
   return locales.map((locale) => ({
     url: toAbsoluteUrl(siteUrl, withLocalePrefix(path, locale)),
-    lastModified,
+    ...(lastModified ? { lastModified } : {}),
     ...(languages ? { alternates: { languages } } : {}),
   }))
 }

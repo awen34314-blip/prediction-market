@@ -12,7 +12,7 @@ import { fetchPortfolioSnapshot } from '@/lib/portfolio'
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getExtracted()
 
-  return { title: t('Portfolio') }
+  return { title: t('Portfolio'), robots: { index: false, follow: true } }
 }
 
 function getFallbackChartEndDate() {

@@ -74,11 +74,15 @@ describe('WindMarket editorial SEO', () => {
   it('serves readable content and navigation without client rendering', () => {
     for (const id of ids) {
       for (const locale of ['en', 'zh', 'zh-hant'] as const) {
-        const html = renderToStaticMarkup(<ResourceArticle id={id} locale={locale} languages={['en', 'zh', 'zh-hant']} />)
+        const html = renderToStaticMarkup(
+          <ResourceArticle id={id} locale={locale} languages={['en', 'zh', 'zh-hant']} />,
+        )
         expect(html.match(/<h1>/g)).toHaveLength(1)
         expect(html).toContain(windmarketResources[id].copy[locale].heading)
         expect(html).toContain('<article')
-        expect(html).toContain(`href="https://windmarket.top${locale === 'zh-hant' ? '/' : locale === 'zh' ? '/zh' : '/en'}"`)
+        expect(html).toContain(
+          `href="https://windmarket.top${locale === 'zh-hant' ? '/' : locale === 'zh' ? '/zh' : '/en'}"`,
+        )
         expect(html).toContain(`href="https://windmarket.top${locale === 'en' ? '' : '/zh'}/blog"`)
         expect(html).not.toContain('/zh/https:')
         expect(html).toContain('https://t.me/WindMarketOfficial')
@@ -99,7 +103,7 @@ describe('WindMarket editorial SEO', () => {
       const data = buildWindMarketResourceStructuredData(id, 'zh', `${siteUrl}/`)
       const html = renderToStaticMarkup(<StructuredDataScript data={data} />)
       expect(html).toContain(`${siteUrl}#website`)
-      expect(html).toContain(`${siteUrl}#organization`)
+      expect(html).toContain('https://windmarket.top/#organization')
       expect(html).toContain('BreadcrumbList')
       expect(html).toContain(`${siteUrl}/zh${windmarketResources[id].path}#webpage`)
       expect(html).not.toContain('"@type":"WebSite"')

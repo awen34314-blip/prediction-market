@@ -5,12 +5,13 @@ import { NextResponse } from 'next/server'
 
 import { isAdminWallet } from '@/lib/admin'
 import { auth } from '@/lib/auth'
+import { isDocsPagePath } from '@/lib/docs-seo'
 import { isWindMarketResourcePath } from '@/lib/windmarket/resources'
 
 import { routing } from './i18n/routing'
 
 const intlMiddleware = createMiddleware(routing)
-// These editorial pages publish only their actual English/Chinese translations in HTML.
+// Editorial pages declare their actual translations in HTML; the English-only docs have one canonical URL.
 const resourceIntlMiddleware = createMiddleware({ ...routing, alternateLinks: false })
 const protectedPrefixes = ['/settings', '/portfolio', '/admin']
 type Locale = (typeof routing.locales)[number]
@@ -52,6 +53,9 @@ export default async function proxy(request: NextRequest) {
   const isProtected = protectedPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
 
   if (!isProtected) {
+    if (isDocsPagePath(pathname)) {
+      return resourceIntlMiddleware(request)
+    }
     if (isWindMarketResourcePath(pathname)) {
       if (locale !== 'en' && locale !== 'zh' && locale !== 'zh-hant') {
         url.pathname = pathname

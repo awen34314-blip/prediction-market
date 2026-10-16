@@ -24,6 +24,7 @@ import type { SupportedLocale } from '@/i18n/locales'
 
 import SearchDiscoveryContent from '@/app/[locale]/(platform)/_components/SearchDiscoveryContent'
 import { MOBILE_BOTTOM_NAV_OFFSET } from '@/app/[locale]/(platform)/_lib/mobile-bottom-nav'
+import DocsLink from '@/components/DocsLink'
 import LocaleFlag from '@/components/LocaleFlag'
 import PwaInstallDialog from '@/components/PwaInstallDialog'
 import ThemeSelector from '@/components/ThemeSelector'
@@ -273,8 +274,9 @@ function MobileBottomNavContent({ pathname }: MobileBottomNavContentProps) {
                 <DrawerClose
                   nativeButton={false}
                   render={
-                    <Link
+                    <DocsLink
                       href="/docs/api-reference"
+
                       target="_blank"
                       prefetch={false}
                       rel="noreferrer"
@@ -315,8 +317,9 @@ function MobileBottomNavContent({ pathname }: MobileBottomNavContentProps) {
                 <DrawerClose
                   nativeButton={false}
                   render={
-                    <Link
+                    <DocsLink
                       href="/docs"
+
                       target="_blank"
                       prefetch={false}
                       className="flex items-center gap-3 px-4 py-3 text-sm font-semibold"

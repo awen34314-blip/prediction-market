@@ -4,6 +4,7 @@ import { DownloadIcon, MenuIcon, TrophyIcon, UnplugIcon } from 'lucide-react'
 import { useExtracted } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
+import DocsLink from '@/components/DocsLink'
 import LocaleSwitcherMenuItem from '@/components/LocaleSwitcherMenuItem'
 import PwaInstallDialog from '@/components/PwaInstallDialog'
 import ThemeSelector from '@/components/ThemeSelector'
@@ -162,8 +163,9 @@ export default function HeaderDropdownUserMenuGuest() {
 
           <DropdownMenuLinkItem
             render={
-              <Link
+              <DocsLink
                 href="/docs/api-reference"
+
                 target="_blank"
                 prefetch={false}
                 rel="noreferrer"
@@ -199,7 +201,15 @@ export default function HeaderDropdownUserMenuGuest() {
           <DropdownMenuSeparator />
 
           <DropdownMenuLinkItem
-            render={<Link href="/docs" target="_blank" prefetch={false} data-testid="header-docs-link" />}
+            render={
+              <DocsLink
+                href="/docs"
+
+                target="_blank"
+                prefetch={false}
+                data-testid="header-docs-link"
+              />
+            }
             className="py-2 text-sm font-semibold text-muted-foreground"
           >
             {t('Documentation')}

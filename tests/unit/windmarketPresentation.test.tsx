@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 
 import CommunityBar from '@/components/windmarket/CommunityBar'
 import DepositSupport from '@/components/windmarket/DepositSupport'
+import HomeIntroduction from '@/components/windmarket/HomeIntroduction'
 import { SUPPORTED_LOCALES } from '@/i18n/locales'
 import { withoutMigratedWindMarketIntegrations } from '@/lib/windmarket/legacy-integrations'
 import { buildWindMarketHomeMetadata } from '@/lib/windmarket/seo'
@@ -72,6 +73,17 @@ describe('WindMarket localized homepage SEO', () => {
   const siteUrl = 'https://app.windmarket.top'
   const inherited = { openGraph: null, twitter: null }
 
+  it('renders one visible brand heading and a valid introduction link before client JavaScript runs', () => {
+    for (const locale of SUPPORTED_LOCALES) {
+      const html = renderToStaticMarkup(<HomeIntroduction locale={locale} />)
+      expect((html.match(/<h1\b/g) ?? []).length).toBe(1)
+      expect(html).toContain('WindMarket')
+      expect(html).not.toContain('sr-only')
+      expect(html).not.toContain('hidden')
+      expect(html).toContain(`href="${locale === 'zh-hant' ? '' : locale === 'zh' ? '/zh' : '/en'}/about"`)
+    }
+  })
+
   it('gives English and Chinese their own canonical URLs and reciprocal language links', () => {
     const english = buildWindMarketHomeMetadata({ locale: 'en', enabledLocales: ['en', 'zh'], siteUrl, inherited })
     const chinese = buildWindMarketHomeMetadata({ locale: 'zh', enabledLocales: ['en', 'zh'], siteUrl, inherited })
@@ -86,13 +98,20 @@ describe('WindMarket localized homepage SEO', () => {
     })
     expect(chinese.title).toEqual({ absolute: '东南亚预测市场｜风向市场 WindMarket' })
     expect(chinese.description).not.toBe(english.description)
-    expect(chinese.openGraph).toMatchObject({ url: `${siteUrl}/zh`, locale: 'zh_CN', alternateLocale: ['zh_TW', 'en_US'] })
+    expect(chinese.openGraph).toMatchObject({
+      url: `${siteUrl}/zh`,
+      locale: 'zh_CN',
+      alternateLocale: ['zh_TW', 'en_US'],
+    })
   })
 
   it('does not advertise disabled language routes', () => {
     const metadata = buildWindMarketHomeMetadata({ locale: 'en', enabledLocales: ['en'], siteUrl, inherited })
-    expect(metadata.alternates?.languages).toEqual({ en: `${siteUrl}/en`,
-      'zh-hant': `${siteUrl}/`, 'x-default': `${siteUrl}/` })
+    expect(metadata.alternates?.languages).toEqual({
+      en: `${siteUrl}/en`,
+      'zh-hant': `${siteUrl}/`,
+      'x-default': `${siteUrl}/`,
+    })
     expect(metadata.openGraph).toMatchObject({ alternateLocale: ['zh_TW'] })
   })
 

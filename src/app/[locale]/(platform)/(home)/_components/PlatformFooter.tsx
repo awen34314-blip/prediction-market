@@ -12,6 +12,7 @@ import type { PlatformNavigationChild, PlatformNavigationTag } from '@/lib/platf
 import type { Event } from '@/types'
 
 import { usePlatformNavigationData } from '@/app/[locale]/(platform)/_providers/PlatformNavigationProvider'
+import DocsLink from '@/components/DocsLink'
 import LocaleFlag from '@/components/LocaleFlag'
 import SiteLogoIcon from '@/components/SiteLogoIcon'
 import SocialIcon from '@/components/SocialIcon'
@@ -371,15 +372,18 @@ function FooterNavigation({ links }: { links: FooterExternalLink[] }) {
       <section>
         <h2 className="mb-5 text-sm font-medium text-muted-foreground">{site.name}</h2>
         <div className="space-y-4">
-          {platformLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block w-fit text-sm font-medium text-foreground transition-colors hover:text-primary"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {platformLinks.map((link) => {
+            const NavigationLink = link.href.startsWith('/docs') ? DocsLink : Link
+            return (
+              <NavigationLink
+                key={link.href}
+                href={link.href}
+                className="block w-fit text-sm font-medium text-foreground transition-colors hover:text-primary"
+              >
+                {link.label}
+              </NavigationLink>
+            )
+          })}
         </div>
       </section>
     </div>
@@ -423,9 +427,9 @@ function FooterBottom({ socialLinks }: { socialLinks: FooterExternalLink[] }) {
             {t('Terms of Use')}
           </Link>
           <span aria-hidden="true">·</span>
-          <Link href="/docs" className="transition-colors hover:text-foreground">
+          <DocsLink href="/docs" className="transition-colors hover:text-foreground">
             {t('Docs')}
-          </Link>
+          </DocsLink>
         </div>
       </div>
 

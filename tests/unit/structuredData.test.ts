@@ -5,6 +5,7 @@ import type { Event } from '@/types'
 import { OUTCOME_INDEX } from '@/lib/constants'
 import { buildEventStructuredData, buildSiteStructuredData } from '@/lib/structured-data'
 import { createDefaultThemeSiteIdentity } from '@/lib/theme-site-identity'
+import { buildWindMarketResourceStructuredData } from '@/lib/windmarket/resource-seo'
 
 const ORIGINAL_SITE_URL = process.env.SITE_URL
 
@@ -130,6 +131,35 @@ describe('structuredData', () => {
     ])
     expect(structuredData.organization.logo).toBe('https://kuest.example/images/pwa/default-icon-512.png')
     expect(structuredData.website.publisher).toEqual({ '@id': 'https://kuest.example#organization' })
+  })
+
+  it('connects WindMarket app, editorial pages and events to the marketing site organization', () => {
+    process.env.SITE_URL = 'https://app.windmarket.top'
+    const site = {
+      ...createDefaultThemeSiteIdentity(),
+      name: 'WindMarket 风向市场',
+      twitterLink: 'https://x.com/WindMarketHQ',
+    }
+    const { organization, website } = buildSiteStructuredData({ locale: 'zh', site })
+    const organizationId = 'https://windmarket.top/#organization'
+
+    expect(organization['@id']).toBe(organizationId)
+    expect(organization.url).toBe('https://windmarket.top/')
+    expect(organization.name).toBe('WindMarket')
+    expect(organization.sameAs).toEqual(['https://x.com/WindMarketHQ', 'https://t.me/WindMarketOfficial'])
+    expect(organization.alternateName).toContain('风向市场')
+    expect(organization.alternateName).toContain('風向市場')
+    expect(website.url).toBe('https://app.windmarket.top')
+    expect(website.publisher).toEqual({ '@id': organizationId })
+    const event = buildEventStructuredData({
+      event: createEventFixture(),
+      locale: 'zh',
+      pagePath: '/event/example',
+      site,
+    })
+    expect(event.event.organizer).toEqual({ '@id': organizationId })
+    const resource = buildWindMarketResourceStructuredData('about', 'zh', 'https://app.windmarket.top')
+    expect((resource['@graph'] as Array<Record<string, unknown>>)[0]?.about).toEqual({ '@id': organizationId })
   })
 
   it('builds event, breadcrumb, and faq structured data for event pages', () => {

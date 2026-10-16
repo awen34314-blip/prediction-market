@@ -53,6 +53,14 @@ interface StructuredDataBreadcrumbTarget {
 
 const STRUCTURED_DATA_URL_PROTOCOLS = new Set(['http:', 'https:'])
 
+function isWindMarketSite(siteUrl: string, site: ThemeSiteIdentity) {
+  return new URL(siteUrl).hostname === 'app.windmarket.top' || /windmarket|风向市场|風向市場/i.test(site.name)
+}
+
+function getOrganizationId(siteUrl: string, site: ThemeSiteIdentity) {
+  return isWindMarketSite(siteUrl, site) ? windmarket.organizationId : `${siteUrl}#organization`
+}
+
 function resolveAbsoluteUrl(pathOrUrl: string | null | undefined, siteUrl: string) {
   const normalized = pathOrUrl?.trim()
   if (!normalized) {
@@ -178,23 +186,23 @@ function buildBreadcrumbTargets({
 
 export function buildSiteStructuredData({ locale, site }: BuildSiteStructuredDataOptions) {
   const siteUrl = resolveSiteUrl(process.env)
-  const isWindMarket = new URL(siteUrl).hostname === 'app.windmarket.top' || /windmarket|风向市场/i.test(site.name)
+  const isWindMarket = isWindMarketSite(siteUrl, site)
   const brandMetadata = isWindMarket
     ? { alternateName: [...windmarket.alternateNames], description: getWindMarketCopy(locale).description }
     : {}
-  const organizationId = `${siteUrl}#organization`
+  const organizationId = getOrganizationId(siteUrl, site)
   const websiteId = `${siteUrl}#website`
-  const sameAs = getThemeSiteSameAs(site)
+  const sameAs = [...new Set([...(isWindMarket ? windmarket.socialProfiles : []), ...getThemeSiteSameAs(site)])]
   const logoUrl = resolveAbsoluteUrl(site.logoImageUrl || site.pwaIcon512Url || site.pwaIcon192Url, siteUrl)
 
   const organization: StructuredDataNode = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': organizationId,
-    name: site.name,
+    name: isWindMarket ? 'WindMarket' : site.name,
     description: site.description,
     ...brandMetadata,
-    url: siteUrl,
+    url: isWindMarket ? `${windmarket.website}/` : siteUrl,
   }
 
   if (logoUrl) {
@@ -257,7 +265,7 @@ export function buildEventStructuredData({
       url: pageUrl,
     },
     url: pageUrl,
-    organizer: { '@id': `${siteUrl}#organization` },
+    organizer: { '@id': getOrganizationId(siteUrl, site) },
     offers: {
       '@type': 'Offer',
       url: pageUrl,

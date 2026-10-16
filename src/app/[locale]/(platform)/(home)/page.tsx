@@ -14,5 +14,5 @@ export async function generateMetadata(_props: unknown, parent: ResolvingMetadat
 }
 
 export default async function HomePage() {
-  return <HomeInitialContent />
+  return <HomeInitialContent showBrandIntroduction />
 }

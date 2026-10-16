@@ -14,6 +14,7 @@ import { useExtracted } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
+import DocsLink from '@/components/DocsLink'
 import HeaderPortfolio from '@/components/HeaderPortfolio'
 import LocaleSwitcherMenuItem from '@/components/LocaleSwitcherMenuItem'
 import PwaInstallDialog from '@/components/PwaInstallDialog'
@@ -287,8 +288,9 @@ export default function HeaderDropdownUserMenuAuth() {
 
           <DropdownMenuLinkItem
             render={
-              <Link
+              <DocsLink
                 href="/docs/api-reference"
+
                 target="_blank"
                 prefetch={false}
                 rel="noreferrer"
@@ -328,7 +330,15 @@ export default function HeaderDropdownUserMenuAuth() {
           <DropdownMenuSeparator />
 
           <DropdownMenuLinkItem
-            render={<Link href="/docs" target="_blank" prefetch={false} data-testid="header-docs-link" />}
+            render={
+              <DocsLink
+                href="/docs"
+
+                target="_blank"
+                prefetch={false}
+                data-testid="header-docs-link"
+              />
+            }
             className="py-2 text-sm font-semibold text-muted-foreground"
           >
             {t('Documentation')}
