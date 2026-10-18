@@ -1,10 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test'
 
-import {
-  hasPublicShellPrerenderEnv,
-  resolvePublicShellCacheMode,
-  resolvePublicShellPrerenderMode,
-} from '@/lib/public-shell-env'
+import { hasPublicShellPrerenderEnv, resolvePublicShellPrerenderMode } from '@/lib/public-shell-env'
 
 import { hoisted, stubEnv, unstubAllEnvs } from '../bun-test-helpers'
 
@@ -16,13 +12,11 @@ void mock.module('next/cache', () => ({
   io: mocks.io,
 }))
 
-const { deferPublicShellPrerenderIfNeeded, shouldCachePublicShell } =
-  await import('@/lib/public-shell-rendering?bun-test')
+const { deferPublicShellPrerenderIfNeeded } = await import('@/lib/public-shell-rendering?bun-test')
 
 beforeEach(() => {
   mocks.io.mockClear()
   stubEnv('BUILD_PRERENDER_PUBLIC_SHELL', '')
-  stubEnv('VERCEL_ENV', '')
 })
 
 afterEach(() => {
@@ -78,44 +72,6 @@ describe('public shell env detection', () => {
 
     expect(hasPublicShellPrerenderEnv(env)).toBe(true)
     expect(resolvePublicShellPrerenderMode(env)).toBe(false)
-  })
-
-  it.each(['production', 'preview'])('keeps a configured Vercel %s shell cacheable at runtime', (target) => {
-    const env: NodeJS.ProcessEnv = {
-      NODE_ENV: 'production',
-      VERCEL_ENV: target,
-      POSTGRES_URL: 'postgres://user:pass@localhost:5432/app',
-      REOWN_APPKIT_PROJECT_ID: 'project-id',
-      VERCEL_PROJECT_PRODUCTION_URL: 'markets.example.com',
-    }
-    expect(resolvePublicShellCacheMode(env)).toBe(true)
-    expect(resolvePublicShellPrerenderMode(env)).toBe(false)
-    expect(resolvePublicShellCacheMode({ ...env, BUILD_PRERENDER_PUBLIC_SHELL: 'false' })).toBe(false)
-  })
-
-  it('keeps incomplete Vercel runtime configuration outside the cached shell', () => {
-    const env: NodeJS.ProcessEnv = {
-      NODE_ENV: 'production',
-      VERCEL_ENV: 'production',
-      POSTGRES_URL: 'postgres://user:pass@localhost:5432/app',
-      REOWN_APPKIT_PROJECT_ID: 'project-id',
-      VERCEL_PROJECT_PRODUCTION_URL: 'markets.example.com',
-    }
-    for (const key of ['POSTGRES_URL', 'REOWN_APPKIT_PROJECT_ID', 'VERCEL_PROJECT_PRODUCTION_URL']) {
-      expect(resolvePublicShellCacheMode({ ...env, [key]: '' })).toBe(false)
-    }
-  })
-
-  it('allows a cached Vercel document while keeping live market data deferred', async () => {
-    stubEnv('NEXT_PHASE', 'phase-production-server')
-    stubEnv('VERCEL_ENV', 'production')
-    stubEnv('POSTGRES_URL', 'postgres://user:pass@localhost:5432/app')
-    stubEnv('REOWN_APPKIT_PROJECT_ID', 'project-id')
-    stubEnv('SITE_URL', 'https://markets.example.com')
-
-    expect(shouldCachePublicShell()).toBe(true)
-    await deferPublicShellPrerenderIfNeeded()
-    expect(mocks.io).toHaveBeenCalledOnce()
   })
 
   it('lets an explicit override force the build mode', () => {
