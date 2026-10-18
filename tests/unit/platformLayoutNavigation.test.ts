@@ -36,6 +36,7 @@ beforeEach(() => {
   mocks.io.mockReset()
   mocks.io.mockResolvedValue(undefined)
   stubEnv('BUILD_PRERENDER_PUBLIC_SHELL', '')
+  stubEnv('VERCEL_ENV', '')
   stubEnv('NEXT_PHASE', 'phase-production-build')
   stubEnv('POSTGRES_URL', '')
   stubEnv('REOWN_APPKIT_PROJECT_ID', '')
@@ -53,6 +54,19 @@ afterEach(() => {
 })
 
 describe('platform layout navigation', () => {
+  it('reuses public navigation without a runtime IO boundary on configured Vercel deployments', async () => {
+    stubEnv('NEXT_PHASE', 'phase-production-server')
+    stubEnv('VERCEL_ENV', 'production')
+    stubEnv('POSTGRES_URL', 'postgres://navigation-test')
+    stubEnv('REOWN_APPKIT_PROJECT_ID', 'project-id')
+    stubEnv('SITE_URL', 'https://markets.example.com')
+
+    const result = await loadPlatformLayoutNavigation()
+
+    expect(mocks.io).not.toHaveBeenCalled()
+    expect(result.tags.map((tag) => tag.slug)).toEqual(['trending', 'new', 'crypto'])
+  })
+
   it.each(['', '   '])(
     'keeps forced prerenders with missing database env %j outside the navigation cache',
     async (databaseUrl) => {

@@ -1,6 +1,4 @@
-'use cache'
-
-import type { Metadata } from 'next'
+import type { Metadata, ResolvingMetadata } from 'next'
 
 import { getExtracted } from 'next-intl/server'
 import { cacheTag } from 'next/cache'
@@ -8,19 +6,35 @@ import { cacheTag } from 'next/cache'
 import type { SupportedLocale } from '@/i18n/locales'
 
 import MentionsList from '@/app/[locale]/(platform)/mentions/_components/MentionsList'
+import { loadEnabledLocales } from '@/i18n/locale-settings'
+import { getRootLocale } from '@/i18n/root-locale'
 import { cacheTags } from '@/lib/cache-tags'
 import { EventRepository } from '@/lib/db/queries/event'
+import { buildLocalizedPageMetadata } from '@/lib/localized-page-seo'
+import resolveSiteUrl from '@/lib/site-url'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getExtracted()
+export async function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  const [t, locale, enabledLocales, inherited] = await Promise.all([
+    getExtracted(),
+    getRootLocale(),
+    loadEnabledLocales(),
+    parent,
+  ])
 
-  return {
+  return buildLocalizedPageMetadata({
+    path: '/mentions',
+    locale,
+    enabledLocales,
+    inherited,
+    siteUrl: resolveSiteUrl(process.env),
     title: t('Mentions'),
     description: t('Live events where you can predict the words and phrases that will be said.'),
-  }
+  })
 }
 
 export default async function MentionsPage({ params }: PageProps<'/[locale]/mentions'>) {
+  'use cache'
+
   const { locale } = await params
   const t = await getExtracted()
   cacheTag(cacheTags.eventsList)

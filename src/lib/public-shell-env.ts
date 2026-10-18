@@ -41,3 +41,15 @@ export function resolvePublicShellPrerenderMode(env: NodeJS.ProcessEnv) {
 
   return isProductionBuildPhase(env) && hasPublicShellPrerenderEnv(env)
 }
+
+export function resolvePublicShellCacheMode(env: NodeJS.ProcessEnv) {
+  const explicitMode = parseBooleanEnv(env.BUILD_PRERENDER_PUBLIC_SHELL)
+  if (explicitMode !== null) {
+    return explicitMode
+  }
+
+  // The document and navigation contain public deployment configuration.
+  // Live market content still uses the separate build-only prerender mode.
+  const isVercelDeployment = env.VERCEL_ENV === 'production' || env.VERCEL_ENV === 'preview'
+  return (isProductionBuildPhase(env) || isVercelDeployment) && hasPublicShellPrerenderEnv(env)
+}

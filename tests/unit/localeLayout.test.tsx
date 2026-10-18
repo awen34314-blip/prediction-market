@@ -15,7 +15,7 @@ const mocks = hoisted(() => ({
   loadPlatformMainTags: mock(),
   loadRuntimeThemeState: mock(),
   notFound: mock(),
-  shouldPrerenderPublicShell: mock(),
+  shouldCachePublicShell: mock(),
 }))
 
 void mock.module('next-intl', () => ({
@@ -84,7 +84,8 @@ void mock.module('@/lib/static-params', () => ({
 
 void mock.module('@/lib/public-shell-rendering', () => ({
   deferPublicShellPrerenderIfNeeded: (...args: unknown[]) => mocks.deferPublicShellPrerenderIfNeeded(...args),
-  shouldPrerenderPublicShell: () => mocks.shouldPrerenderPublicShell(),
+  shouldCachePublicShell: () => mocks.shouldCachePublicShell(),
+  shouldPrerenderPublicShell: () => mocks.shouldCachePublicShell(),
 }))
 
 void mock.module('@/lib/theme-settings', () => ({
@@ -121,7 +122,7 @@ describe('locale layout', () => {
     jest.clearAllMocks()
     mocks.deferPublicShellPrerenderIfNeeded.mockResolvedValue(undefined)
     mocks.getRootLocale.mockResolvedValue('en')
-    mocks.shouldPrerenderPublicShell.mockReturnValue(false)
+    mocks.shouldCachePublicShell.mockReturnValue(false)
     mocks.notFound.mockImplementation(() => {
       throw new Error('NEXT_NOT_FOUND')
     })
@@ -147,7 +148,7 @@ describe('locale layout', () => {
   })
 
   it('generates static category params only for the default English locale', async () => {
-    mocks.shouldPrerenderPublicShell.mockReturnValue(true)
+    mocks.shouldCachePublicShell.mockReturnValue(true)
 
     const { generateStaticParams: generateLocaleParams } = await import('@/app/[locale]/layout')
     const localeParams = await generateLocaleParams()
@@ -198,7 +199,7 @@ describe('locale layout', () => {
   })
 
   it('prerenders a complete document and theme preset without runtime deferral', async () => {
-    mocks.shouldPrerenderPublicShell.mockReturnValue(true)
+    mocks.shouldCachePublicShell.mockReturnValue(true)
     const children = <main>Visible docs</main>
 
     const document = await renderLocaleDocument(children)

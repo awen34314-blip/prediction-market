@@ -1,24 +1,36 @@
-import type { Metadata } from 'next'
+import type { Metadata, ResolvingMetadata } from 'next'
 
 import { getExtracted } from 'next-intl/server'
 
 import TermsOfServiceDocument from '@/components/TermsOfServiceDocument'
+import { loadEnabledLocales } from '@/i18n/locale-settings'
 import { resolveSupportedLocale } from '@/i18n/locales'
+import { getRootLocale } from '@/i18n/root-locale'
 import { SettingsRepository } from '@/lib/db/queries/settings'
 import { TermsOfServiceRepository } from '@/lib/db/queries/terms-of-service'
+import { buildLocalizedPageMetadata } from '@/lib/localized-page-seo'
 import resolveSiteUrl from '@/lib/site-url'
 import { getThemeSiteSettingsFormState, loadRuntimeThemeState } from '@/lib/theme-settings'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getExtracted()
-
-  const runtimeTheme = await loadRuntimeThemeState()
+export async function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  const [t, runtimeTheme, locale, enabledLocales, inherited] = await Promise.all([
+    getExtracted(),
+    loadRuntimeThemeState(),
+    getRootLocale(),
+    loadEnabledLocales(),
+    parent,
+  ])
   const siteName = runtimeTheme.site.name
 
-  return {
+  return buildLocalizedPageMetadata({
+    path: '/tos',
+    locale,
+    enabledLocales,
+    inherited,
+    siteUrl: resolveSiteUrl(process.env),
     title: t('Terms of Use'),
     description: t(`Terms of Use for {siteName}`, { siteName }),
-  }
+  })
 }
 
 export default async function TermsOfUsePage({ params }: PageProps<'/[locale]/tos'>) {
