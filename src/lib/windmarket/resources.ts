@@ -75,7 +75,7 @@ export const windmarketResources: Record<
         title: 'What Is a Prediction Market? Prices and Settlement | WindMarket',
         heading: 'Start with the question, then read the market',
         description:
-          'Read prediction-market prices, probabilities, order-book quantities, dollar amounts, spreads and average execution prices, with worked examples and settlement basics.',
+          'Understand prediction-market prices, probabilities, order-book depth, spreads and average fill prices with worked examples and settlement basics.',
       },
     },
   },
@@ -149,7 +149,7 @@ export const windmarketResources: Record<
         title: 'How to Deposit: Networks and Balance Checks | WindMarket',
         heading: 'Funding your WindMarket account',
         description:
-          'Find the deposit flow, check the asset, network and Deposit Wallet address, and understand the difference between submitting a transfer and receiving trading funds.',
+          'Find the deposit flow and check the asset, network and wallet address. Learn how to confirm that a transfer has reached your trading balance.',
       },
       'zh-hant': {
         label: '充值指南',

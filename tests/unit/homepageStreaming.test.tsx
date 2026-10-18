@@ -23,15 +23,15 @@ mock.module('@/app/[locale]/(platform)/(home)/_components/EventsGridSkeleton', (
 const { default: HomePage } = await import('@/app/[locale]/(platform)/(home)/page')
 
 describe('homepage streaming', () => {
-  it('sends the brand introduction while market data is still pending', async () => {
+  it('streams the market loading state without a separate brand introduction', async () => {
     const stream = await renderToReadableStream(await HomePage())
     const reader = stream.getReader()
     const decoder = new TextDecoder()
     let html = decoder.decode((await reader.read()).value)
 
     try {
-      expect(html).toContain('东南亚预测市场｜风向市场 WindMarket')
-      expect(html).toContain('浏览市场概率，了解事件规则与结算方式。')
+      expect(html).not.toContain('windmarket-home-title')
+      expect(html).not.toContain('浏览市场概率，了解事件规则与结算方式。')
       expect(html).toContain('Loading markets')
       expect(html).not.toContain('Markets loaded')
     } finally {
@@ -47,7 +47,6 @@ describe('homepage streaming', () => {
     }
     expect(html).toContain('Markets loaded')
     expect(html.match(/<main\b/g)).toHaveLength(1)
-    expect(html.match(/<h1\b/g)).toHaveLength(1)
     expect(marketWrapper).toBe(false)
   })
 })
