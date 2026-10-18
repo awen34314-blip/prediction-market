@@ -6,7 +6,7 @@ import { getRootLocale } from '@/i18n/root-locale'
 import { hasDatabaseEnv } from '@/lib/db/env'
 import { loadPlatformMainTags } from '@/lib/platform-main-tags'
 import { buildChildParentMap, buildPlatformNavigationTags } from '@/lib/platform-navigation'
-import { deferPublicShellPrerenderIfNeeded, shouldCachePublicShell } from '@/lib/public-shell-rendering'
+import { deferPublicShellPrerenderIfNeeded } from '@/lib/public-shell-rendering'
 
 async function loadCachedPlatformLayoutNavigation(locale: SupportedLocale) {
   'use cache'
@@ -30,9 +30,7 @@ type PlatformLayoutNavigation = Awaited<ReturnType<typeof loadCachedPlatformLayo
 export async function loadPlatformLayoutNavigation(): Promise<PlatformLayoutNavigation> {
   // Layout segments render independently. Defer before entering the cache so
   // Docker builds without runtime env do not capture an empty navigation tree.
-  if (!shouldCachePublicShell()) {
-    await deferPublicShellPrerenderIfNeeded()
-  }
+  await deferPublicShellPrerenderIfNeeded()
 
   // An explicit prerender override can skip deferral even without database env.
   if (!hasDatabaseEnv()) {
