@@ -6,6 +6,7 @@ interface EventRouteTagInput {
 
 interface EventRouteInput {
   slug: string
+  total_markets_count?: number | null
   main_tag?: string | null
   sports_sport_slug?: string | null
   sports_league_slug?: string | null
@@ -80,6 +81,15 @@ export function resolveEventMarketPath(event: EventRouteInput, marketSlug: strin
   }
 
   return `/event/${event.slug}/${marketSlug}`
+}
+
+export function resolveEventCanonicalPath(event: EventRouteInput, marketSlug?: string | null) {
+  const normalizedMarketSlug = marketSlug?.trim()
+  if (!normalizedMarketSlug || (event.total_markets_count === 1 && normalizedMarketSlug === event.slug)) {
+    return resolveEventPagePath(event)
+  }
+
+  return resolveEventMarketPath(event, normalizedMarketSlug)
 }
 
 interface EventOutcomePathOptions {
