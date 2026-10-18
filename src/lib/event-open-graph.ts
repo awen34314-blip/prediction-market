@@ -8,7 +8,7 @@ import type { Event } from '@/types'
 import { DEFAULT_LOCALE } from '@/i18n/locales'
 import { OUTCOME_INDEX } from '@/lib/constants'
 import { loadEventPageShellData } from '@/lib/event-page-data'
-import { resolveEventMarketPath, resolveEventPagePath } from '@/lib/events-routing'
+import { resolveEventCanonicalPath } from '@/lib/events-routing'
 import { resolveCommitSha } from '@/lib/git'
 import resolveSiteUrl from '@/lib/site-url'
 import 'server-only'
@@ -104,9 +104,7 @@ export function buildEventPageUrl({
     sports_event_slug: null,
     sports_section: null,
   }
-  const pagePath = marketSlug?.trim()
-    ? resolveEventMarketPath(resolvedRoute, marketSlug.trim())
-    : resolveEventPagePath(resolvedRoute)
+  const pagePath = resolveEventCanonicalPath(resolvedRoute, marketSlug)
   const localizedPath = buildLocalizedPagePath(pagePath, locale)
   const siteUrl = resolveSiteUrl(process.env)
 
@@ -151,6 +149,7 @@ export async function buildEventPageMetadata({
   return {
     title: resolvedTitle,
     description,
+    alternates: { canonical: pageUrl },
     openGraph: {
       type: 'website',
       url: pageUrl,

@@ -1,8 +1,29 @@
 import { describe, expect, it } from 'bun:test'
 
-import { resolveEventMarketPath, resolveEventPagePath } from '@/lib/events-routing'
+import { resolveEventCanonicalPath, resolveEventMarketPath, resolveEventPagePath } from '@/lib/events-routing'
 
 describe('events routing', () => {
+  it('uses the event as canonical for the repeated slug of a single-market event', () => {
+    const event = { slug: 'btc-updown-15m-1792280700', total_markets_count: 1 }
+
+    expect(resolveEventCanonicalPath(event)).toBe('/event/btc-updown-15m-1792280700')
+    expect(resolveEventCanonicalPath(event, event.slug)).toBe('/event/btc-updown-15m-1792280700')
+    expect(resolveEventMarketPath(event, event.slug)).toBe('/event/btc-updown-15m-1792280700/btc-updown-15m-1792280700')
+  })
+
+  it('preserves distinct markets and does not guess when the market count is unknown', () => {
+    expect(resolveEventCanonicalPath({ slug: 'election', total_markets_count: 2 }, 'election')).toBe(
+      '/event/election/election',
+    )
+    expect(resolveEventCanonicalPath({ slug: 'election', total_markets_count: 1 }, 'popular-vote')).toBe(
+      '/event/election/popular-vote',
+    )
+    expect(resolveEventCanonicalPath({ slug: 'election' }, 'election')).toBe('/event/election/election')
+    expect(resolveEventCanonicalPath({ slug: 'election', total_markets_count: 0 }, 'election')).toBe(
+      '/event/election/election',
+    )
+  })
+
   it('opens the exact market for regular, multi-market and NegRisk event pages', () => {
     const event = { slug: 'presidential-election' }
 

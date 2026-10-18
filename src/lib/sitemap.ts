@@ -10,7 +10,7 @@ import { TagRepository } from '@/lib/db/queries/tag'
 import { event_sports, event_tags, events, markets, tags } from '@/lib/db/schema/events/tables'
 import { db } from '@/lib/drizzle'
 import { buildPublicEventListVisibilityCondition } from '@/lib/event-visibility'
-import { resolveEventMarketPath, resolveEventPagePath } from '@/lib/events-routing'
+import { resolveEventCanonicalPath, resolveEventPagePath } from '@/lib/events-routing'
 import { isDynamicHomeCategorySlug } from '@/lib/platform-routing'
 import { source } from '@/lib/source'
 import { isSportsAuxiliaryEventSlug } from '@/lib/sports-event-slugs'
@@ -65,6 +65,7 @@ interface EventSitemapRow {
 interface PredictionSitemapRow {
   event_slug: string
   market_slug: string
+  total_markets_count: number | null
   updated_at: Date
   has_esports_tag: boolean
   sports_sport_slug: string | null
@@ -287,6 +288,7 @@ async function getPredictionSitemapEntries(): Promise<SitemapRouteEntry[]> {
       .select({
         event_slug: events.slug,
         market_slug: markets.slug,
+        total_markets_count: events.total_markets_count,
         updated_at: markets.updated_at,
         has_esports_tag: hasEsportsTag,
         sports_sport_slug: event_sports.sports_sport_slug,
@@ -321,16 +323,19 @@ async function getPredictionSitemapEntries(): Promise<SitemapRouteEntry[]> {
         sportsTags: toOptionalStringArray(row.sports_tags),
       })
 
-      const marketPath = resolveEventMarketPath(
-        {
-          slug: row.event_slug,
-          tags: row.has_esports_tag ? [{ slug: 'esports' }] : undefined,
-          sports_sport_slug: canonicalSportsSportSlug,
-          sports_league_slug: row.sports_league_slug,
-          sports_event_slug: row.sports_event_slug,
-        },
-        row.market_slug,
-      )
+      const eventRoute = {
+        slug: row.event_slug,
+        total_markets_count: row.total_markets_count,
+        tags: row.has_esports_tag ? [{ slug: 'esports' }] : undefined,
+        sports_sport_slug: canonicalSportsSportSlug,
+        sports_league_slug: row.sports_league_slug,
+        sports_event_slug: row.sports_event_slug,
+      }
+      const marketPath = resolveEventCanonicalPath(eventRoute, row.market_slug)
+      // Event URLs are already published in the active or closed event sitemap.
+      if (marketPath === resolveEventPagePath(eventRoute)) {
+        continue
+      }
 
       marketPathMap.set(marketPath, {
         path: marketPath,
