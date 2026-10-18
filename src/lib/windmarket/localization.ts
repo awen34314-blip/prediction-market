@@ -22,7 +22,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Get help with your deposit · Telegram',
     title: 'Prediction Markets for Southeast Asia | WindMarket',
     description:
-      'WindMarket brings crypto, stock, gold and other real-world event prediction markets to Southeast Asian communities. Explore market probabilities, rules and settlement details.',
+      'Explore WindMarket prediction markets for Southeast Asia. Read crypto, stock and gold market probabilities, event rules and settlement details.',
     ogLocale: 'en_US',
   },
   'zh-hant': {
@@ -55,7 +55,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Support kontaktieren · Telegram',
     title: 'Prognosemärkte für Südostasien | WindMarket',
     description:
-      'WindMarket bietet Prognosemärkte zu Kryptowährungen, Aktien, Gold und weiteren realen Ereignissen für Communitys in Südostasien. Entdecke Marktwahrscheinlichkeiten, Regeln und Abrechnung.',
+      'WindMarket: Prognosemärkte für Südostasien zu Krypto, Aktien, Gold und realen Ereignissen. Entdecke Wahrscheinlichkeiten, Regeln und Abrechnung.',
     ogLocale: 'de_DE',
   },
   es: {
@@ -66,7 +66,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Contactar con soporte · Telegram',
     title: 'Mercados de predicción para el Sudeste Asiático | WindMarket',
     description:
-      'WindMarket ofrece mercados de predicción sobre criptomonedas, acciones, oro y otros eventos reales para las comunidades del Sudeste Asiático. Explora probabilidades, reglas y liquidación.',
+      'Explora WindMarket, mercados de predicción para el Sudeste Asiático sobre cripto, acciones y oro. Consulta probabilidades, reglas y liquidación.',
     ogLocale: 'es_ES',
   },
   pt: {
@@ -77,7 +77,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Fale com o suporte · Telegram',
     title: 'Mercados de previsão para o Sudeste Asiático | WindMarket',
     description:
-      'WindMarket oferece mercados de previsão sobre criptomoedas, ações, ouro e outros eventos reais para comunidades do Sudeste Asiático. Explore probabilidades, regras e liquidação.',
+      'Explore a WindMarket: mercados de previsão para o Sudeste Asiático sobre cripto, ações e ouro. Consulte probabilidades, regras e liquidação.',
     ogLocale: 'pt_BR',
   },
   fr: {
@@ -88,7 +88,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Contacter le support · Telegram',
     title: 'Marchés prédictifs pour l’Asie du Sud-Est | WindMarket',
     description:
-      'WindMarket propose des marchés prédictifs sur les cryptomonnaies, les actions, l’or et d’autres événements réels aux communautés d’Asie du Sud-Est. Découvrez probabilités, règles et règlement.',
+      'WindMarket : marchés prédictifs pour l’Asie du Sud-Est sur les cryptos, actions et l’or. Consultez les probabilités, règles et modalités de règlement.',
     ogLocale: 'fr_FR',
   },
   ja: {
@@ -121,7 +121,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Связаться с поддержкой · Telegram',
     title: 'Рынки прогнозов для Юго-Восточной Азии | WindMarket',
     description:
-      'WindMarket предлагает сообществам Юго-Восточной Азии рынки прогнозов на криптовалюты, акции, золото и другие реальные события. Изучайте вероятности, правила и расчёты.',
+      'WindMarket: рынки прогнозов для Юго-Восточной Азии о криптовалютах, акциях, золоте и реальных событиях. Изучайте вероятности, правила и расчёты.',
     ogLocale: 'ru_RU',
   },
   it: {
@@ -132,7 +132,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Contatta il supporto · Telegram',
     title: 'Mercati di previsione per il Sud-est asiatico | WindMarket',
     description:
-      'WindMarket offre alle comunità del Sud-est asiatico mercati di previsione su criptovalute, azioni, oro e altri eventi reali. Esplora probabilità, regole e liquidazione.',
+      'WindMarket: mercati di previsione per il Sud-est asiatico su cripto, azioni e oro. Scopri probabilità, regole dei mercati e liquidazione.',
     ogLocale: 'it_IT',
   },
   pl: {
@@ -143,7 +143,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     depositSupportDetail: 'Skontaktuj się z pomocą · Telegram',
     title: 'Rynki prognostyczne dla Azji Południowo-Wschodniej | WindMarket',
     description:
-      'WindMarket oferuje społecznościom Azji Południowo-Wschodniej rynki prognostyczne dotyczące kryptowalut, akcji, złota i innych rzeczywistych wydarzeń. Poznaj prawdopodobieństwa, zasady i rozliczanie.',
+      'WindMarket: rynki prognostyczne dla Azji Południowo-Wschodniej o kryptowalutach, akcjach i złocie. Poznaj prawdopodobieństwa, zasady i rozliczanie.',
     ogLocale: 'pl_PL',
   },
   ko: {
