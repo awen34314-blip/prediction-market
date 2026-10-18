@@ -1,9 +1,13 @@
 import { io } from 'next/cache'
 
-import { resolvePublicShellPrerenderMode } from '@/lib/public-shell-env'
+import { resolvePublicShellCacheMode, resolvePublicShellPrerenderMode } from '@/lib/public-shell-env'
 
 export function shouldPrerenderPublicShell() {
   return resolvePublicShellPrerenderMode(process.env)
+}
+
+export function shouldCachePublicShell() {
+  return resolvePublicShellCacheMode(process.env)
 }
 
 export async function deferPublicShellPrerenderIfNeeded() {

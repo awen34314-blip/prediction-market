@@ -23,7 +23,7 @@ import { loadGlobalAnnouncementSettings } from '@/lib/global-announcement-settin
 import { IS_TEST_MODE } from '@/lib/network'
 import { PUBLIC_CONFIG_FAILURE_CACHE_LIFE } from '@/lib/public-config-cache'
 import { getPublicRuntimeConfig } from '@/lib/public-runtime-config.server'
-import { deferPublicShellPrerenderIfNeeded, shouldPrerenderPublicShell } from '@/lib/public-shell-rendering'
+import { deferPublicShellPrerenderIfNeeded, shouldCachePublicShell } from '@/lib/public-shell-rendering'
 import { resolvePwaThemeColors } from '@/lib/pwa-colors'
 import resolveSiteUrl from '@/lib/site-url'
 import { loadRuntimeThemeState } from '@/lib/theme-settings'
@@ -269,7 +269,7 @@ async function RuntimeLocaleDocument({ children }: LocaleDocumentProps) {
 }
 
 export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'>) {
-  return shouldPrerenderPublicShell() ? (
+  return shouldCachePublicShell() ? (
     <PrerenderedLocaleDocument>{children}</PrerenderedLocaleDocument>
   ) : (
     <RuntimeLocaleDocument>{children}</RuntimeLocaleDocument>
