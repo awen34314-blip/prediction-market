@@ -5,7 +5,7 @@ import type { SupportedLocale } from '@/i18n/locales'
 import type { OpenRouterProviderSettings } from '@/lib/ai/market-context-config'
 import type { Event, HomeFeaturedContextItem } from '@/types'
 
-import { DEFAULT_LOCALE } from '@/i18n/locales'
+import { DEFAULT_LOCALE, SOURCE_LOCALE } from '@/i18n/locales'
 import { parseOpenRouterProviderSettings } from '@/lib/ai/market-context-config'
 import { requestOpenRouterCompletion, sanitizeForPrompt } from '@/lib/ai/openrouter'
 import { cacheTags } from '@/lib/cache-tags'
@@ -175,7 +175,7 @@ async function readSavedHomeFeaturedNews(featuredId: string, eventId: string, lo
   }
 
   const localizedItems = await readLocale(locale)
-  return localizedItems.length > 0 || locale === DEFAULT_LOCALE ? localizedItems : readLocale(DEFAULT_LOCALE)
+  return localizedItems.length > 0 || locale === SOURCE_LOCALE ? localizedItems : readLocale(SOURCE_LOCALE)
 }
 
 export async function loadHomeFeaturedNews(

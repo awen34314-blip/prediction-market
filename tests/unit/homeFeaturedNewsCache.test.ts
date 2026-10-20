@@ -281,6 +281,15 @@ describe('home featured news refresh cache', () => {
     expect(items.map((item) => item.title)).toEqual(['Saved pt story'])
   })
 
+  it('uses English fallback when the default Traditional Chinese entry has no saved news', async () => {
+    state.rows = [existingRow('en')]
+
+    const items = await loadHomeFeaturedNews('featured', event, 'zh-hant', [], false)
+
+    expect(items.map((item) => item.title)).toEqual(['Saved en story'])
+    expect(state.completion).not.toHaveBeenCalled()
+  })
+
   it('does not treat saved comments as a news cache hit', async () => {
     state.rows = [{ ...existingRow('pt'), id: 'saved-comment', item_type: 'comment' }]
     state.completion.mockResolvedValue('{"news":[{"url":"https://example.com/pt"}]}')
