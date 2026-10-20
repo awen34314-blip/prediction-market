@@ -3760,6 +3760,7 @@ export const EventRepository = {
   async getEventRouteBySlug(slug: string): Promise<
     QueryResult<{
       slug: string
+      total_markets_count?: number
       sports_sport_slug: string | null
       sports_league_slug: string | null
       sports_event_slug: string | null
@@ -3774,6 +3775,7 @@ export const EventRepository = {
       interface EventRouteRow {
         id: string
         slug: string
+        total_markets_count: number | null
         sports_sport_slug: string | null
         sports_league_slug: string | null
         sports_series_slug: string | null
@@ -3785,6 +3787,7 @@ export const EventRepository = {
         .select({
           id: events.id,
           slug: events.slug,
+          total_markets_count: events.total_markets_count,
           sports_sport_slug: event_sports.sports_sport_slug,
           sports_league_slug: event_sports.sports_league_slug,
           sports_series_slug: event_sports.sports_series_slug,
@@ -3815,6 +3818,7 @@ export const EventRepository = {
       return {
         data: {
           slug: eventRow.slug,
+          total_markets_count: eventRow.total_markets_count ?? 0,
           sports_sport_slug: resolveCanonicalSportsSportSlug(sportsSlugResolver, {
             sportsSportSlug: eventRow.sports_sport_slug,
             sportsSeriesSlug: eventRow.sports_series_slug,

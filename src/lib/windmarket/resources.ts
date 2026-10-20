@@ -54,28 +54,28 @@ export const windmarketResources: Record<
   },
   'prediction-markets': {
     path: '/learn/prediction-markets',
-    updated: '2026-09-22',
+    updated: '2026-10-19',
     copy: {
       'zh-hant': {
         label: '預測市場入門',
         title: '預測市場是什麼？價格、概率與結算入門｜風向市場 WindMarket',
         heading: '預測市場，從讀懂一個問題開始',
         description:
-          '預測市場價格代表什麼？通過簡單示例瞭解概率、買賣價差、成交價格、事件規則與結算，以及使用風向市場前需要核對的信息。',
+          '通過訂單簿示例讀懂預測市場的價格、概率、掛單數量、金額、點差與平均成交價，並瞭解事件規則、結算和使用前的核對事項。',
       },
       zh: {
         label: '预测市场入门',
         title: '预测市场是什么？价格、概率与结算入门｜风向市场 WindMarket',
         heading: '预测市场，从读懂一个问题开始',
         description:
-          '预测市场价格代表什么？通过简单示例了解概率、买卖价差、成交价格、事件规则与结算，以及使用风向市场前需要核对的信息。',
+          '通过订单簿示例读懂预测市场的价格、概率、挂单数量、金额、点差与平均成交价，并了解事件规则、结算和使用前的核对事项。',
       },
       en: {
         label: 'Prediction market guide',
         title: 'What Is a Prediction Market? Prices and Settlement | WindMarket',
         heading: 'Start with the question, then read the market',
         description:
-          'Learn how prediction markets work: implied probabilities, bid–ask spreads, execution prices, event rules and settlement, with a simple worked example.',
+          'Understand prediction-market prices, probabilities, order-book depth, spreads and average fill prices with worked examples and settlement basics.',
       },
     },
   },
@@ -149,7 +149,7 @@ export const windmarketResources: Record<
         title: 'How to Deposit: Networks and Balance Checks | WindMarket',
         heading: 'Funding your WindMarket account',
         description:
-          'Find the deposit flow, check the asset, network and Deposit Wallet address, and understand the difference between submitting a transfer and receiving trading funds.',
+          'Find the deposit flow and check the asset, network and wallet address. Learn how to confirm that a transfer has reached your trading balance.',
       },
       'zh-hant': {
         label: '充值指南',

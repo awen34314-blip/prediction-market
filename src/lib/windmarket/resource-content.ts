@@ -238,19 +238,47 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'execution',
-          heading: '3. 買入價和賣出價為什麼不一樣',
+          heading: '3. 訂單簿裡的數量、金額和點差',
           paragraphs: [
-            '訂單簿裡，買方願意支付的最高價格稱為買價，賣方願意接受的最低價格稱為賣價。兩者之間的差額是買賣價差。立即買入通常需要匹配賣方訂單，立即賣出通常需要匹配買方訂單。',
+            '訂單簿列出買方與賣方的掛單。最高買價稱為買一，最低賣價稱為賣一；兩者之間的差額是買賣價差，也常稱為點差。立即買入通常匹配賣單，立即賣出通常匹配買單。',
             '某一價格上可成交的數量有限。訂單較大時，可能匹配多個價格，實際平均成交價會與最先看到的價格不同。限價單可以限定可接受的價格，但不保證成交。提交前查看訂單預覽中的數量、價格與費用。',
+            '下面只是假設的同一結果份額訂單簿，所有金額以美元計算。每檔掛單金額＝每份價格×該檔份額數；表中金額不含手續費，也不是當前市場報價。',
           ],
+          table: {
+            caption: '假設示例：同一結果份額的買賣掛單',
+            headers: ['掛單檔位', '每份價格', '該檔份額數', '該檔掛單金額'],
+            rows: [
+              ['賣一（最低賣價）', '$0.52', '300 份', '$156'],
+              ['賣二', '$0.54', '400 份', '$216'],
+              ['買一（最高買價）', '$0.48', '500 份', '$240'],
+              ['買二', '$0.46', '300 份', '$138'],
+            ],
+          },
           links: [
             { label: '價格說明（英文）', href: '/docs/exploring-markets/understanding-prices' },
             { label: '訂單類型（英文）', href: '/docs/exploring-markets/order-types' },
           ],
         },
         {
+          id: 'depth',
+          heading: '4. 掛單 500 份，代表多少流動性？',
+          paragraphs: [
+            '先看數字的單位與統計範圍：它可能表示份額數、美元金額、單一檔位或累計深度。上表買一的 500 是份額數，按 $0.48 計算的掛單金額是 $240。這只描述買一這一檔，不能單憑它判斷整個市場的流動性。',
+            '要判斷一筆訂單能否成交，需要查看對手方的多個價格檔位。上表的點差是 $0.52 − $0.48＝每份 $0.04，也就是 4 美分。點差與交易手續費需要分別考慮。',
+          ],
+          example: {
+            label: '假設買入 500 份：平均成交價怎麼算',
+            text: '假設上表掛單保持不變，且買單允許匹配到 $0.54：先買 300 份×$0.52＝$156，再買 200 份×$0.54＝$108，合計 $264，平均每份 $0.528。這比最先看到的 $0.52 高出每份 $0.008，說明吃到更深檔位時的價格影響。此計算不含手續費；真實掛單也可能在成交前改變或撤銷。',
+          },
+          points: [
+            '若將買入限價設為 $0.52，在上表不變且允許部分成交的假設下，最多只能匹配 300 份。剩餘部分是否保留或取消，取決於訂單類型。',
+            '較小的點差、某一檔的大掛單或較高的歷史成交量，都不足以單獨保證你的訂單能以預期價格成交。下單時還要核對即時深度、數量、限價與費用。',
+          ],
+          links: [{ label: '費用與成交成本', href: '/learn/fees' }],
+        },
+        {
           id: 'resolution',
-          heading: '4. 截止時間不等於結算完成',
+          heading: '5. 截止時間不等於結算完成',
           paragraphs: [
             '交易截止、事件結束、結果確認和資產結算可能發生在不同時間。某個事件已結束，並不意味著結果已經確認或餘額已經可以使用。',
             '市場會依據寫明的判定條件與結果來源進行處理。查看事件頁面的狀態與規則，瞭解何時停止交易、如何確定結果，以及存在爭議時的處理方式。',
@@ -259,7 +287,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'check',
-          heading: '5. 使用前核對這幾項',
+          heading: '6. 使用前核對這幾項',
           paragraphs: ['信息不完整時，先閱讀規則或通過官方社區諮詢。理解市場並不要求你立刻充值或下單。'],
           points: [
             '資格與地區：查看當前服務條款及賬戶提示。',
@@ -301,19 +329,47 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'execution',
-          heading: '3. 买入价和卖出价为什么不一样',
+          heading: '3. 订单簿里的数量、金额和点差',
           paragraphs: [
-            '订单簿里，买方愿意支付的最高价格称为买价，卖方愿意接受的最低价格称为卖价。两者之间的差额是买卖价差。立即买入通常需要匹配卖方订单，立即卖出通常需要匹配买方订单。',
+            '订单簿列出买方与卖方的挂单。最高买价称为买一，最低卖价称为卖一；两者之间的差额是买卖价差，也常称为点差。立即买入通常匹配卖单，立即卖出通常匹配买单。',
             '某一价格上可成交的数量有限。订单较大时，可能匹配多个价格，实际平均成交价会与最先看到的价格不同。限价单可以限定可接受的价格，但不保证成交。提交前查看订单预览中的数量、价格与费用。',
+            '下面只是假设的同一结果份额订单簿，所有金额以美元计算。每档挂单金额＝每份价格×该档份额数；表中金额不含手续费，也不是当前市场报价。',
           ],
+          table: {
+            caption: '假设示例：同一结果份额的买卖挂单',
+            headers: ['挂单档位', '每份价格', '该档份额数', '该档挂单金额'],
+            rows: [
+              ['卖一（最低卖价）', '$0.52', '300 份', '$156'],
+              ['卖二', '$0.54', '400 份', '$216'],
+              ['买一（最高买价）', '$0.48', '500 份', '$240'],
+              ['买二', '$0.46', '300 份', '$138'],
+            ],
+          },
           links: [
             { label: '价格说明（英文）', href: '/docs/exploring-markets/understanding-prices' },
             { label: '订单类型（英文）', href: '/docs/exploring-markets/order-types' },
           ],
         },
         {
+          id: 'depth',
+          heading: '4. 挂单 500 份，代表多少流动性？',
+          paragraphs: [
+            '先看数字的单位与统计范围：它可能表示份额数、美元金额、单一档位或累计深度。上表买一的 500 是份额数，按 $0.48 计算的挂单金额是 $240。这只描述买一这一档，不能单凭它判断整个市场的流动性。',
+            '要判断一笔订单能否成交，需要查看对手方的多个价格档位。上表的点差是 $0.52 − $0.48＝每份 $0.04，也就是 4 美分。点差与交易手续费需要分别考虑。',
+          ],
+          example: {
+            label: '假设买入 500 份：平均成交价怎么算',
+            text: '假设上表挂单保持不变，且买单允许匹配到 $0.54：先买 300 份×$0.52＝$156，再买 200 份×$0.54＝$108，合计 $264，平均每份 $0.528。这比最先看到的 $0.52 高出每份 $0.008，说明吃到更深档位时的价格影响。此计算不含手续费；真实挂单也可能在成交前改变或撤销。',
+          },
+          points: [
+            '若将买入限价设为 $0.52，在上表不变且允许部分成交的假设下，最多只能匹配 300 份。剩余部分是否保留或取消，取决于订单类型。',
+            '较小的点差、某一档的大挂单或较高的历史成交量，都不足以单独保证你的订单能以预期价格成交。下单时还要核对即时深度、数量、限价与费用。',
+          ],
+          links: [{ label: '费用与成交成本', href: '/learn/fees' }],
+        },
+        {
           id: 'resolution',
-          heading: '4. 截止时间不等于结算完成',
+          heading: '5. 截止时间不等于结算完成',
           paragraphs: [
             '交易截止、事件结束、结果确认和资产结算可能发生在不同时间。某个事件已结束，并不意味着结果已经确认或余额已经可以使用。',
             '市场会依据写明的判定条件与结果来源进行处理。查看事件页面的状态与规则，了解何时停止交易、如何确定结果，以及存在争议时的处理方式。',
@@ -322,7 +378,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'check',
-          heading: '5. 使用前核对这几项',
+          heading: '6. 使用前核对这几项',
           paragraphs: ['信息不完整时，先阅读规则或通过官方社区咨询。理解市场并不要求你立刻充值或下单。'],
           points: [
             '资格与地区：查看当前服务条款及账户提示。',
@@ -365,19 +421,47 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'execution',
-          heading: '3. Why buying and selling prices differ',
+          heading: '3. Order-book quantities, amounts and spreads',
           paragraphs: [
-            'In an order book, the bid is the highest price a buyer is offering and the ask is the lowest price a seller is accepting. The difference is the bid–ask spread. An immediate purchase normally matches sell orders; an immediate sale normally matches buy orders.',
+            'An order book lists buy and sell orders. The best bid is the highest buying price, and the best ask is the lowest selling price. Their difference is the bid–ask spread. An immediate purchase normally matches sell orders; an immediate sale normally matches buy orders.',
             'Only a certain number of shares may be available at one price. A larger order can match several price levels, so its average execution price may differ from the first quote you saw. A limit order sets an acceptable price but does not guarantee a fill. Review the quantity, price and fees before submitting.',
+            'The table below is a hypothetical order book for shares in the same outcome, with all amounts in US dollars. The amount at each level equals its share price multiplied by its share quantity. These amounts exclude fees and are not current market quotes.',
           ],
+          table: {
+            caption: 'Hypothetical example: buy and sell orders for the same outcome',
+            headers: ['Order level', 'Price per share', 'Shares at this level', 'Amount at this level'],
+            rows: [
+              ['Best ask (lowest sell price)', '$0.52', '300', '$156'],
+              ['Second ask', '$0.54', '400', '$216'],
+              ['Best bid (highest buy price)', '$0.48', '500', '$240'],
+              ['Second bid', '$0.46', '300', '$138'],
+            ],
+          },
           links: [
             { label: 'Understanding prices', href: '/docs/exploring-markets/understanding-prices' },
             { label: 'Order types explained', href: '/docs/exploring-markets/order-types' },
           ],
         },
         {
+          id: 'depth',
+          heading: '4. Does an order for 500 shares mean $500 of liquidity?',
+          paragraphs: [
+            'Check the unit and scope of a displayed number: it might describe shares, a dollar amount, one price level or cumulative depth. The 500 at the best bid above is a share quantity. At $0.48, its order amount is $240. That describes one bid level and is not enough to judge liquidity across the whole market.',
+            'To assess whether an order can fill, inspect the available price levels on the opposite side. The spread above is $0.52 minus $0.48, or $0.04 per share: 4 cents. Account for the spread and trading fees separately.',
+          ],
+          example: {
+            label: 'Buying 500 shares: a worked average-price example',
+            text: 'Suppose the displayed orders stay unchanged and a buy order permits matching up to $0.54. Buying 300 shares at $0.52 costs $156; buying another 200 at $0.54 costs $108. The total is $264, averaging $0.528 per share. This is $0.008 per share above the first $0.52 quote and illustrates the price impact of reaching deeper levels. Fees are excluded, and real orders can change or be cancelled before execution.',
+          },
+          points: [
+            'With a $0.52 buy limit, the unchanged example book can supply at most 300 shares if partial execution is allowed. Whether the remainder stays open or is cancelled depends on the order type.',
+            'A small spread, a large order at one level or high historical trading volume does not by itself guarantee execution at your expected price. Check current depth, quantity, limits and fees when placing an order.',
+          ],
+          links: [{ label: 'Fees and execution costs', href: '/learn/fees' }],
+        },
+        {
           id: 'resolution',
-          heading: '4. A deadline is not completed settlement',
+          heading: '5. A deadline is not completed settlement',
           paragraphs: [
             'Trading closure, the end of an event, confirmation of its result and asset settlement can happen at different times. An event having ended does not mean its result has been confirmed or its proceeds are available.',
             'The market follows its stated resolution conditions and sources. Read the event status and rules to understand when trading ends, how the result is determined and how disputes are handled.',
@@ -386,7 +470,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
         },
         {
           id: 'check',
-          heading: '5. What to check before using a market',
+          heading: '6. What to check before using a market',
           paragraphs: [
             'If information is missing, read the rules or ask in the official community. Learning how a market works does not require an immediate deposit or order.',
           ],

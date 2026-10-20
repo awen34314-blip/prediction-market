@@ -1,8 +1,15 @@
-import { afterEach, describe, expect, it } from 'bun:test'
+import { afterEach, describe, expect, it, spyOn } from 'bun:test'
 
 import type { Event } from '@/types'
 
-import { buildEventOgImageUrl, buildEventOgImageVersion, buildEventPageUrl } from '@/lib/event-open-graph'
+import {
+  buildEventOgImageUrl,
+  buildEventOgImageVersion,
+  buildEventPageMetadata,
+  buildEventPageUrl,
+} from '@/lib/event-open-graph'
+import * as eventPageData from '@/lib/event-page-data'
+import { createDefaultThemeSiteIdentity } from '@/lib/theme-site-identity'
 
 function createEvent(overrides: Partial<Event> = {}): Event {
   return {
@@ -138,6 +145,53 @@ describe('event open graph helpers', () => {
     })
 
     expect(pageUrl).toBe('https://demo.kuest.com/pt/event/us-recession-by-end-of-2026')
+  })
+
+  it('keeps single-market aliases on the same canonical URL in both Chinese variants', () => {
+    process.env.SITE_URL = 'https://app.windmarket.top'
+    const eventSlug = 'btc-updown-15m-1792280700'
+    const route = {
+      slug: eventSlug,
+      total_markets_count: 1,
+      sports_sport_slug: null,
+      sports_league_slug: null,
+      sports_event_slug: null,
+      sports_section: null,
+      tags: [],
+    }
+
+    expect(buildEventPageUrl({ eventSlug, locale: 'zh', marketSlug: eventSlug, route })).toBe(
+      `https://app.windmarket.top/zh/event/${eventSlug}`,
+    )
+    expect(buildEventPageUrl({ eventSlug, locale: 'zh-hant', marketSlug: eventSlug, route })).toBe(
+      `https://app.windmarket.top/event/${eventSlug}`,
+    )
+  })
+
+  it('declares the same canonical URL in HTML metadata and social metadata', async () => {
+    process.env.SITE_URL = 'https://app.windmarket.top'
+    const eventSlug = 'btc-updown-15m-1792280700'
+    const shellSpy = spyOn(eventPageData, 'loadEventPageShellData').mockResolvedValue({
+      route: {
+        slug: eventSlug,
+        total_markets_count: 1,
+        sports_sport_slug: null,
+        sports_league_slug: null,
+        sports_event_slug: null,
+        sports_section: null,
+        tags: [],
+      },
+      title: 'Bitcoin up or down?',
+      site: createDefaultThemeSiteIdentity(),
+    })
+
+    try {
+      const metadata = await buildEventPageMetadata({ eventSlug, locale: 'zh', marketSlug: eventSlug })
+      expect(metadata.alternates?.canonical).toBe(`https://app.windmarket.top/zh/event/${eventSlug}`)
+      expect(metadata.openGraph?.url).toBe(metadata.alternates?.canonical)
+    } finally {
+      shellSpy.mockRestore()
+    }
   })
 
   it('builds canonical esports league urls when the route includes a league slug', () => {
