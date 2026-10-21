@@ -48,13 +48,13 @@ export default async function SdkDownloadsSettingsPage() {
   const builderCode = addressToBuilderCode(feeReceiver)
   const geoblock = getBlockedCountriesFromSettings(allSettings ?? undefined).length > 0
 
-  function buildSdkDownloadUrl(language: 'python' | 'rust' | 'typescript', sdk: 'clob' | 'relayer') {
+  function buildSdkDownloadUrl(language: 'python' | 'rust' | 'typescript', sdk: 'unified' | 'clob' | 'relayer') {
     const url = new URL('/download', sdkDownloadUrl)
     url.searchParams.set('sdk', sdk)
     url.searchParams.set('language', language)
     url.searchParams.set('site_url', siteUrl)
 
-    if (sdk === 'clob') {
+    if (sdk !== 'relayer') {
       url.searchParams.set('builder_code', builderCode)
       url.searchParams.set('geoblock', geoblock ? 'true' : 'false')
     }
@@ -81,7 +81,7 @@ export default async function SdkDownloadsSettingsPage() {
         <h1 className="text-2xl font-semibold tracking-tight">{t('SDK Downloads')}</h1>
         <p className="text-muted-foreground">
           {t(
-            'Build trading bots and integrations with personalized SDK bundles. The CLOB client handles orderbook trading, while the Relayer client helps route and execute signed actions.',
+            'Build with a unified SDK for market data, CLOB trading, and Deposit Wallet actions in TypeScript or Python. Rust has separate CLOB and relayer clients.',
           )}
         </p>
       </div>
@@ -97,15 +97,9 @@ export default async function SdkDownloadsSettingsPage() {
               logoSrc: '/images/sdks/python.svg',
               actions: [
                 {
-                  id: 'python-clob',
-                  label: t('CLOB'),
-                  href: buildSdkDownloadUrl('python', 'clob'),
-                  variant: 'outline',
-                },
-                {
-                  id: 'python-relayer',
-                  label: t('Relayer'),
-                  href: buildSdkDownloadUrl('python', 'relayer'),
+                  id: 'python-sdk',
+                  label: t('SDK'),
+                  href: buildSdkDownloadUrl('python', 'unified'),
                   variant: 'outline',
                 },
               ],
@@ -137,15 +131,9 @@ export default async function SdkDownloadsSettingsPage() {
               logoSrc: '/images/sdks/typescript.svg',
               actions: [
                 {
-                  id: 'typescript-clob',
-                  label: t('CLOB'),
-                  href: buildSdkDownloadUrl('typescript', 'clob'),
-                  variant: 'outline',
-                },
-                {
-                  id: 'typescript-relayer',
-                  label: t('Relayer'),
-                  href: buildSdkDownloadUrl('typescript', 'relayer'),
+                  id: 'typescript-sdk',
+                  label: t('SDK'),
+                  href: buildSdkDownloadUrl('typescript', 'unified'),
                   variant: 'outline',
                 },
               ],
@@ -166,7 +154,9 @@ export default async function SdkDownloadsSettingsPage() {
           <div className="grid gap-1">
             <h2 className="text-base font-semibold tracking-tight">{t('Build with the SDKs')}</h2>
             <p className="max-w-3xl text-sm text-muted-foreground">
-              {t('Read the SDK documentation for CLOB trading, relayer wallet actions, and market maker workflows.')}
+              {t(
+                'Read the SDK documentation for the unified TypeScript and Python clients, separate Rust clients, and market maker examples.',
+              )}
             </p>
           </div>
         </div>
