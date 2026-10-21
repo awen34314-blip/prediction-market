@@ -15,6 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import DepositSupport from '@/components/windmarket/DepositSupport'
 import { IS_TEST_MODE } from '@/lib/network'
 import { cn } from '@/lib/utils'
+import { getWindMarketCopy } from '@/lib/windmarket/localization'
 
 function WalletFundMenu({
   onBuy,
@@ -41,6 +42,7 @@ function WalletFundMenu({
 }) {
   const t = useExtracted()
   const locale = useLocale()
+  const depositCopy = getWindMarketCopy(locale).directDepositNotice
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   const logoVariant = isDark ? 'dark' : 'light'
@@ -205,11 +207,9 @@ function WalletFundMenu({
           </div>
           <div>
             <p className="text-sm font-semibold">{t('Transfer Funds')}</p>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>USDC</span>
-              <span className="size-1 rounded-full bg-muted-foreground" />
-              <span>{t('copy wallet or scan QR code')}</span>
-            </div>
+            <p className="text-xs font-semibold text-amber-800 dark:text-amber-300">
+              {IS_TEST_MODE ? depositCopy.testMenuLabel : depositCopy.menuLabel}
+            </p>
           </div>
         </div>
         <div className="flex items-center -space-x-2 transition-all group-hover:-space-x-1">

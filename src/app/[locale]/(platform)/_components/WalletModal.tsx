@@ -277,7 +277,7 @@ export function WalletDepositModal(props: WalletDepositModalProps) {
       }}
     >
       <DialogContent
-        className="max-w-md border bg-background pt-4 sm:max-w-md"
+        className="max-h-[90dvh] max-w-md overflow-y-auto border bg-background pt-4 sm:max-w-md"
         showCloseButton={view !== 'confirm'}
         closeLabel={t('Close')}
       >

@@ -1,10 +1,10 @@
 'use client'
 
 import { useExtracted } from 'next-intl'
-import Image from 'next/image'
 import QRCode from 'react-qr-code'
 
 import WalletAddressCard from '@/app/[locale]/(platform)/_components/wallet-modal/WalletAddressCard'
+import WalletDepositNetworkNotice from '@/app/[locale]/(platform)/_components/wallet-modal/WalletDepositNetworkNotice'
 import { useSiteIdentity } from '@/hooks/useSiteIdentity'
 
 function WalletReceiveView({
@@ -24,24 +24,11 @@ function WalletReceiveView({
 
   return (
     <div className="space-y-4">
+      <WalletDepositNetworkNotice />
       <div className="space-y-2">
         <p className="text-center text-sm font-semibold text-muted-foreground">
           <span>{t('Scan QR Code or copy your {siteName} wallet address to transfer', { siteName: siteLabel })}</span>{' '}
-          <span className="inline-flex items-center gap-1 align-middle">
-            <Image src="/images/deposit/transfer/usdc_dark.png" alt="USDC" width={14} height={14} className="block" />
-            <span>USDC</span>
-          </span>{' '}
-          <span>{t('on')}</span>{' '}
-          <span className="inline-flex items-center gap-1 align-middle">
-            <Image
-              src="/images/deposit/transfer/polygon_dark.png"
-              alt="Polygon"
-              width={14}
-              height={14}
-              className="block"
-            />
-            <span>Polygon</span>
-          </span>
+          <span>USDC</span>
         </p>
         <div className="flex justify-center">
           <div className="rounded-lg border bg-white p-2 transition">
