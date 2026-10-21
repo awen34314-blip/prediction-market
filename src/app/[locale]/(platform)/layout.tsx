@@ -9,9 +9,11 @@ import PlatformViewerState from '@/app/[locale]/(platform)/_components/PlatformV
 import { FilterProvider } from '@/app/[locale]/(platform)/_providers/FilterProvider'
 import PlatformNavigationProvider from '@/app/[locale]/(platform)/_providers/PlatformNavigationProvider'
 import { TradingOnboardingProvider } from '@/app/[locale]/(platform)/_providers/TradingOnboardingProvider'
+import InAppBrowserNotice from '@/components/InAppBrowserNotice'
 import CommunityBar from '@/components/windmarket/CommunityBar'
 import { getRootLocale } from '@/i18n/root-locale'
 import { loadPlatformLayoutNavigation } from '@/lib/platform-layout-navigation'
+import { getWindMarketCopy } from '@/lib/windmarket/localization'
 import AppKitProvider from '@/providers/AppKitProvider'
 import { CommunityFollowsProvider } from '@/providers/CommunityFollowsProvider'
 import TradeAlertsProvider from '@/providers/TradeAlertsProvider'
@@ -20,6 +22,7 @@ export const instant = false
 
 async function PlatformLayoutContent({ children }: { children: ReactNode }) {
   const [{ tags, childParentMap }, locale] = await Promise.all([loadPlatformLayoutNavigation(), getRootLocale()])
+  const copy = getWindMarketCopy(locale)
 
   return (
     <TradingOnboardingProvider>
@@ -30,6 +33,7 @@ async function PlatformLayoutContent({ children }: { children: ReactNode }) {
             <CommunityBar locale={locale} />
             <Header />
             <NavigationTabs />
+            <InAppBrowserNotice copy={copy.inAppBrowserNotice} />
             {children}
           </div>
           <PlatformLayoutFooter />

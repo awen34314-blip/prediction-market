@@ -3,6 +3,11 @@ import type { SupportedLocale } from '@/i18n/locales'
 import { resolveSupportedLocale } from '@/i18n/locales'
 
 interface WindMarketCopy {
+  inAppBrowserNotice: {
+    title: string
+    description: string
+    dismiss: string
+  }
   community: string
   communityDetail: string
   join: string
@@ -15,6 +20,12 @@ interface WindMarketCopy {
 
 const copy: Record<SupportedLocale, WindMarketCopy> = {
   en: {
+    inAppBrowserNotice: {
+      title: 'Open in your browser',
+      description:
+        'For smoother sign-in and wallet connections, use the app menu to open this page in Chrome or Safari.',
+      dismiss: 'Dismiss browser reminder',
+    },
     community: 'WindMarket community',
     communityDetail: 'Discuss markets · Deposit support',
     join: 'Join community',
@@ -26,6 +37,11 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'en_US',
   },
   'zh-hant': {
+    inAppBrowserNotice: {
+      title: '建議在瀏覽器中開啟',
+      description: '為便於登入和連接錢包，請透過目前應用程式的選單，用 Chrome 或 Safari 開啟此頁面。',
+      dismiss: '關閉瀏覽器提醒',
+    },
     community: '風向市場社區',
     communityDetail: '交流預測 · 充值幫助',
     join: '加入社區',
@@ -37,6 +53,11 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'zh_TW',
   },
   zh: {
+    inAppBrowserNotice: {
+      title: '建议在浏览器中打开',
+      description: '为便于登录和连接钱包，请通过当前应用的菜单，用 Chrome 或 Safari 打开此页面。',
+      dismiss: '关闭浏览器提醒',
+    },
     community: '风向市场社区',
     communityDetail: '交流预测 · 充值帮助',
     join: '加入社区',
@@ -48,6 +69,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'zh_CN',
   },
   de: {
+    inAppBrowserNotice: {
+      title: 'Im Browser öffnen',
+      description:
+        'Öffne diese Seite über das App-Menü in Chrome oder Safari, damit Anmeldung und Wallet-Verbindung reibungsloser funktionieren.',
+      dismiss: 'Browser-Hinweis schließen',
+    },
     community: 'WindMarket Community',
     communityDetail: 'Märkte diskutieren · Hilfe bei Einzahlungen',
     join: 'Beitreten',
@@ -59,6 +86,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'de_DE',
   },
   es: {
+    inAppBrowserNotice: {
+      title: 'Abrir en el navegador',
+      description:
+        'Para iniciar sesión y conectar tu billetera con mayor facilidad, abre esta página en Chrome o Safari desde el menú de la aplicación.',
+      dismiss: 'Cerrar aviso del navegador',
+    },
     community: 'Comunidad WindMarket',
     communityDetail: 'Debate sobre mercados · Ayuda con depósitos',
     join: 'Unirse',
@@ -70,6 +103,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'es_ES',
   },
   pt: {
+    inAppBrowserNotice: {
+      title: 'Abrir no navegador',
+      description:
+        'Para facilitar o login e a conexão da carteira, abra esta página no Chrome ou Safari pelo menu do aplicativo.',
+      dismiss: 'Fechar aviso do navegador',
+    },
     community: 'Comunidade WindMarket',
     communityDetail: 'Discussão de mercados · Ajuda com depósitos',
     join: 'Participar',
@@ -81,6 +120,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'pt_BR',
   },
   fr: {
+    inAppBrowserNotice: {
+      title: 'Ouvrir dans le navigateur',
+      description:
+        'Pour faciliter la connexion à votre compte et à votre portefeuille, ouvrez cette page dans Chrome ou Safari depuis le menu de l’application.',
+      dismiss: 'Fermer le rappel du navigateur',
+    },
     community: 'Communauté WindMarket',
     communityDetail: 'Discuter des marchés · Aide aux dépôts',
     join: 'Rejoindre',
@@ -92,6 +137,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'fr_FR',
   },
   ja: {
+    inAppBrowserNotice: {
+      title: 'ブラウザで開くことをおすすめします',
+      description:
+        'ログインやウォレット接続をスムーズに行うため、アプリのメニューからこのページを Chrome または Safari で開いてください。',
+      dismiss: 'ブラウザの案内を閉じる',
+    },
     community: 'WindMarket コミュニティ',
     communityDetail: '市場について話す · 入金サポート',
     join: '参加する',
@@ -103,6 +154,11 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'ja_JP',
   },
   ar: {
+    inAppBrowserNotice: {
+      title: 'افتح الصفحة في متصفحك',
+      description: 'لتسهيل تسجيل الدخول وربط المحفظة، افتح هذه الصفحة في Chrome أو Safari من قائمة التطبيق.',
+      dismiss: 'إغلاق تذكير المتصفح',
+    },
     community: 'مجتمع WindMarket',
     communityDetail: 'ناقش الأسواق · مساعدة في الإيداع',
     join: 'انضم للمجتمع',
@@ -114,6 +170,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'ar_SA',
   },
   ru: {
+    inAppBrowserNotice: {
+      title: 'Откройте в браузере',
+      description:
+        'Для удобного входа и подключения кошелька откройте эту страницу в Chrome или Safari через меню приложения.',
+      dismiss: 'Закрыть напоминание о браузере',
+    },
     community: 'Сообщество WindMarket',
     communityDetail: 'Обсуждение рынков · Помощь с пополнением',
     join: 'Присоединиться',
@@ -125,6 +187,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'ru_RU',
   },
   it: {
+    inAppBrowserNotice: {
+      title: 'Apri nel browser',
+      description:
+        'Per facilitare l’accesso e il collegamento del wallet, apri questa pagina in Chrome o Safari dal menu dell’app.',
+      dismiss: 'Chiudi il promemoria del browser',
+    },
     community: 'Community WindMarket',
     communityDetail: 'Discussioni sui mercati · Assistenza depositi',
     join: 'Unisciti',
@@ -136,6 +204,12 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'it_IT',
   },
   pl: {
+    inAppBrowserNotice: {
+      title: 'Otwórz w przeglądarce',
+      description:
+        'Aby ułatwić logowanie i łączenie portfela, otwórz tę stronę w Chrome lub Safari przez menu aplikacji.',
+      dismiss: 'Zamknij przypomnienie o przeglądarce',
+    },
     community: 'Społeczność WindMarket',
     communityDetail: 'Dyskusje o rynkach · Pomoc z wpłatami',
     join: 'Dołącz',
@@ -147,6 +221,11 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     ogLocale: 'pl_PL',
   },
   ko: {
+    inAppBrowserNotice: {
+      title: '브라우저에서 열기를 권장합니다',
+      description: '원활한 로그인과 지갑 연결을 위해 앱 메뉴에서 이 페이지를 Chrome 또는 Safari로 열어 주세요.',
+      dismiss: '브라우저 안내 닫기',
+    },
     community: 'WindMarket 커뮤니티',
     communityDetail: '시장 토론 · 입금 지원',
     join: '참여하기',
