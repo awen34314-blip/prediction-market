@@ -32,7 +32,7 @@ import {
   HOME_FEED_REFRESH_INTERVAL_MS,
 } from '@/lib/home-events-query'
 import { getDefaultHomeRouteSortBy } from '@/lib/home-route-sort'
-import { resolveDisplayPrice } from '@/lib/market-chance'
+import { resolveHomeCardDisplayPrice } from '@/lib/market-chance'
 import { buildHomeSportsMoneylineModel } from '@/lib/sports-home-card'
 import { useUser } from '@/stores/useUser'
 
@@ -353,13 +353,7 @@ function useHomeLivePriceOverrides({
     Object.keys({ ...marketQuotesByMarket, ...lastTradesByMarket }).forEach((conditionId) => {
       const quote = marketQuotesByMarket[conditionId]
       const lastTrade = lastTradesByMarket[conditionId]
-      const displayPrice = resolveDisplayPrice({
-        bid: quote?.bid ?? null,
-        ask: quote?.ask ?? null,
-        midpoint: quote?.mid ?? null,
-        lastTrade,
-        strictFallbacks: true,
-      })
+      const displayPrice = resolveHomeCardDisplayPrice(quote, lastTrade)
 
       if (displayPrice != null) {
         strictPriceByMarket[conditionId] = displayPrice

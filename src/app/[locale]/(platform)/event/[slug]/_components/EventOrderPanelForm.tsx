@@ -102,7 +102,14 @@ import { isUserRejectedRequestError, normalizeAddress } from '@/lib/wallet'
 import { signAndSubmitDepositWalletCalls } from '@/lib/wallet/client'
 import { buildNegRiskRedeemPositionCall, buildRedeemPositionCall } from '@/lib/wallet/transactions'
 import { useNotifications } from '@/stores/useNotifications'
-import { useAmountAsNumber, useIsLimitOrder, useNoPrice, useOrder, useYesPrice } from '@/stores/useOrder'
+import {
+  selectOrderOutcomeAtDisplayedPrice,
+  useAmountAsNumber,
+  useIsLimitOrder,
+  useNoPrice,
+  useOrder,
+  useYesPrice,
+} from '@/stores/useOrder'
 import { usePolymarketWallet } from '@/stores/usePolymarketWallet'
 import { useUser } from '@/stores/useUser'
 
@@ -1976,20 +1983,22 @@ export default function EventOrderPanelForm({
     state.setLimitPrice(cents.toFixed(1))
   }
 
-  function handleOutcomeSelect(nextOutcome: Outcome | null | undefined) {
-    if (!activeMarket || !nextOutcome) {
-      return
-    }
-
+  function handleOutcomeSelect(nextOutcome: Outcome | null | undefined, displayedPrice: number | null) {
     clearValidationFeedback()
     clearSlippageWarning()
-
-    if (!state.market) {
-      state.setMarket(activeMarket)
+    if (
+      selectOrderOutcomeAtDisplayedPrice({
+        market: activeMarket,
+        outcome: nextOutcome,
+        displayedPrice,
+        currentMarketConditionId: state.market?.condition_id,
+        setMarket: state.setMarket,
+        setOutcome: state.setOutcome,
+        setLimitPrice: state.setLimitPrice,
+      })
+    ) {
+      focusInput()
     }
-
-    state.setOutcome(nextOutcome)
-    focusInput()
   }
 
   const shouldStickDesktopTabs = !isMobile && stickyDesktopTabs
@@ -2376,8 +2385,8 @@ export default function EventOrderPanelForm({
                   styleVariant={outcomeButtonStyleVariant}
                   primarySelectedAccent={outcomeAccentOverrides[normalizedPrimaryOutcomeIndex] ?? null}
                   secondarySelectedAccent={outcomeAccentOverrides[normalizedSecondaryOutcomeIndex] ?? null}
-                  onSelectPrimary={() => handleOutcomeSelect(primaryOutcome)}
-                  onSelectSecondary={() => handleOutcomeSelect(secondaryOutcome)}
+                  onSelectPrimary={() => handleOutcomeSelect(primaryOutcome, primaryPrice)}
+                  onSelectSecondary={() => handleOutcomeSelect(secondaryOutcome, secondaryPrice)}
                 />
 
                 <EventOrderPanelOrderInput

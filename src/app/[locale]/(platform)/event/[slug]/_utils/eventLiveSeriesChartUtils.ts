@@ -218,6 +218,75 @@ export function isCanonicalBinanceDailySnapshot(snapshot: LiveSeriesPriceSnapsho
   return snapshot?.source === 'binance' && snapshot.interval === '1d'
 }
 
+function hasCanonicalDailyClose({
+  snapshot,
+  snapshotStatus,
+  eventWindowStartTimestamp,
+  eventWindowEndTimestamp,
+}: {
+  snapshot: LiveSeriesPriceSnapshot | null
+  snapshotStatus: LiveSeriesPriceSnapshotStatus
+  eventWindowStartTimestamp: number | null
+  eventWindowEndTimestamp: number | null
+}) {
+  return (
+    snapshotStatus === 'ready' &&
+    snapshot != null &&
+    snapshot.source === 'pyth' &&
+    snapshot.interval === '1d' &&
+    snapshot.interval_ms === 24 * 60 * 60 * 1000 &&
+    snapshot.is_event_closed &&
+    eventWindowStartTimestamp != null &&
+    snapshot.event_window_start_ms === eventWindowStartTimestamp &&
+    eventWindowEndTimestamp != null &&
+    snapshot.event_window_end_ms === eventWindowEndTimestamp &&
+    snapshot.closing_price != null &&
+    Number.isFinite(snapshot.closing_price) &&
+    snapshot.closing_price > 0
+  )
+}
+
+export function isCanonicalGoldDailyCloseSnapshot({
+  snapshot,
+  snapshotStatus,
+  eventWindowStartTimestamp,
+  eventWindowEndTimestamp,
+}: {
+  snapshot: LiveSeriesPriceSnapshot | null
+  snapshotStatus: LiveSeriesPriceSnapshotStatus
+  eventWindowStartTimestamp: number | null
+  eventWindowEndTimestamp: number | null
+}) {
+  return (
+    snapshot != null &&
+    isGoldDailySeries(snapshot.series_slug) &&
+    snapshot.instrument === 'XAUUSD' &&
+    hasCanonicalDailyClose({ snapshot, snapshotStatus, eventWindowStartTimestamp, eventWindowEndTimestamp })
+  )
+}
+
+export function isCanonicalEventBoundEquityCloseSnapshot({
+  snapshot,
+  snapshotStatus,
+  eventWindowStartTimestamp,
+  eventWindowEndTimestamp,
+  expectedInstrument,
+}: {
+  snapshot: LiveSeriesPriceSnapshot | null
+  snapshotStatus: LiveSeriesPriceSnapshotStatus
+  eventWindowStartTimestamp: number | null
+  eventWindowEndTimestamp: number | null
+  expectedInstrument: string
+}) {
+  return (
+    snapshotStatus === 'ready' &&
+    snapshot != null &&
+    (snapshot.series_slug === 'hood-daily-up-or-down' || snapshot.series_slug === 'coin-daily-up-or-down') &&
+    snapshot.instrument === expectedInstrument &&
+    hasCanonicalDailyClose({ snapshot, snapshotStatus, eventWindowStartTimestamp, eventWindowEndTimestamp })
+  )
+}
+
 export function requiresCanonicalBinanceDailyClose({
   snapshot,
   snapshotStatus,
@@ -669,6 +738,37 @@ export function normalizeSubscriptionSymbol(topic: string, symbol: string) {
   return trimmed.toLowerCase()
 }
 
+const GOLD_DAILY_SERIES_SLUG = 'gold-daily-up-or-down'
+
+export function isGoldDailySeries(seriesSlug: string | null | undefined) {
+  return seriesSlug?.trim().toLowerCase() === GOLD_DAILY_SERIES_SLUG
+}
+
+export function resolveLiveSeriesStartTimestamp({
+  seriesSlug,
+  eventStartTimestamp,
+  eventEndTimestamp,
+  activeWindowMinutes,
+}: {
+  seriesSlug: string
+  eventStartTimestamp: number | null
+  eventEndTimestamp: number | null
+  activeWindowMinutes: number
+}) {
+  if (
+    isGoldDailySeries(seriesSlug) &&
+    eventEndTimestamp != null &&
+    Number.isFinite(eventEndTimestamp) &&
+    eventEndTimestamp > 0 &&
+    Number.isFinite(activeWindowMinutes) &&
+    activeWindowMinutes > 0
+  ) {
+    return eventEndTimestamp - activeWindowMinutes * 60 * 1000
+  }
+
+  return eventStartTimestamp
+}
+
 export function resolveLiveSeriesRealtimeTopic({
   configuredTopic,
   activeWindowMinutes,
@@ -993,4 +1093,19 @@ export function isUsEquityMarketOpen(timestamp: number) {
   }
 
   return minutesOfDay >= 9 * 60 + 30 && minutesOfDay < 16 * 60
+}
+
+export function isGoldMarketSessionOpen(timestamp: number) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(new Date(timestamp))
+  const weekday = parts.find((part) => part.type === 'weekday')?.value ?? ''
+  const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? '0')
+  const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? '0')
+  const minutesOfDay = hour * 60 + minute
+  return weekday !== 'Sat' && weekday !== 'Sun' && minutesOfDay >= 9 * 60 + 30 && minutesOfDay < 17 * 60
 }
