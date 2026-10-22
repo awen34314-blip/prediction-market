@@ -2763,5 +2763,10 @@
   "aetEa0": "Get trade alerts from people you follow on this device.",
   "t-2AAt": "Could not update follow status.",
   "-RU9lJ": "{trader} bought {shares} {outcome} in {marketTitle}",
-  "l7onJY": "{trader} sold {shares} {outcome} in {marketTitle}"
+  "l7onJY": "{trader} sold {shares} {outcome} in {marketTitle}",
+  "rztPaw": "Switch to {network}",
+  "7dAwzx": "Open your wallet and approve the switch to {network} to continue.",
+  "yPMPAG": "Network switch required",
+  "hyYN_J": "Network switch cancelled. Open your wallet, switch to {network}, then try again. Your order has not been submitted.",
+  "-ODwK5": "Could not switch networks. Open your wallet, switch to {network}, then try again. Your order has not been submitted."
 }

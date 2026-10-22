@@ -2763,5 +2763,10 @@
   "aetEa0": "在此设备上接收您关注的用户的交易提醒。",
   "t-2AAt": "无法更新关注状态。",
   "-RU9lJ": "{trader} 在 {marketTitle} 买入了 {shares} 份 {outcome}",
-  "l7onJY": "{trader} 在 {marketTitle} 卖出了 {shares} 份 {outcome}"
+  "l7onJY": "{trader} 在 {marketTitle} 卖出了 {shares} 份 {outcome}",
+  "rztPaw": "切换至 {network}",
+  "7dAwzx": "请打开钱包，确认切换至 {network} 后继续。",
+  "yPMPAG": "需要切换网络",
+  "hyYN_J": "你已取消切换网络。请在钱包中切换至 {network} 后重试，订单尚未提交。",
+  "-ODwK5": "无法自动切换网络。请在钱包中手动切换至 {network} 后重试，订单尚未提交。"
 }

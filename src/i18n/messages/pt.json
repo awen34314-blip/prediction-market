@@ -2763,5 +2763,10 @@
   "aetEa0": "Receba neste dispositivo alertas de trading das pessoas que você segue.",
   "t-2AAt": "Não foi possível atualizar o status de follow.",
   "-RU9lJ": "{trader} comprou {shares} {outcome} em {marketTitle}",
-  "l7onJY": "{trader} vendeu {shares} {outcome} em {marketTitle}"
+  "l7onJY": "{trader} vendeu {shares} {outcome} em {marketTitle}",
+  "rztPaw": "Mudar para {network}",
+  "7dAwzx": "Abra sua carteira e aprove a mudança para {network} para continuar.",
+  "yPMPAG": "É necessário mudar de rede",
+  "hyYN_J": "Mudança de rede cancelada. Abra sua carteira, mude para {network} e tente novamente. Sua ordem não foi enviada.",
+  "-ODwK5": "Não foi possível mudar de rede. Abra sua carteira, mude manualmente para {network} e tente novamente. Sua ordem não foi enviada."
 }

@@ -2763,5 +2763,10 @@
   "aetEa0": "Erhalte auf diesem Gerät Handelsbenachrichtigungen von Personen, denen du folgst.",
   "t-2AAt": "Follow-Status konnte nicht aktualisiert werden.",
   "-RU9lJ": "{trader} kaufte {shares} {outcome} in {marketTitle}",
-  "l7onJY": "{trader} verkaufte {shares} {outcome} in {marketTitle}"
+  "l7onJY": "{trader} verkaufte {shares} {outcome} in {marketTitle}",
+  "rztPaw": "Zu {network} wechseln",
+  "7dAwzx": "Öffne deine Wallet und bestätige den Wechsel zu {network}, um fortzufahren.",
+  "yPMPAG": "Netzwerkwechsel erforderlich",
+  "hyYN_J": "Netzwerkwechsel abgebrochen. Öffne deine Wallet, wechsle zu {network} und versuche es erneut. Deine Order wurde noch nicht übermittelt.",
+  "-ODwK5": "Netzwerkwechsel fehlgeschlagen. Öffne deine Wallet, wechsle manuell zu {network} und versuche es erneut. Deine Order wurde noch nicht übermittelt."
 }

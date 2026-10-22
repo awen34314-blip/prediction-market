@@ -2763,5 +2763,10 @@
   "aetEa0": "在此設備上接收您關注的用戶的交易提醒。",
   "t-2AAt": "無法更新關注狀態。",
   "-RU9lJ": "{trader} 在 {marketTitle} 買入了 {shares} 份 {outcome}",
-  "l7onJY": "{trader} 在 {marketTitle} 賣出了 {shares} 份 {outcome}"
+  "l7onJY": "{trader} 在 {marketTitle} 賣出了 {shares} 份 {outcome}",
+  "rztPaw": "切換至 {network}",
+  "7dAwzx": "請開啟錢包，確認切換至 {network} 後繼續。",
+  "yPMPAG": "需要切換網路",
+  "hyYN_J": "你已取消切換網路。請在錢包中切換至 {network} 後重試，訂單尚未提交。",
+  "-ODwK5": "無法自動切換網路。請在錢包中手動切換至 {network} 後重試，訂單尚未提交。"
 }

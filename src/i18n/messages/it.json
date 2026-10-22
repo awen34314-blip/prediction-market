@@ -2763,5 +2763,10 @@
   "aetEa0": "Ricevi su questo dispositivo gli avvisi di trading delle persone che segui.",
   "t-2AAt": "Impossibile aggiornare lo stato del follow.",
   "-RU9lJ": "{trader} ha acquistato {shares} {outcome} su {marketTitle}",
-  "l7onJY": "{trader} ha venduto {shares} {outcome} su {marketTitle}"
+  "l7onJY": "{trader} ha venduto {shares} {outcome} su {marketTitle}",
+  "rztPaw": "Passa a {network}",
+  "7dAwzx": "Apri il portafoglio e approva il passaggio a {network} per continuare.",
+  "yPMPAG": "È necessario cambiare rete",
+  "hyYN_J": "Cambio di rete annullato. Apri il portafoglio, passa a {network} e riprova. Il tuo ordine non è stato inviato.",
+  "-ODwK5": "Impossibile cambiare rete. Apri il portafoglio, passa manualmente a {network} e riprova. Il tuo ordine non è stato inviato."
 }

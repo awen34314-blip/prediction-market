@@ -55,6 +55,7 @@ import { useCurrentTimestamp } from '@/hooks/useCurrentTimestamp'
 import { useHasHydrated } from '@/hooks/useHasHydrated'
 import { useKuestFeeRate } from '@/hooks/useKuestFeeRate'
 import { useMarketRewards } from '@/hooks/useMarketRewards'
+import { OrderNetworkSwitchError, useOrderSignature } from '@/hooks/useOrderSignature'
 import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
 import { useSignaturePromptRunner } from '@/hooks/useSignaturePromptRunner'
 import { useSiteIdentity } from '@/hooks/useSiteIdentity'
@@ -874,6 +875,7 @@ export default function EventOrderPanelForm({
   const { address: activeWalletAddress, connector: activeWalletConnector } = useAccount()
   const wagmiConfig = useConfig()
   const { signTypedDataAsync } = useSignTypedData()
+  const { signOrder, networkName } = useOrderSignature()
   const { runWithSignaturePrompt } = useSignaturePromptRunner()
   const t = useExtracted()
   const translateFeedback = useOrderFeedbackTranslate()
@@ -1335,6 +1337,10 @@ export default function EventOrderPanelForm({
   }
 
   async function submitOrderFlow(options: { confirmedSlippageWarning?: boolean } = {}) {
+    if (useOrder.getState().isLoading) {
+      return
+    }
+
     if (!ensureChainlinkMarketAcceptsSubmission(activeMarket)) {
       return
     }
@@ -1566,16 +1572,28 @@ export default function EventOrderPanelForm({
     const submittedOutcomeIndex = activeOutcome.outcome_index
     const submittedLastMouseEvent = state.lastMouseEvent
 
+    state.setIsLoading(true)
     let signature: string
     try {
-      signature = await runWithSignaturePrompt(() =>
-        signOrderPayload({
-          payload,
-          domain: orderDomain,
-          signTypedDataAsync,
-        }),
-      )
+      signature = await signOrder({ payload, domain: orderDomain, account: userAddress })
     } catch (error) {
+      state.setIsLoading(false)
+      if (error instanceof OrderNetworkSwitchError) {
+        handleOrderErrorFeedback(
+          t('Network switch required'),
+          error.reason === 'rejected'
+            ? t(
+                'Network switch cancelled. Open your wallet, switch to {network}, then try again. Your order has not been submitted.',
+                { network: networkName },
+              )
+            : t(
+                'Could not switch networks. Open your wallet, switch to {network}, then try again. Your order has not been submitted.',
+                { network: networkName },
+              ),
+        )
+        return
+      }
+
       if (isUserRejectedRequestError(error)) {
         handleOrderCancelledFeedback(translateFeedback)
         return
@@ -1585,7 +1603,6 @@ export default function EventOrderPanelForm({
       return
     }
 
-    state.setIsLoading(true)
     try {
       if (!ensureChainlinkMarketAcceptsSubmission(activeMarket)) {
         return

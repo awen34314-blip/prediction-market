@@ -2763,5 +2763,10 @@
   "aetEa0": "Recibe alertas de trading de las personas que sigues en este dispositivo.",
   "t-2AAt": "No se pudo actualizar el estado de seguimiento.",
   "-RU9lJ": "{trader} compró {shares} {outcome} en {marketTitle}",
-  "l7onJY": "{trader} vendió {shares} {outcome} en {marketTitle}"
+  "l7onJY": "{trader} vendió {shares} {outcome} en {marketTitle}",
+  "rztPaw": "Cambiar a {network}",
+  "7dAwzx": "Abre tu billetera y aprueba el cambio a {network} para continuar.",
+  "yPMPAG": "Debes cambiar de red",
+  "hyYN_J": "Cambio de red cancelado. Abre tu billetera, cambia a {network} e inténtalo de nuevo. Tu orden no se ha enviado.",
+  "-ODwK5": "No se pudo cambiar de red. Abre tu billetera, cambia manualmente a {network} e inténtalo de nuevo. Tu orden no se ha enviado."
 }

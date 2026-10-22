@@ -2763,5 +2763,10 @@
   "aetEa0": "Recevez sur cet appareil des alertes de trading des personnes que vous suivez.",
   "t-2AAt": "Impossible de mettre à jour le statut de suivi.",
   "-RU9lJ": "{trader} a acheté {shares} {outcome} sur {marketTitle}",
-  "l7onJY": "{trader} a vendu {shares} {outcome} sur {marketTitle}"
+  "l7onJY": "{trader} a vendu {shares} {outcome} sur {marketTitle}",
+  "rztPaw": "Passer à {network}",
+  "7dAwzx": "Ouvrez votre portefeuille et approuvez le passage à {network} pour continuer.",
+  "yPMPAG": "Changement de réseau requis",
+  "hyYN_J": "Changement de réseau annulé. Ouvrez votre portefeuille, passez à {network} et réessayez. Votre ordre n’a pas été envoyé.",
+  "-ODwK5": "Impossible de changer de réseau. Ouvrez votre portefeuille, passez manuellement à {network} et réessayez. Votre ordre n’a pas été envoyé."
 }

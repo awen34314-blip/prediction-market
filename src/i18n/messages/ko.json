@@ -2763,5 +2763,10 @@
   "aetEa0": "이 기기에서 팔로우한 사용자의 거래 알림을 받으세요.",
   "t-2AAt": "팔로우 상태를 업데이트하지 못했습니다.",
   "-RU9lJ": "{trader}님이 {marketTitle}에서 {outcome} {shares}주를 매수했습니다",
-  "l7onJY": "{trader}님이 {marketTitle}에서 {outcome} {shares}주를 매도했습니다"
+  "l7onJY": "{trader}님이 {marketTitle}에서 {outcome} {shares}주를 매도했습니다",
+  "rztPaw": "{network}(으)로 전환",
+  "7dAwzx": "지갑을 열고 {network}(으)로 전환을 승인해 계속하세요.",
+  "yPMPAG": "네트워크 전환 필요",
+  "hyYN_J": "네트워크 전환이 취소되었습니다. 지갑에서 {network}(으)로 전환한 후 다시 시도하세요. 주문은 아직 제출되지 않았습니다.",
+  "-ODwK5": "네트워크를 자동으로 전환할 수 없습니다. 지갑에서 수동으로 {network}(으)로 전환한 후 다시 시도하세요. 주문은 아직 제출되지 않았습니다."
 }

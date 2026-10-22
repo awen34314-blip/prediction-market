@@ -2763,5 +2763,10 @@
   "aetEa0": "Otrzymuj na tym urządzeniu alerty o transakcjach obserwowanych osób.",
   "t-2AAt": "Nie udało się zaktualizować statusu obserwowania.",
   "-RU9lJ": "{trader} kupił {shares} {outcome} na {marketTitle}",
-  "l7onJY": "{trader} sprzedał {shares} {outcome} na {marketTitle}"
+  "l7onJY": "{trader} sprzedał {shares} {outcome} na {marketTitle}",
+  "rztPaw": "Przełącz na {network}",
+  "7dAwzx": "Otwórz portfel i zatwierdź przełączenie na {network}, aby kontynuować.",
+  "yPMPAG": "Wymagana zmiana sieci",
+  "hyYN_J": "Anulowano zmianę sieci. Otwórz portfel, przełącz na {network} i spróbuj ponownie. Twoje zlecenie nie zostało wysłane.",
+  "-ODwK5": "Nie udało się zmienić sieci. Otwórz portfel, przełącz ręcznie na {network} i spróbuj ponownie. Twoje zlecenie nie zostało wysłane."
 }
