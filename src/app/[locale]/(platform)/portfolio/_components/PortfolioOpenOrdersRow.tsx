@@ -1,7 +1,7 @@
 import type { Route } from 'next'
 
 import { XIcon } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useExtracted, useLocale } from 'next-intl'
 
 import type { PortfolioUserOpenOrder } from '@/app/[locale]/(platform)/portfolio/_types/PortfolioOpenOrdersTypes'
 
@@ -18,6 +18,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
 import { Link } from '@/i18n/navigation'
 import { formatDollarValueLabel } from '@/lib/formatters'
+import { localizeHomeEventCardTitle } from '@/lib/home-featured-localization'
 import { cn } from '@/lib/utils'
 
 interface PortfolioOpenOrdersRowProps {
@@ -28,6 +29,8 @@ interface PortfolioOpenOrdersRowProps {
 
 export default function PortfolioOpenOrdersRow({ order, onCancel, isCancelling }: PortfolioOpenOrdersRowProps) {
   const t = useExtracted()
+  const locale = useLocale()
+  const marketTitle = localizeHomeEventCardTitle(order.market.title, locale)
   const normalizeOutcomeLabel = useOutcomeLabel()
   const totalShares = getOrderTotalShares(order)
   const filledShares = getOrderFilledShares(order)
@@ -51,7 +54,7 @@ export default function PortfolioOpenOrdersRow({ order, onCancel, isCancelling }
         <div className="flex min-w-0 items-start gap-3">
           <Link href={eventHref} className="relative size-12 shrink-0 overflow-hidden rounded-sm bg-muted">
             {marketIcon ? (
-              <EventIconImage src={marketIcon} alt={order.market.title} sizes="48px" containerClassName="size-full" />
+              <EventIconImage src={marketIcon} alt={marketTitle} sizes="48px" containerClassName="size-full" />
             ) : (
               <div className="grid size-full place-items-center text-2xs text-muted-foreground">{t('No image')}</div>
             )}
@@ -60,9 +63,9 @@ export default function PortfolioOpenOrdersRow({ order, onCancel, isCancelling }
             <Link
               href={eventHref}
               className="block max-w-full truncate text-sm font-semibold underline-offset-2 hover:underline"
-              title={order.market.title}
+              title={marketTitle}
             >
-              {order.market.title}
+              {marketTitle}
             </Link>
           </div>
         </div>

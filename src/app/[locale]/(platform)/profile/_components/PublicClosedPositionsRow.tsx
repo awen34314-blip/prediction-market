@@ -1,7 +1,7 @@
 import type { Route } from 'next'
 
 import { ShareIcon } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useExtracted, useLocale } from 'next-intl'
 
 import {
   getClosedPositionMetrics,
@@ -11,8 +11,10 @@ import {
 import EventIconImage from '@/components/EventIconImage'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
 import { Link } from '@/i18n/navigation'
 import { formatCentsLabel, formatCurrency, formatSharesLabel } from '@/lib/formatters'
+import { localizeHomeEventCardTitle } from '@/lib/home-featured-localization'
 import { cn } from '@/lib/utils'
 
 import type { PublicPosition } from './PublicPositionItem'
@@ -24,8 +26,11 @@ interface PublicClosedPositionsRowProps {
 
 export default function PublicClosedPositionsRow({ position, onShareClick }: PublicClosedPositionsRowProps) {
   const t = useExtracted()
+  const normalizeOutcomeLabel = useOutcomeLabel()
+  const locale = useLocale()
+  const marketTitle = localizeHomeEventCardTitle(position.title, locale)
   const imageSrc = position.icon ? `https://gateway.irys.xyz/${position.icon}` : null
-  const outcomeLabel = getOutcomeLabel(position)
+  const outcomeLabel = normalizeOutcomeLabel(getOutcomeLabel(position))
   const outcomeColor = getOutcomeBadgeColorClassName(position)
   const eventSlug = position.eventSlug || position.slug
   const marketSlug = position.eventSlug && position.slug ? position.slug : null
@@ -44,7 +49,7 @@ export default function PublicClosedPositionsRow({ position, onShareClick }: Pub
         <div className="flex min-w-0 items-start gap-3">
           <Link href={eventHref} className="relative size-12 shrink-0 overflow-hidden rounded-sm bg-muted">
             {imageSrc ? (
-              <EventIconImage src={imageSrc} alt={position.title} sizes="48px" containerClassName="size-full" />
+              <EventIconImage src={imageSrc} alt={marketTitle} sizes="48px" containerClassName="size-full" />
             ) : (
               <div className="grid size-full place-items-center text-sm text-muted-foreground">{t('No image')}</div>
             )}
@@ -55,9 +60,9 @@ export default function PublicClosedPositionsRow({ position, onShareClick }: Pub
               className={cn(
                 `block max-w-full truncate text-[13px] leading-tight font-semibold text-foreground underline-offset-2 hover:underline`,
               )}
-              title={position.title}
+              title={marketTitle}
             >
-              {position.title}
+              {marketTitle}
             </Link>
             <div className="flex flex-wrap items-center gap-1.5 text-xs">
               <span
@@ -99,7 +104,7 @@ export default function PublicClosedPositionsRow({ position, onShareClick }: Pub
                   variant="outline"
                   className="shrink-0"
                   onClick={() => onShareClick(position)}
-                  aria-label={t('Share {title}', { title: position.title })}
+                  aria-label={t('Share {title}', { title: marketTitle })}
                 >
                   <ShareIcon className="size-4" />
                 </Button>

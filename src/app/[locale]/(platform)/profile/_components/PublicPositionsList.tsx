@@ -41,11 +41,13 @@ import {
 import { useAppKit } from '@/hooks/useAppKit'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useInfiniteLoadMore } from '@/hooks/useInfiniteLoadMore'
+import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
 import { usePublicRuntimeConfig } from '@/hooks/usePublicRuntimeConfig'
 import { useSignaturePromptRunner } from '@/hooks/useSignaturePromptRunner'
 import { fetchOrderBookSummary } from '@/lib/clob'
 import { getExchangeEip712Domain, ORDER_SIDE, ORDER_TYPE, OUTCOME_INDEX } from '@/lib/constants'
 import { formatAmountInputValue, formatCentsLabel } from '@/lib/formatters'
+import { localizeHomeEventCardTitle } from '@/lib/home-featured-localization'
 import { applyPositionDeltasToPublicPositions, updateQueryDataWhere } from '@/lib/optimistic-trading'
 import { calculateMarketFill, normalizeBookLevels } from '@/lib/order-panel-utils'
 import { buildShareCardPayload } from '@/lib/share-card'
@@ -187,16 +189,23 @@ function useShareDialog() {
 }
 
 function useShareCardPayload({ sharePosition, user }: { sharePosition: PublicPosition | null; user: User | null }) {
+  const locale = useLocale()
+  const normalizeOutcomeLabel = useOutcomeLabel()
   return useMemo(() => {
     if (!sharePosition) {
       return null
     }
 
-    return buildShareCardPayload(sharePosition, {
+    const payload = buildShareCardPayload(sharePosition, {
       userName: user?.username || undefined,
       userImage: user?.image || undefined,
     })
-  }, [sharePosition, user?.image, user?.username])
+    return {
+      ...payload,
+      title: localizeHomeEventCardTitle(payload.title, locale),
+      outcome: normalizeOutcomeLabel(payload.outcome),
+    }
+  }, [locale, normalizeOutcomeLabel, sharePosition, user?.image, user?.username])
 }
 
 function useMergeDialog() {
@@ -744,6 +753,7 @@ function useSellPositionFlow({
 export default function PublicPositionsList({ userAddress }: PublicPositionsListProps) {
   const t = useExtracted()
   const locale = useLocale()
+  const normalizeOutcomeLabel = useOutcomeLabel()
   const translateFeedback = useOrderFeedbackTranslate()
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -937,8 +947,8 @@ export default function PublicPositionsList({ userAddress }: PublicPositionsList
         <SellPositionModal
           open={Boolean(sellModalPayload)}
           onOpenChange={handleSellModalChange}
-          outcomeLabel={getOutcomeLabel(sellModalPayload.position)}
-          outcomeShortLabel={sellModalPayload.position.title}
+          outcomeLabel={normalizeOutcomeLabel(getOutcomeLabel(sellModalPayload.position))}
+          outcomeShortLabel={localizeHomeEventCardTitle(sellModalPayload.position.title, locale)}
           outcomeIconUrl={
             sellModalPayload.position.icon ? `https://gateway.irys.xyz/${sellModalPayload.position.icon}` : undefined
           }

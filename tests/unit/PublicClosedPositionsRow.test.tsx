@@ -8,6 +8,7 @@ import type { PublicPosition } from '@/app/[locale]/(platform)/profile/_componen
 import PublicClosedPositionsRow from '@/app/[locale]/(platform)/profile/_components/PublicClosedPositionsRow'
 
 void mock.module('next-intl', () => ({
+  useLocale: () => 'en',
   useExtracted: () => (message: string) => message,
 }))
 

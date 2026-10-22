@@ -1,7 +1,7 @@
 import type { Route } from 'next'
 
 import { BadgeCheckIcon, CircleDollarSignIcon } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useExtracted, useLocale } from 'next-intl'
 import { createElement } from 'react'
 
 import type { PublicActivityRowProps } from '@/app/[locale]/(platform)/profile/_types/PublicActivityTypes'
@@ -14,24 +14,32 @@ import {
 } from '@/app/[locale]/(platform)/profile/_utils/PublicActivityUtils'
 import EventIconImage from '@/components/EventIconImage'
 import useLocalizedTimeAgo from '@/hooks/useLocalizedTimeAgo'
+import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
 import { Link } from '@/i18n/navigation'
 import { MICRO_UNIT } from '@/lib/constants'
 import { formatCurrency } from '@/lib/formatters'
+import { localizeHomeEventCardTitle } from '@/lib/home-featured-localization'
 import { cn } from '@/lib/utils'
 
 export default function PublicActivityRow({ activity }: PublicActivityRowProps) {
   const t = useExtracted()
+  const normalizeOutcomeLabel = useOutcomeLabel()
+  const locale = useLocale()
+  const marketTitle = localizeHomeEventCardTitle(activity.market.title, locale)
   const { formatTimeAgo } = useLocalizedTimeAgo()
   const variant = resolveVariant(activity)
   const icon = activityIcon(variant)
-  const sharesText = formatActivityShares(activity)
+  const sharesText = formatActivityShares(
+    activity,
+    locale === 'en' ? undefined : (amount) => t('{amount} shares', { amount }),
+  )
   const priceText = formatPriceCents(activity.price)
   const eventSlug = activity.market.event?.slug || activity.market.slug
   const marketSlug = activity.market.event?.slug ? activity.market.slug : null
   const eventHref = (marketSlug ? `/event/${eventSlug}/${marketSlug}` : `/event/${eventSlug}`) as Route
   const fallbackOutcomeLabel = t('Outcome')
-  const outcomeText = activity.outcome?.text || fallbackOutcomeLabel
-  const outcomeIsYes = outcomeText.toLowerCase().includes('yes') || activity.outcome?.index === 0
+  const outcomeText = normalizeOutcomeLabel(activity.outcome?.text) || fallbackOutcomeLabel
+  const outcomeIsYes = activity.outcome?.text?.toLowerCase() === 'yes' || activity.outcome?.index === 0
   const outcomeColor = outcomeIsYes ? 'bg-yes/15 text-yes' : 'bg-no/15 text-no'
   const showOutcomeBadge = (variant === 'buy' || variant === 'sell') && outcomeText !== fallbackOutcomeLabel
   const imageUrl = activity.market.icon_url
@@ -63,16 +71,22 @@ export default function PublicActivityRow({ activity }: PublicActivityRowProps) 
   const valueDisplay = hasValue ? formatCurrency(Math.abs(valueNumber)) : '—'
   const valuePrefix = hasValue ? (isNegative ? '-' : '+') : ''
   const valueContent = variant === 'loss' ? '-' : Number.isFinite(valueNumber) ? `${valuePrefix}${valueDisplay}` : '—'
-  const activityLabel =
-    variant === 'resolution_bond'
-      ? t('Bond')
-      : variant === 'resolution_reward'
-        ? t('Reward')
-        : variant === 'liquidity_reward'
-          ? t('Liquidity reward')
-          : variant === 'maker_rebate'
-            ? t('Maker rebate')
-            : icon.label
+  const activityLabel = {
+    split: t('Split'),
+    merge: t('Merge'),
+    redeem: t('Redeem'),
+    loss: t('Loss'),
+    convert: t('Convert'),
+    deposit: t('Deposited funds'),
+    withdraw: t('Withdrew funds'),
+    resolution_bond: t('Bond'),
+    resolution_reward: t('Reward'),
+    liquidity_reward: t('Liquidity reward'),
+    maker_rebate: t('Maker rebate'),
+    sell: t('Sold'),
+    buy: t('Bought'),
+    trade: t('Trade'),
+  }[variant]
   const marketContent = isFundsFlow ? (
     <div className="flex min-w-0 items-center gap-2.5 pl-1">
       <div
@@ -103,7 +117,7 @@ export default function PublicActivityRow({ activity }: PublicActivityRowProps) 
     <div className="flex min-w-0 items-start gap-2.5 pl-1">
       <Link href={eventHref} className="relative size-12 shrink-0 overflow-hidden rounded-sm bg-muted">
         {imageUrl ? (
-          <EventIconImage src={imageUrl} alt={activity.market.title} sizes="48px" containerClassName="size-full" />
+          <EventIconImage src={imageUrl} alt={marketTitle} sizes="48px" containerClassName="size-full" />
         ) : variant === 'redeem' ? (
           <div className="grid size-full place-items-center text-primary/80">
             <CircleDollarSignIcon className="size-5" />
@@ -119,9 +133,9 @@ export default function PublicActivityRow({ activity }: PublicActivityRowProps) 
           className={cn(
             `block max-w-full truncate text-sm/tight font-semibold text-foreground underline-offset-2 hover:underline`,
           )}
-          title={activity.market.title}
+          title={marketTitle}
         >
-          {activity.market.title}
+          {marketTitle}
         </Link>
         <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
           {showOutcomeBadge && (

@@ -310,6 +310,10 @@ export async function listHomeEventsPage({
   const resolvedCurrentTimestamp = currentTimestamp ?? null
   const hasHomeVisibilityFilters = hideSports || hideCrypto || hideEarnings
 
+  // Latest is the same public home feed ordered by creation time. Imported events
+  // can carry hide-from-new when automatic deployment is off, even after they are
+  // active and visible on Home. Keep the repository's public visibility filters.
+  const isLatestFeed = tag === 'new' || mainTag === 'new'
   const { data: rawEvents, error } = await loadHomeEventCandidates({
     bookmarked,
     frequency,
@@ -317,14 +321,14 @@ export async function listHomeEventsPage({
     hideEarnings,
     hideSports,
     locale,
-    mainTag,
+    mainTag: mainTag === 'new' ? 'trending' : mainTag,
     offset,
     search,
-    sortBy,
+    sortBy: sortBy ?? (isLatestFeed ? 'created_at' : undefined),
     sportsSection,
     sportsSportSlug,
     status,
-    tag,
+    tag: tag === 'new' ? 'trending' : tag,
     userId,
   })
 

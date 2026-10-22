@@ -50,7 +50,7 @@ export function resolveActivityTypeParams(typeFilter: ActivityTypeFilter) {
   }
 }
 
-function formatShares(amount: string | number | undefined) {
+function formatShares(amount: string | number | undefined, formatLabel?: (amount: string) => string) {
   if (amount == null) {
     return null
   }
@@ -63,19 +63,19 @@ function formatShares(amount: string | number | undefined) {
     minimumFractionDigits: useExtraPrecision ? 4 : 0,
     maximumFractionDigits: useExtraPrecision ? 4 : 2,
   })
-  return `${formatted} ${numeric === 1 ? 'share' : 'shares'}`
+  return formatLabel ? formatLabel(formatted) : `${formatted} ${numeric === 1 ? 'share' : 'shares'}`
 }
 
-export function formatActivityShares(activity: ActivityOrder) {
+export function formatActivityShares(activity: ActivityOrder, formatLabel?: (amount: string) => string) {
   const variant = resolveVariant(activity)
   if (variant === 'redeem') {
     return null
   }
   if (variant === 'loss') {
-    return '0.0 shares'
+    return formatLabel ? formatLabel('0.0') : '0.0 shares'
   }
   const amount = variant === 'split' ? Number(activity.amount) / 2 : activity.amount
-  return formatShares(amount)
+  return formatShares(amount, formatLabel)
 }
 
 export function formatPriceCents(price?: string | number) {

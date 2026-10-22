@@ -1,7 +1,7 @@
 import type { Route } from 'next'
 
 import { ArrowRightIcon, ShareIcon } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useExtracted, useLocale } from 'next-intl'
 
 import {
   formatCurrencyValue,
@@ -12,8 +12,10 @@ import {
 import EventIconImage from '@/components/EventIconImage'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
 import { Link } from '@/i18n/navigation'
 import { formatCentsLabel, formatCurrency, formatSharesLabel } from '@/lib/formatters'
+import { localizeHomeEventCardTitle } from '@/lib/home-featured-localization'
 import { cn } from '@/lib/utils'
 
 import type { PublicPosition } from './PublicPositionItem'
@@ -26,6 +28,9 @@ interface PublicPositionsRowProps {
 
 export default function PublicPositionsRow({ position, onShareClick, onSellClick }: PublicPositionsRowProps) {
   const t = useExtracted()
+  const normalizeOutcomeLabel = useOutcomeLabel()
+  const locale = useLocale()
+  const marketTitle = localizeHomeEventCardTitle(position.title, locale)
   const imageSrc = position.icon ? `https://gateway.irys.xyz/${position.icon}` : null
   const avgPrice = position.avgPrice ?? 0
   const nowPrice = getLatestPrice(position)
@@ -35,7 +40,7 @@ export default function PublicPositionsRow({ position, onShareClick, onSellClick
   const toWinValue = shares
   const pnlDiff = currentValue - tradeValue
   const pnlPct = tradeValue > 0 ? (pnlDiff / tradeValue) * 100 : 0
-  const outcomeLabel = position.outcome ?? '—'
+  const outcomeLabel = normalizeOutcomeLabel(position.outcome) || '—'
   const outcomeColor = getOutcomeBadgeColorClassName(position)
   const eventSlug = position.eventSlug || position.slug
   const marketSlug = position.eventSlug && position.slug ? position.slug : null
@@ -47,7 +52,7 @@ export default function PublicPositionsRow({ position, onShareClick, onSellClick
         <div className="flex min-w-0 items-start gap-3">
           <Link href={eventHref} className="relative size-12 shrink-0 overflow-hidden rounded-sm bg-muted">
             {imageSrc ? (
-              <EventIconImage src={imageSrc} alt={position.title} sizes="48px" containerClassName="size-full" />
+              <EventIconImage src={imageSrc} alt={marketTitle} sizes="48px" containerClassName="size-full" />
             ) : (
               <div className="grid size-full place-items-center text-sm text-muted-foreground">{t('No image')}</div>
             )}
@@ -58,9 +63,9 @@ export default function PublicPositionsRow({ position, onShareClick, onSellClick
               className={cn(
                 `block max-w-full truncate text-[13px] leading-tight font-semibold text-foreground underline-offset-2 hover:underline`,
               )}
-              title={position.title}
+              title={marketTitle}
             >
-              {position.title}
+              {marketTitle}
             </Link>
             <div className="flex flex-wrap items-center gap-1.5 text-xs">
               <span
@@ -129,7 +134,7 @@ export default function PublicPositionsRow({ position, onShareClick, onSellClick
                   variant="outline"
                   className="shrink-0"
                   onClick={() => onShareClick(position)}
-                  aria-label={t('Share {title}', { title: position.title })}
+                  aria-label={t('Share {title}', { title: marketTitle })}
                 >
                   <ShareIcon className="size-4" />
                 </Button>

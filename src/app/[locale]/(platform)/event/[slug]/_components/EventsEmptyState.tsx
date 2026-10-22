@@ -44,6 +44,8 @@ export default function EventsEmptyState({ onClearFilters, searchQuery, tag }: E
       <p className="mb-6 text-sm text-muted-foreground">
         {searchQuery ? (
           <>{t('Try adjusting your search for “{query}”', { query: searchQuery })}</>
+        ) : tag === 'new' || tag === 'trending' ? (
+          <>{t('No events match your filters.')}</>
         ) : (
           <>{t('There are no events in the {tag} category with these filters', { tag })}</>
         )}

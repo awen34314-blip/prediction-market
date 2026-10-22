@@ -4,6 +4,8 @@ import * as actualHomeEvents from '@/lib/home-events'
 
 import { hoisted } from '../bun-test-helpers'
 
+const originalFilterHomeEvents = actualHomeEvents.filterHomeEvents
+
 const mocks = hoisted(() => ({
   cacheTag: mock(),
   filterHomeEvents: mock(),
@@ -38,6 +40,106 @@ describe('listHomeEventsPage', () => {
     mocks.listEvents.mockReset()
     mocks.hydrateEventListPrices.mockReset().mockImplementation(async (events: any[]) => events)
     mocks.filterHomeEvents.mockReset()
+  })
+
+  it('lists public imported events in Latest and keeps the currently open series period', async () => {
+    const now = Date.parse('2026-10-22T06:07:00Z')
+    function makeEvent(id: string, created_at: string, end_date: string) {
+      return {
+        id,
+        slug: `btc-${id}`,
+        title: 'Bitcoin Up or Down',
+        status: 'active' as const,
+        series_slug: 'btc-up-or-down-15m',
+        series_recurrence: '15m',
+        main_tag: 'Crypto',
+        created_at,
+        updated_at: created_at,
+        end_date,
+        markets: [{ is_resolved: false, condition: { resolved: false } }],
+        tags: [{ slug: 'crypto' }, { slug: 'hide-from-new' }],
+      }
+    }
+    const future = makeEvent('future', '2026-10-22T06:00:00Z', '2026-10-22T06:30:00Z')
+    const current = makeEvent('current', '2026-10-22T05:45:00Z', '2026-10-22T06:15:00Z')
+    const previous = makeEvent('previous', '2026-10-22T05:30:00Z', '2026-10-22T06:00:00Z')
+    mocks.listEvents.mockImplementation(async ({ tag, offset }: { tag: string; offset: number }) => ({
+      data: tag === 'new' || offset > 0 ? [] : [future, current, previous],
+      error: null,
+    }))
+    mocks.filterHomeEvents.mockImplementation(originalFilterHomeEvents)
+
+    const { listHomeEventsPage } = await import('@/lib/home-events-page')
+    const result = await listHomeEventsPage({
+      bookmarked: false,
+      locale: 'zh-hant',
+      mainTag: 'new',
+      tag: 'new',
+      userId: '',
+      currentTimestamp: now,
+    })
+
+    expect(result.data).toEqual([current])
+    expect(mocks.listEvents).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tag: 'trending',
+        mainTag: 'trending',
+        sortBy: 'created_at',
+        status: 'active',
+        excludeSportsAuxiliary: true,
+      }),
+    )
+    expect(result.hasMore).toBe(false)
+  })
+
+  it('retains Latest category, search, bookmark and visibility filters and explicit sorting', async () => {
+    mocks.listEvents.mockResolvedValue({ data: [], error: null })
+    const { listHomeEventsPage } = await import('@/lib/home-events-page')
+    await listHomeEventsPage({
+      bookmarked: true,
+      locale: 'zh',
+      mainTag: 'new',
+      tag: 'finance',
+      userId: 'user-1',
+      search: 'Gold',
+      hideCrypto: true,
+      status: 'active',
+      frequency: 'daily',
+      sortBy: 'volume_24h',
+    })
+    expect(mocks.listEvents).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tag: 'finance',
+        mainTag: 'trending',
+        sortBy: 'volume_24h',
+        search: 'Gold',
+        userId: 'user-1',
+        bookmarked: true,
+        hideCrypto: true,
+        status: 'active',
+        frequency: 'daily',
+      }),
+    )
+  })
+
+  it('uses creation time as the default order within a Latest category', async () => {
+    mocks.listEvents.mockResolvedValue({ data: [], error: null })
+    const { listHomeEventsPage } = await import('@/lib/home-events-page')
+    await listHomeEventsPage({
+      bookmarked: false,
+      locale: 'zh-hant',
+      mainTag: 'new',
+      tag: 'finance',
+      userId: '',
+    })
+    expect(mocks.listEvents).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tag: 'finance',
+        mainTag: 'trending',
+        sortBy: 'created_at',
+        status: 'active',
+      }),
+    )
   })
 
   it('queries one SQL-filtered page for resolved pages without home visibility filters', async () => {
