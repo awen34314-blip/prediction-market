@@ -61,10 +61,7 @@ describe('eventCardHeader', () => {
         roundedPrimaryDisplayChance={null}
       />,
     )
-    expect(screen.getByRole('link')).toHaveAttribute(
-      'href',
-      '/api/home-featured/live-link?seriesSlug=btc-up-or-down-15m&locale=en',
-    )
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/en/event/series/btc-up-or-down-15m')
   })
 
   it('clamps multi-market event titles to two lines', () => {

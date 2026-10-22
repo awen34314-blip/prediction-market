@@ -32,9 +32,7 @@ describe('home event links', () => {
     render(<HomeEventLink event={event}>BTC 15m</HomeEventLink>)
     const link = screen.getByRole('link', { name: 'BTC 15m' })
     const href = new URL(link.getAttribute('href')!, 'https://app.windmarket.top')
-    expect(href.pathname).toBe('/api/home-featured/live-link')
-    expect(href.searchParams.get('seriesSlug')).toBe('btc-up-or-down-15m')
-    expect(href.searchParams.get('locale')).toBe('zh-hant')
+    expect(href.pathname).toBe('/event/series/btc-up-or-down-15m')
     expect(link).not.toHaveAttribute('data-next-link')
   })
 
@@ -66,7 +64,7 @@ describe('home event links', () => {
     expect(buttons).toHaveLength(2)
     for (const [outcomeIndex, button] of buttons.entries()) {
       const href = new URL(button.getAttribute('href')!, 'https://app.windmarket.top')
-      expect(href.pathname).toBe('/api/home-featured/live-link')
+      expect(href.pathname).toBe('/event/series/btc-up-or-down-15m')
       expect(href.searchParams.get('outcomeIndex')).toBe(String(outcomeIndex))
       expect(href.searchParams.get('conditionId')).toBe('old-condition')
     }

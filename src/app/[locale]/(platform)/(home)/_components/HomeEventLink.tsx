@@ -8,6 +8,7 @@ import { forwardRef } from 'react'
 import type { Event } from '@/types'
 
 import IntentPrefetchLink from '@/app/[locale]/(platform)/_components/IntentPrefetchLink'
+import { DEFAULT_LOCALE } from '@/i18n/locales'
 import { isIntradayCryptoEvent } from '@/lib/crypto-cadence-event'
 import { resolveEventOutcomePath, resolveEventPagePath } from '@/lib/events-routing'
 import { isEventResolvedLike } from '@/lib/home-events'
@@ -25,7 +26,7 @@ const HomeEventLink = forwardRef<HTMLAnchorElement, HomeEventLinkProps>(function
   const locale = useLocale()
   const seriesSlug = event.series_slug?.trim()
   if (seriesSlug && event.status === 'active' && isIntradayCryptoEvent(event) && !isEventResolvedLike(event)) {
-    const params = new URLSearchParams({ seriesSlug, locale })
+    const params = new URLSearchParams()
     if (outcomeIndex !== undefined) {
       params.set('outcomeIndex', String(outcomeIndex))
       if (conditionId) {
@@ -34,7 +35,15 @@ const HomeEventLink = forwardRef<HTMLAnchorElement, HomeEventLinkProps>(function
     }
 
     // Resolve at click time. Prefetching a redirect could freeze the previous period.
-    return <a {...props} href={`/api/home-featured/live-link?${params}`} ref={ref} />
+    const prefix = locale === DEFAULT_LOCALE ? '' : `/${locale}`
+    const query = params.toString()
+    return (
+      <a
+        {...props}
+        href={`${prefix}/event/series/${encodeURIComponent(seriesSlug)}${query ? `?${query}` : ''}`}
+        ref={ref}
+      />
+    )
   }
 
   const href =

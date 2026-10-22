@@ -21,6 +21,26 @@ void mock.module('@/lib/db/queries/home-featured-events', () => ({
 describe('home featured live link', () => {
   beforeEach(() => mocks.resolveLiveSeriesDestination.mockReset())
 
+  it.each(['zh-hant', 'en', 'pt'])('supports a normal market navigation URL in %s', async (locale) => {
+    mocks.resolveLiveSeriesDestination.mockResolvedValue({
+      data: { eventSlug: 'btc-current', marketSlug: 'current-market', conditionId: 'current-condition' },
+      error: null,
+    })
+    const { GET } = await import('@/app/[locale]/(platform)/event/series/[seriesSlug]/route')
+    const response = await GET(
+      new Request(
+        'https://example.com/event/series/btc-15m?outcomeIndex=1&conditionId=old-condition&seriesSlug=wrong&locale=wrong',
+      ),
+      { params: Promise.resolve({ locale, seriesSlug: 'btc-15m' }) },
+    )
+    expect(mocks.resolveLiveSeriesDestination).toHaveBeenCalledWith('btc-15m', null, 'old-condition')
+    expect(response.status).toBe(307)
+    expect(response.headers.get('cache-control')).toBe('no-store')
+    expect(response.headers.get('location')).toBe(
+      `${locale === 'zh-hant' ? '' : `/${locale}`}/event/btc-current/current-market?outcomeIndex=1`,
+    )
+  })
+
   it('redirects a stale featured card to the live event and keeps the selected outcome and locale', async () => {
     mocks.resolveLiveSeriesDestination.mockResolvedValue({
       data: { eventSlug: 'btc-live', marketSlug: 'up-down', conditionId: 'current-market' },
