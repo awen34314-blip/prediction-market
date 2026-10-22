@@ -57,44 +57,14 @@ describe('eventCardHeader', () => {
           } as any
         }
         title="BTC 15m"
-        isSingleMarket
-        roundedPrimaryDisplayChance={null}
       />,
     )
     expect(screen.getByRole('link')).toHaveAttribute('href', '/en/event/series/btc-up-or-down-15m')
   })
 
   it('clamps multi-market event titles to two lines', () => {
-    render(
-      <EventCardHeader event={EVENT} title={EVENT.title} isSingleMarket={false} roundedPrimaryDisplayChance={null} />,
-    )
+    render(<EventCardHeader event={EVENT} title={EVENT.title} />)
 
     expect(screen.getByRole('heading', { name: EVENT.title })).toHaveClass('line-clamp-2')
-  })
-
-  it('hides the chance block for single-market cards without quotes or trades', () => {
-    render(
-      <EventCardHeader
-        event={EVENT}
-        title={EVENT.title}
-        isSingleMarket
-        primaryMarket={
-          {
-            ...EVENT.markets[0],
-            volume: 0,
-            volume_24h: 0,
-            outcomes: [],
-            condition: {
-              resolved: false,
-              volume: 0,
-            },
-          } as any
-        }
-        roundedPrimaryDisplayChance={null}
-      />,
-    )
-
-    expect(screen.queryByText('—')).not.toBeInTheDocument()
-    expect(screen.queryByText('chance')).not.toBeInTheDocument()
   })
 })

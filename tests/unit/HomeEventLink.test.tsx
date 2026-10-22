@@ -56,6 +56,7 @@ describe('home event links', () => {
         primaryMarket={{ ...event.markets[0], condition_id: 'old-condition' }}
         yesOutcome={{ outcome_index: 0, outcome_text: 'Up' }}
         noOutcome={{ outcome_index: 1, outcome_text: 'Down' }}
+        yesChance={32}
         isResolvedEvent={false}
         resolvedOutcomeIndexByConditionId={{}}
       />,

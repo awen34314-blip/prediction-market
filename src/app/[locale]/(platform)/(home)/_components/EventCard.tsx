@@ -137,11 +137,10 @@ export default function EventCard({
     return chanceByMarket[marketId] ?? 0
   }
 
-  const primaryDisplayChance =
+  const primaryYesChance =
     primaryMarket && hasHomeCardMarketChance(primaryMarket, priceOverridesByMarket[primaryMarket.condition_id])
       ? getDisplayChance(primaryMarket.condition_id)
       : null
-  const roundedPrimaryDisplayChance = primaryDisplayChance == null ? null : Math.round(primaryDisplayChance)
   const endedLabel =
     !isResolvedEvent || !isSingleMarket || !event.resolved_at
       ? null
@@ -179,13 +178,7 @@ export default function EventCard({
       )}
     >
       <CardContent className={cn(`flex h-full flex-col px-3 pt-3 ${isResolvedEvent ? 'pb-3' : 'pb-3 md:pb-1'}`)}>
-        <EventCardHeader
-          event={event}
-          title={cardTitle}
-          isSingleMarket={isSingleMarket}
-          primaryMarket={primaryMarket}
-          roundedPrimaryDisplayChance={roundedPrimaryDisplayChance}
-        />
+        <EventCardHeader event={event} title={cardTitle} />
 
         <div className="flex flex-1 flex-col">
           <div
@@ -210,6 +203,7 @@ export default function EventCard({
                 yesOutcome={yesOutcome}
                 noOutcome={noOutcome}
                 primaryMarket={primaryMarket}
+                yesChance={primaryYesChance}
                 isResolvedEvent={isResolvedEvent}
                 resolvedOutcomeIndexByConditionId={resolvedOutcomeIndexByConditionId}
               />

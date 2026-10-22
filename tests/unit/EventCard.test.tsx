@@ -163,6 +163,7 @@ describe('eventCard', () => {
           outcome_index: 1,
           outcome_text: 'No',
         }),
+        yesChance: null,
       }),
     )
   })
@@ -205,9 +206,9 @@ describe('eventCard', () => {
       />,
     )
 
-    expect(mocks.eventCardHeader).toHaveBeenCalledWith(
+    expect(mocks.singleMarketActions).toHaveBeenCalledWith(
       expect.objectContaining({
-        roundedPrimaryDisplayChance: 62,
+        yesChance: 62,
       }),
     )
   })
