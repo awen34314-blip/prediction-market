@@ -240,6 +240,57 @@ describe('home-events', () => {
     ).toEqual([currentEvent])
   })
 
+  it.each([
+    ['5m', 5],
+    ['15m', 15],
+    ['hourly', 60],
+    ['4h', 240],
+  ] as const)(
+    'rolls the %s crypto card forward even while the previous period awaits settlement',
+    (cadence, durationMinutes) => {
+      const boundary = Date.parse('2026-10-22T04:30:00.000Z')
+      const previousEvent = {
+        id: 'previous',
+        slug: 'btc-previous',
+        series_slug: `btc-up-or-down-${cadence}`,
+        series_recurrence: cadence,
+        main_tag: 'Crypto',
+        status: 'active' as const,
+        end_date: '2026-10-22T04:30:00.000Z',
+        created_at: '2026-10-21T12:00:00.000Z',
+        updated_at: '2026-10-22T04:30:00.000Z',
+        markets: [{ is_resolved: false, condition: { resolved: false } }],
+      }
+      const currentEvent = {
+        ...previousEvent,
+        id: 'current',
+        slug: 'btc-current',
+        end_date: new Date(boundary + durationMinutes * 60_000).toISOString(),
+      }
+      const nextEvent = {
+        ...previousEvent,
+        id: 'next',
+        slug: 'btc-next',
+        end_date: new Date(boundary + 2 * durationMinutes * 60_000).toISOString(),
+      }
+
+      for (const candidates of [
+        [previousEvent, nextEvent, currentEvent],
+        [currentEvent, previousEvent, nextEvent],
+      ]) {
+        expect(filterHomeEvents(candidates, { currentTimestamp: Date.parse('2026-10-22T04:29:59.999Z') })).toEqual([
+          previousEvent,
+        ])
+        expect(filterHomeEvents(candidates, { currentTimestamp: Date.parse('2026-10-22T04:30:00.000Z') })).toEqual([
+          currentEvent,
+        ])
+        expect(filterHomeEvents(candidates, { currentTimestamp: Date.parse('2026-10-22T04:31:00.000Z') })).toEqual([
+          currentEvent,
+        ])
+      }
+    },
+  )
+
   it('keeps the same-day overdue unresolved series event over the next occurrence', () => {
     const todayEvent = {
       id: 'today-event',

@@ -221,6 +221,11 @@ export function isCryptoEvent(event: CryptoTaxonomyCandidate) {
   )
 }
 
+export function isIntradayCryptoEvent(event: CryptoCadenceCandidate & CryptoTaxonomyCandidate) {
+  const cadence = resolveCryptoEventCadence(event)
+  return isCryptoEvent(event) && Boolean(cadence && cadence.durationMinutes < 24 * 60)
+}
+
 export function resolveCryptoEventAsset(event: CryptoEventCandidate) {
   if (!isCryptoEvent(event)) {
     return null

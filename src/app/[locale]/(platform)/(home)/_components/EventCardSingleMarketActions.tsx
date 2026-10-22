@@ -2,23 +2,17 @@ import { CheckIcon, XIcon } from 'lucide-react'
 import { useExtracted } from 'next-intl'
 
 import type { HomeCardBinaryOutcome } from '@/app/[locale]/(platform)/(home)/_utils/homeCardMarketDisplay'
-import type { Market } from '@/types'
+import type { Event, Market } from '@/types'
 
+import HomeEventLink from '@/app/[locale]/(platform)/(home)/_components/HomeEventLink'
 import { resolveBinaryOutcomeByIndex } from '@/app/[locale]/(platform)/(home)/_utils/eventCardResolvedOutcome'
 import { Button } from '@/components/ui/button'
 import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
-import { Link } from '@/i18n/navigation'
 import { OUTCOME_INDEX } from '@/lib/constants'
-import { resolveEventOutcomePath } from '@/lib/events-routing'
 import { cn } from '@/lib/utils'
 
 interface EventCardSingleMarketActionsProps {
-  event: {
-    slug: string
-    sports_sport_slug?: string | null
-    sports_league_slug?: string | null
-    sports_event_slug?: string | null
-  }
+  event: Event
   yesOutcome: HomeCardBinaryOutcome
   noOutcome: HomeCardBinaryOutcome
   primaryMarket: Market | undefined
@@ -87,15 +81,11 @@ export default function EventCardSingleMarketActions({
         size="outcome"
         nativeButton={false}
         render={
-          <Link
-            href={resolveEventOutcomePath(event, {
-              outcomeIndex: yesOutcome.outcome_index,
-            })}
-          >
+          <HomeEventLink event={event} outcomeIndex={yesOutcome.outcome_index} conditionId={primaryMarket.condition_id}>
             <span className="truncate">
               {normalizeOutcomeLabel(yesOutcome.outcome_text) ?? yesOutcome.outcome_text}
             </span>
-          </Link>
+          </HomeEventLink>
         }
       />
       <Button
@@ -103,13 +93,9 @@ export default function EventCardSingleMarketActions({
         size="outcome"
         nativeButton={false}
         render={
-          <Link
-            href={resolveEventOutcomePath(event, {
-              outcomeIndex: noOutcome.outcome_index,
-            })}
-          >
+          <HomeEventLink event={event} outcomeIndex={noOutcome.outcome_index} conditionId={primaryMarket.condition_id}>
             <span className="truncate">{normalizeOutcomeLabel(noOutcome.outcome_text) ?? noOutcome.outcome_text}</span>
-          </Link>
+          </HomeEventLink>
         }
       />
     </div>

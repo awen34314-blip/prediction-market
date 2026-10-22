@@ -22,6 +22,7 @@ import { useColumns } from '@/hooks/useColumns'
 import { useCurrentTimestamp } from '@/hooks/useCurrentTimestamp'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useHasHydrated } from '@/hooks/useHasHydrated'
+import { useHomeSeriesRollover } from '@/hooks/useHomeSeriesRollover'
 import { matchesCryptoCadenceRoute } from '@/lib/crypto-cadence-event'
 import { filterHomeEvents, isEventResolvedLike } from '@/lib/home-events'
 import {
@@ -595,6 +596,7 @@ export default function EventsGrid({
     hasNextPage,
     isPending,
     isPlaceholderData,
+    refetch,
   } = useInfiniteQuery({
     queryKey: eventsQueryKey,
     queryFn: ({ pageParam }) =>
@@ -636,6 +638,12 @@ export default function EventsGrid({
     visibleEvents.length === 0 && cachedSnapshotEvents.length > 0 && status !== 'success'
   const eventsToRender = shouldShowSnapshotFallback ? cachedSnapshotEvents : visibleEvents
   const hydrationSafeEventsToRender = !hasHydrated && isRouteInitialState ? initialEvents : eventsToRender
+
+  useHomeSeriesRollover({
+    events: hydrationSafeEventsToRender,
+    enabled: shouldAutoRefreshEvents && hasHydrated,
+    refresh: refetch,
+  })
 
   const { parentRef, livePriceEventIds } = useHomeLivePriceVisibility(hydrationSafeEventsToRender)
   const { stablePriceOverridesByMarket } = useHomeLivePriceOverrides({

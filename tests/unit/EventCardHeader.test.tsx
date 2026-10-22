@@ -7,6 +7,7 @@ import EventCardHeader from '@/app/[locale]/(platform)/(home)/_components/EventC
 
 void mock.module('next-intl', () => ({
   useExtracted: () => (message: string) => message,
+  useLocale: () => 'en',
 }))
 
 void mock.module('@/i18n/navigation', () => ({
@@ -43,6 +44,29 @@ const EVENT = {
 } as any
 
 describe('eventCardHeader', () => {
+  it('uses the live series destination for the BTC card title', () => {
+    render(
+      <EventCardHeader
+        event={
+          {
+            slug: 'btc-old',
+            series_slug: 'btc-up-or-down-15m',
+            main_tag: 'Crypto',
+            status: 'active',
+            markets: [],
+          } as any
+        }
+        title="BTC 15m"
+        isSingleMarket
+        roundedPrimaryDisplayChance={null}
+      />,
+    )
+    expect(screen.getByRole('link')).toHaveAttribute(
+      'href',
+      '/api/home-featured/live-link?seriesSlug=btc-up-or-down-15m&locale=en',
+    )
+  })
+
   it('clamps multi-market event titles to two lines', () => {
     render(
       <EventCardHeader event={EVENT} title={EVENT.title} isSingleMarket={false} roundedPrimaryDisplayChance={null} />,

@@ -2,15 +2,14 @@ import { useExtracted } from 'next-intl'
 
 import type { Event, Market } from '@/types'
 
+import HomeEventLink from '@/app/[locale]/(platform)/(home)/_components/HomeEventLink'
 import {
   formatHomeCardChanceLabel,
   resolveHomeCardBinaryOutcome,
 } from '@/app/[locale]/(platform)/(home)/_utils/homeCardMarketDisplay'
-import IntentPrefetchLink from '@/app/[locale]/(platform)/_components/IntentPrefetchLink'
 import EventIconImage from '@/components/EventIconImage'
 import { useOutcomeLabel } from '@/hooks/useOutcomeLabel'
 import { OUTCOME_INDEX } from '@/lib/constants'
-import { resolveEventPagePath } from '@/lib/events-routing'
 import { isEventResolvedLike } from '@/lib/home-events'
 import { cn } from '@/lib/utils'
 
@@ -52,7 +51,6 @@ export default function EventCardHeader({
       ? normalizeOutcomeLabel(leadingOutcomeLabel) || t('chance')
       : t('chance')
   const primaryChanceLabel = formatHomeCardChanceLabel(roundedPrimaryDisplayChance)
-  const eventHref = resolveEventPagePath(event)
   const isSportsEvent = Boolean(event.sports_event_id || event.sports_sport_slug || event.sports_event_slug)
   const titleNode = (
     <h3
@@ -67,7 +65,7 @@ export default function EventCardHeader({
 
   return (
     <div className="mb-3 flex items-start justify-between">
-      <IntentPrefetchLink href={eventHref} className="flex flex-1 items-center gap-2 pr-2">
+      <HomeEventLink event={event} className="flex flex-1 items-center gap-2 pr-2">
         <div className="flex size-10 shrink-0 items-center justify-center self-start rounded-sm">
           <EventIconImage
             src={event.icon_url}
@@ -78,7 +76,7 @@ export default function EventCardHeader({
         </div>
 
         {titleNode}
-      </IntentPrefetchLink>
+      </HomeEventLink>
 
       {isSingleMarket && !isResolvedEvent && hasPrimaryDisplayChance && (
         <div className="relative -mt-3 flex flex-col items-center">

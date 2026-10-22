@@ -1,5 +1,6 @@
 import type { EventListStatusFilter } from '@/lib/event-list-filters'
 
+import { isIntradayCryptoEvent } from '@/lib/crypto-cadence-event'
 import { isSportsAuxiliaryEventSlug } from '@/lib/sports-event-slugs'
 
 interface HomeEventVisibilityOptions {
@@ -29,6 +30,7 @@ export interface HomeVisibleEventCandidate {
   slug: string
   status: 'draft' | 'active' | 'resolved' | 'archived'
   series_slug?: string | null
+  series_recurrence?: string | null
   sports_event_id?: string | null
   sports_event_slug?: string | null
   sports_parent_event_id?: number | string | null
@@ -136,8 +138,10 @@ function isSameUtcDay(leftTimestamp: number, rightTimestamp: number) {
 function isPreferredSeriesEvent<T extends HomeVisibleEventCandidate>(candidate: T, current: T, nowMs: number) {
   const candidateEnd = toTimestamp(candidate.end_date)
   const currentEnd = toTimestamp(current.end_date)
-  const candidateHasFutureEnd = candidateEnd >= nowMs
-  const currentHasFutureEnd = currentEnd >= nowMs
+  // Intraday trading closes at the boundary, independently of oracle settlement.
+  const isIntradaySeries = isIntradayCryptoEvent(candidate) || isIntradayCryptoEvent(current)
+  const candidateHasFutureEnd = isIntradaySeries ? candidateEnd > nowMs : candidateEnd >= nowMs
+  const currentHasFutureEnd = isIntradaySeries ? currentEnd > nowMs : currentEnd >= nowMs
   const candidateResolved = isEventResolvedLike(candidate)
   const currentResolved = isEventResolvedLike(current)
   const candidateOverdueUnresolved = isOverdueUnresolved(candidate, nowMs)
@@ -164,6 +168,10 @@ function isPreferredSeriesEvent<T extends HomeVisibleEventCandidate>(candidate: 
   }
 
   if (candidateHasFutureEnd !== currentHasFutureEnd) {
+    if (isIntradaySeries) {
+      return candidateHasFutureEnd
+    }
+
     if (candidateHasFutureEnd && currentOverdueUnresolved && isSameUtcDay(currentEnd, nowMs)) {
       return false
     }
