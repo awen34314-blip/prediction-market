@@ -7,11 +7,13 @@ import { cn } from '@/lib/utils'
 
 interface HeaderLogoProps {
   labelSuffix?: string
+  asHeading?: boolean
 }
 
-export default function HeaderLogo({ labelSuffix }: HeaderLogoProps) {
+export default function HeaderLogo({ labelSuffix, asHeading = false }: HeaderLogoProps) {
   const site = useSitePresentation()
   const label = labelSuffix ? `${site.name} ${labelSuffix}` : site.name
+  const Label = asHeading ? 'h1' : 'span'
 
   return (
     <Link
@@ -28,7 +30,7 @@ export default function HeaderLogo({ labelSuffix }: HeaderLogoProps) {
         imageClassName="size-[1em] object-contain"
         size={32}
       />
-      <span>{label}</span>
+      <Label>{label}</Label>
     </Link>
   )
 }

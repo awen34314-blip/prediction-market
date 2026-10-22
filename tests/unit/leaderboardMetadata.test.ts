@@ -75,7 +75,17 @@ describe('leaderboard metadata', () => {
     expect(mocks.calls.indexOf('defer')).toBeGreaterThanOrEqual(0)
     expect(firstResolveIndex).toBeGreaterThan(mocks.calls.indexOf('defer'))
     expect(metadata.openGraph?.url).toBe('https://demo.kuest.com/en/leaderboard/sports/weekly/volume')
+    expect(metadata.alternates?.canonical).toBe('https://demo.kuest.com/en/leaderboard/sports/weekly/volume')
     expect(serializedMetadata).toContain('https://demo.kuest.com/api/og/leaderboard')
     expect(serializedMetadata).not.toContain('localhost:3000')
+  })
+
+  it('declares the unfiltered leaderboard as its own canonical page', async () => {
+    const { generateMetadata } = await import('@/app/[locale]/(platform)/leaderboard/[[...filters]]/page')
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ locale: 'en', filters: [] }),
+    } as any)
+
+    expect(metadata.alternates?.canonical).toBe('https://demo.kuest.com/en/leaderboard')
   })
 })

@@ -18,6 +18,7 @@ void mock.module('@/lib/db/queries/settings', () => ({
 }))
 
 const originalPostgresUrl = process.env.POSTGRES_URL
+const originalSiteUrl = process.env.SITE_URL
 
 describe('theme settings runtime resolver', () => {
   beforeEach(() => {
@@ -25,9 +26,15 @@ describe('theme settings runtime resolver', () => {
     mocks.cacheTag.mockReset()
     mocks.getSettings.mockReset()
     process.env.POSTGRES_URL = 'postgres://theme-settings-test'
+    process.env.SITE_URL = 'https://example.com'
   })
 
   afterEach(() => {
+    if (originalSiteUrl == null) {
+      delete process.env.SITE_URL
+    } else {
+      process.env.SITE_URL = originalSiteUrl
+    }
     if (originalPostgresUrl == null) {
       delete process.env.POSTGRES_URL
       return
@@ -57,6 +64,83 @@ describe('theme settings runtime resolver', () => {
 
     expect(state.source).toBe('default')
     expect(mocks.getSettings).not.toHaveBeenCalled()
+  })
+
+  it('keeps the WindMarket brand during a failed settings read and recovers saved settings on retry', async () => {
+    process.env.SITE_URL = 'https://app.windmarket.top'
+    mocks.getSettings.mockResolvedValueOnce({ data: null, error: 'Failed to fetch settings.' })
+
+    const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
+    const fallback = await loadRuntimeThemeState()
+
+    expect(fallback.site.name).toBe('WindMarket 风向市场')
+    expect(fallback.site.logoImageUrl).toBe('/images/logos/windmarket.png')
+    expect(fallback.site.supportUrl).toBe('https://t.me/WindMarketOfficial')
+    expect(fallback.site.twitterLink).toBe('https://x.com/WindMarketHQ')
+    expect(fallback.cacheable).toBe(false)
+    expect(mocks.cacheLife).toHaveBeenLastCalledWith({ stale: 30, revalidate: 5, expire: 300 })
+
+    mocks.getSettings.mockResolvedValueOnce({
+      data: {
+        general: {
+          site_name: { value: 'WindMarket 风向市场', updated_at: '2026-10-23T00:00:00.000Z' },
+          site_description: { value: 'Saved operator description', updated_at: '2026-10-23T00:00:00.000Z' },
+          site_logo_mode: { value: 'svg', updated_at: '2026-10-23T00:00:00.000Z' },
+          site_logo_svg: {
+            value: '<svg viewBox="0 0 10 10"><circle r="4"/></svg>',
+            updated_at: '2026-10-23T00:00:00.000Z',
+          },
+        },
+      },
+      error: null,
+    })
+    const recovered = await loadRuntimeThemeState()
+
+    expect(recovered.source).toBe('settings')
+    expect(recovered.cacheable).toBe(true)
+    expect(recovered.site.description).toBe('Saved operator description')
+    expect(recovered.site.logoMode).toBe('svg')
+    expect(recovered.site.logoImageUrl).toBeNull()
+    expect(mocks.cacheLife).toHaveBeenLastCalledWith('max')
+  })
+
+  it('keeps the WindMarket brand when the database environment is unavailable', async () => {
+    process.env.SITE_URL = 'https://app.windmarket.top'
+    delete process.env.POSTGRES_URL
+
+    const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
+    const state = await loadRuntimeThemeState()
+
+    expect(state.site.name).toBe('WindMarket 风向市场')
+    expect(state.site.logoMode).toBe('image')
+    expect(state.site.pwaIcon512Url).toBe('/images/logos/windmarket.png')
+    expect(state.source).toBe('default')
+    expect(state.cacheable).toBe(false)
+    expect(mocks.getSettings).not.toHaveBeenCalled()
+  })
+
+  it('keeps the WindMarket fallback short lived when a stored identity is invalid', async () => {
+    process.env.SITE_URL = 'https://app.windmarket.top'
+    mocks.getSettings.mockResolvedValueOnce({
+      data: { general: { site_name: { value: 'WindMarket 风向市场', updated_at: '2026-10-23T00:00:00.000Z' } } },
+      error: null,
+    })
+
+    const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
+    const state = await loadRuntimeThemeState()
+
+    expect(state.site.name).toBe('WindMarket 风向市场')
+    expect(state.cacheable).toBe(false)
+    expect(mocks.cacheLife).toHaveBeenLastCalledWith({ stale: 30, revalidate: 5, expire: 300 })
+  })
+
+  it('preserves the generic fallback on unrelated and lookalike domains', async () => {
+    const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
+    for (const siteUrl of ['https://example.com', 'https://app.windmarket.top.example.com']) {
+      process.env.SITE_URL = siteUrl
+      mocks.getSettings.mockResolvedValueOnce({ data: null, error: 'Failed to fetch settings.' })
+      expect((await loadRuntimeThemeState()).site.name).toBe('Kuest')
+    }
   })
 
   it('uses settings theme when DB values are valid', async () => {

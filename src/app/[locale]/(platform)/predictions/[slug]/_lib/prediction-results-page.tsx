@@ -79,6 +79,7 @@ export async function generatePredictionResultsMetadata({
   return {
     title,
     description,
+    alternates: { canonical: pageUrl },
     openGraph: {
       type: 'website',
       url: pageUrl,

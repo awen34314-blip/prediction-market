@@ -53,7 +53,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: 'Join community',
     depositSupport: 'Deposit support',
     depositSupportDetail: 'Get help with your deposit · Telegram',
-    title: 'Prediction Markets for Southeast Asia | WindMarket',
+    title: 'WindMarket | Prediction Markets for Southeast Asia',
     description:
       'Explore WindMarket prediction markets for Southeast Asia. Read crypto, stock and gold market probabilities, event rules and settlement details.',
     ogLocale: 'en_US',
@@ -80,7 +80,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: '加入社區',
     depositSupport: '充值客服',
     depositSupportDetail: '聯繫客戶服務 · Telegram',
-    title: '東南亞預測市場｜風向市場 WindMarket',
+    title: '風向市場 WindMarket｜東南亞預測市場',
     description:
       '風向市場 WindMarket 專注東南亞預測市場，涵蓋加密貨幣、股票、黃金等多種類別。瀏覽市場概率，瞭解事件規則與結算方式。',
     ogLocale: 'zh_TW',
@@ -107,7 +107,7 @@ const copy: Record<SupportedLocale, WindMarketCopy> = {
     join: '加入社区',
     depositSupport: '充值客服',
     depositSupportDetail: '联系客户服务 · Telegram',
-    title: '东南亚预测市场｜风向市场 WindMarket',
+    title: '风向市场 WindMarket｜东南亚预测市场',
     description:
       '风向市场 WindMarket 专注东南亚预测市场，涵盖加密货币、股票、黄金等多种类别。浏览市场概率，了解事件规则与结算方式。',
     ogLocale: 'zh_CN',

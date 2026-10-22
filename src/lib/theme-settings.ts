@@ -10,6 +10,7 @@ import { validateCustomJavascriptCodesJson } from '@/lib/custom-javascript-code'
 import { hasDatabaseEnv } from '@/lib/db/env'
 import { SettingsRepository } from '@/lib/db/queries/settings'
 import { PUBLIC_CONFIG_FAILURE_CACHE_LIFE } from '@/lib/public-config-cache'
+import resolveSiteUrl from '@/lib/site-url'
 import { getPublicAssetUrl } from '@/lib/storage'
 import {
   buildResolvedThemeConfig,
@@ -33,6 +34,7 @@ import {
   validateThemeSiteName,
   validateThemeSiteSupportUrl,
 } from '@/lib/theme-site-identity'
+import { getWindMarketFallbackIdentity } from '@/lib/windmarket/fallback-site-identity'
 
 const THEME_SETTINGS_GROUP = 'theme'
 const GENERAL_SETTINGS_GROUP = 'general'
@@ -507,7 +509,7 @@ function normalizeThemeSiteConfig(params: {
 }
 
 function buildThemeSiteIdentity(config: NormalizedThemeSiteConfig): ThemeSiteIdentity {
-  const defaultSite = createDefaultThemeSiteIdentity()
+  const defaultSite = getWindMarketFallbackIdentity(createDefaultThemeSiteIdentity(), resolveSiteUrl(process.env))
   const logoImageUrl = config.logoMode === 'image' ? getPublicAssetUrl(config.logoImagePath) : null
   const pwaIcon192Url = getPublicAssetUrl(config.pwaIcon192Path) || defaultSite.pwaIcon192Url
   const pwaIcon512Url = getPublicAssetUrl(config.pwaIcon512Path) || defaultSite.pwaIcon512Url
@@ -543,7 +545,7 @@ function buildThemeSiteIdentity(config: NormalizedThemeSiteConfig): ThemeSiteIde
 function buildDefaultThemeState(): RuntimeThemeState {
   return {
     theme: buildResolvedThemeConfig(DEFAULT_THEME_PRESET_ID),
-    site: createDefaultThemeSiteIdentity(),
+    site: getWindMarketFallbackIdentity(createDefaultThemeSiteIdentity(), resolveSiteUrl(process.env)),
     source: 'default',
     cacheable: false,
   }

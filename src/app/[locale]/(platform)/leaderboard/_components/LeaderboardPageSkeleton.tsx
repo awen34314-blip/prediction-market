@@ -20,7 +20,7 @@ export default function LeaderboardPageSkeleton() {
     <div className="relative w-full" aria-busy="true">
       <div className={LEADERBOARD_LAYOUT_CLASS_NAME}>
         <section className="flex min-w-0 flex-col gap-6">
-          <h1 className="text-2xl font-semibold text-foreground md:text-3xl">{translateLeaderboardTitle()}</h1>
+          <p className="text-2xl font-semibold text-foreground md:text-3xl">{translateLeaderboardTitle()}</p>
 
           <div className="flex min-w-0 flex-col">
             <LeaderboardFiltersBar

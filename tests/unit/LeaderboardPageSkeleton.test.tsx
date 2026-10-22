@@ -18,7 +18,8 @@ describe('leaderboardPageSkeleton', () => {
   it('keeps the leaderboard controls and sidebar visible', () => {
     render(<LeaderboardPageSkeleton />)
 
-    expect(screen.getByRole('heading', { name: 'Leaderboard' })).toBeVisible()
+    expect(screen.getByText('Leaderboard')).toBeVisible()
+    expect(screen.queryByRole('heading', { name: 'Leaderboard' })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Monthly' })).toBeVisible()
     expect(screen.getAllByRole('combobox').some((select) => select.textContent?.startsWith('All Categories'))).toBe(
       true,
