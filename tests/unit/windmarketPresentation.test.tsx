@@ -84,9 +84,10 @@ describe('WindMarket localized homepage SEO', () => {
       zh: `${siteUrl}/zh`,
       'x-default': `${siteUrl}/`,
     })
-    expect(chinese.title).toEqual({ absolute: '风向市场 WindMarket｜东南亚预测市场' })
+    expect(chinese.title).toEqual({ absolute: '风向市场｜东南亚预测市场' })
     expect(chinese.description).not.toBe(english.description)
     expect(chinese.openGraph).toMatchObject({
+      siteName: '风向市场',
       url: `${siteUrl}/zh`,
       locale: 'zh_CN',
       alternateLocale: ['zh_TW', 'en_US'],
@@ -113,6 +114,9 @@ describe('WindMarket localized homepage SEO', () => {
         inherited,
       })
       expect(metadata.description).toBeTruthy()
+      expect(metadata.openGraph).toMatchObject({
+        siteName: locale === 'zh-hant' ? '風向市場' : locale === 'zh' ? '风向市场' : 'WindMarket',
+      })
       descriptions.add(metadata.description!)
       expect(metadata.alternates?.canonical).toBe(locale === 'zh-hant' ? `${siteUrl}/` : `${siteUrl}/${locale}`)
     }

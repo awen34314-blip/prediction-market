@@ -1,4 +1,4 @@
-import { afterEach, expect, it, mock } from 'bun:test'
+import { afterEach, expect, it, mock, setSystemTime } from 'bun:test'
 
 import { GET } from '@/app/api/price-reference/live-series/route'
 
@@ -6,9 +6,12 @@ const originalFetch = globalThis.fetch
 
 afterEach(() => {
   globalThis.fetch = originalFetch
+  setSystemTime()
 })
 
 it('uses the current HOOD event reference and never promotes an older close into it', async () => {
+  // Keep the current event open and the previous event closed, regardless of the run date.
+  setSystemTime(new Date('2026-10-22T14:00:00Z'))
   const eventSlug = 'hood-up-or-down-on-october-22-2026'
   const previousSlug = 'hood-up-or-down-on-october-21-2026'
   const start = Date.parse('2026-10-22T13:30:00Z')

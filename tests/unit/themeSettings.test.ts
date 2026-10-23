@@ -73,7 +73,7 @@ describe('theme settings runtime resolver', () => {
     const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
     const fallback = await loadRuntimeThemeState()
 
-    expect(fallback.site.name).toBe('WindMarket 风向市场')
+    expect(fallback.site.name).toBe('風向市場')
     expect(fallback.site.logoImageUrl).toBe('/images/logos/windmarket.png')
     expect(fallback.site.supportUrl).toBe('https://t.me/WindMarketOfficial')
     expect(fallback.site.twitterLink).toBe('https://x.com/WindMarketHQ')
@@ -111,7 +111,7 @@ describe('theme settings runtime resolver', () => {
     const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
     const state = await loadRuntimeThemeState()
 
-    expect(state.site.name).toBe('WindMarket 风向市场')
+    expect(state.site.name).toBe('風向市場')
     expect(state.site.logoMode).toBe('image')
     expect(state.site.pwaIcon512Url).toBe('/images/logos/windmarket.png')
     expect(state.source).toBe('default')
@@ -129,7 +129,7 @@ describe('theme settings runtime resolver', () => {
     const { loadRuntimeThemeState } = await import('@/lib/theme-settings')
     const state = await loadRuntimeThemeState()
 
-    expect(state.site.name).toBe('WindMarket 风向市场')
+    expect(state.site.name).toBe('風向市場')
     expect(state.cacheable).toBe(false)
     expect(mocks.cacheLife).toHaveBeenLastCalledWith({ stale: 30, revalidate: 5, expire: 300 })
   })

@@ -145,7 +145,9 @@ describe('structuredData', () => {
 
     expect(organization['@id']).toBe(organizationId)
     expect(organization.url).toBe('https://windmarket.top/')
-    expect(organization.name).toBe('WindMarket')
+    expect(organization.name).toBe('風向市場')
+    expect(website.name).toBe('風向市場')
+    expect(website.alternateName).toContain('WindMarket')
     expect(organization.sameAs).toEqual(['https://x.com/WindMarketHQ', 'https://t.me/WindMarketOfficial'])
     expect(organization.alternateName).toContain('风向市场')
     expect(organization.alternateName).toContain('風向市場')

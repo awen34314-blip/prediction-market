@@ -5,7 +5,7 @@ import type { StructuredDataNode } from '@/lib/structured-data'
 import type { WindMarketResourceId, WindMarketResourceLocale } from '@/lib/windmarket/resources'
 
 import { withLocalePrefix } from '@/lib/locale-path'
-import { windmarket } from '@/lib/windmarket/config'
+import { getWindMarketName, windmarket } from '@/lib/windmarket/config'
 import { getWindMarketCopy } from '@/lib/windmarket/localization'
 import {
   getWindMarketResourceHref,
@@ -37,7 +37,7 @@ export function buildWindMarketResourceMetadata({
       type: 'website',
       title: copy.title,
       description: copy.description,
-      siteName: windmarket.name,
+      siteName: getWindMarketName(locale),
       url,
       locale: getWindMarketCopy(locale).ogLocale,
       alternateLocale: getWindMarketResourceLocales(enabledLocales)

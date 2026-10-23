@@ -4,7 +4,7 @@ import type { SupportedLocale } from '@/i18n/locales'
 
 import { normalizeEnabledLocales } from '@/i18n/locales'
 import { withLocalePrefix } from '@/lib/locale-path'
-import { windmarket } from '@/lib/windmarket/config'
+import { getWindMarketName } from '@/lib/windmarket/config'
 import { getWindMarketCopy } from '@/lib/windmarket/localization'
 
 export function buildWindMarketHomeMetadata({
@@ -34,7 +34,7 @@ export function buildWindMarketHomeMetadata({
       type: 'website',
       title: copy.title,
       description: copy.description,
-      siteName: windmarket.name,
+      siteName: getWindMarketName(locale),
       url: pageUrl,
       locale: copy.ogLocale,
       alternateLocale: locales

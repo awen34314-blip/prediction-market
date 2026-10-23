@@ -146,7 +146,7 @@ export default function ResourceArticle({
         <ResourceLinks locale={locale} current={id} />
         <div className="wm-resource-actions">
           <a href={`${windmarket.website}${locale === 'zh-hant' ? '/' : locale === 'zh' ? '/zh' : '/en'}`}>
-            {zh ? text('WindMarket 风向市场品牌官网') : 'WindMarket official website'}
+            {zh ? text('风向市场品牌官网') : 'WindMarket official website'}
             <ArrowUpRightIcon size={15} aria-hidden="true" />
           </a>
           <a href={`${windmarket.website}${zh ? text('/zh') : ''}/blog`}>

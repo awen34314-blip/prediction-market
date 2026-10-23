@@ -69,10 +69,10 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           heading: '平臺與官方入口',
           paragraphs: [
             '風向市場使用 Kuest 白標基礎設施，提供自己的品牌界面和社區內容。具體市場、訂單、資產與結算信息，以平臺實際展示的規則和記錄為準。',
-            '品牌官網 windmarket.top 用於瞭解 WindMarket 風向市場和閱讀科普博客；市場應用 app.windmarket.top 用於查看具體市場與規則。官方 Telegram 社區為 @WindMarketOfficial，可用於討論市場和獲取使用幫助。',
+            '品牌官網 windmarket.top 用於瞭解風向市場和閱讀科普博客；市場應用 app.windmarket.top 用於查看具體市場與規則。官方 Telegram 社區為 @WindMarketOfficial，可用於討論市場和獲取使用幫助。',
           ],
           links: [
-            { label: '瞭解 WindMarket 風向市場：品牌官網', href: 'https://windmarket.top/zh' },
+            { label: '瞭解風向市場：品牌官網', href: 'https://windmarket.top/zh' },
             { label: '閱讀平臺服務條款', href: '/tos' },
             { label: '充值指南', href: '/learn/deposits' },
             { label: '提現指南', href: '/learn/withdrawals' },
@@ -131,10 +131,10 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
           heading: '平台与官方入口',
           paragraphs: [
             '风向市场使用 Kuest 白标基础设施，提供自己的品牌界面和社区内容。具体市场、订单、资产与结算信息，以平台实际展示的规则和记录为准。',
-            '品牌官网 windmarket.top 用于了解 WindMarket 风向市场和阅读科普博客；市场应用 app.windmarket.top 用于查看具体市场与规则。官方 Telegram 社区为 @WindMarketOfficial，可用于讨论市场和获取使用帮助。',
+            '品牌官网 windmarket.top 用于了解风向市场和阅读科普博客；市场应用 app.windmarket.top 用于查看具体市场与规则。官方 Telegram 社区为 @WindMarketOfficial，可用于讨论市场和获取使用帮助。',
           ],
           links: [
-            { label: '了解 WindMarket 风向市场：品牌官网', href: 'https://windmarket.top/zh' },
+            { label: '了解风向市场：品牌官网', href: 'https://windmarket.top/zh' },
             { label: '阅读平台服务条款', href: '/tos' },
             { label: '充值指南', href: '/learn/deposits' },
             { label: '提现指南', href: '/learn/withdrawals' },

@@ -29,6 +29,7 @@ import resolveSiteUrl from '@/lib/site-url'
 import { loadRuntimeThemeState } from '@/lib/theme-settings'
 import { withoutMigratedWindMarketIntegrations } from '@/lib/windmarket/legacy-integrations'
 import { getWindMarketCopy } from '@/lib/windmarket/localization'
+import { getSitePresentation } from '@/lib/windmarket/site-presentation'
 import { AppProviders } from '@/providers/AppProviders'
 import PublicRuntimeConfigProvider from '@/providers/PublicRuntimeConfigProvider'
 import SiteIdentityProvider from '@/providers/SiteIdentityProvider'
@@ -67,9 +68,9 @@ export async function generateMetadata(): Promise<Metadata> {
   } else {
     cacheLife(PUBLIC_CONFIG_FAILURE_CACHE_LIFE)
   }
-  const site = runtimeTheme.site
   const siteUrl = resolveSiteUrl(process.env)
   const locale = await getRootLocale()
+  const site = getSitePresentation(runtimeTheme.site, locale)
   const copy = getWindMarketCopy(locale)
   const defaultTitle = copy.title
   const fallbackOgImage = new URL('/api/og', siteUrl).toString()
