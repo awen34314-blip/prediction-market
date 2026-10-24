@@ -1803,8 +1803,10 @@ async function hydrateEventListResults({
     ),
   )
   const eventIds = eventsData.map((event) => event.id)
-  const sportsVolumeGroupKeyByEventId = await getSportsVolumeGroupKeysByEventId(eventIds)
-  const sportsVolumeGroupKeysForAggregation = Array.from(new Set(sportsVolumeGroupKeyByEventId.values()))
+  const sportsVolumeGroupKeysPromise = getSportsVolumeGroupKeysByEventId(eventIds)
+  const groupedSportsVolumesPromise = sportsVolumeGroupKeysPromise.then((groupKeysByEventId) =>
+    getSportsAggregatedVolumesByGroupKey(Array.from(new Set(groupKeysByEventId.values()))),
+  )
   const [
     priceMap,
     lastTradeMap,
@@ -1812,7 +1814,9 @@ async function hydrateEventListResults({
     localizedEventTitlesById,
     localizedEventAdditionalContextsById,
     localizedEventRulesById,
+    sportsVolumeGroupKeyByEventId,
     groupedSportsVolumesByGroupKey,
+    liveChartSeriesSlugs,
   ] = await Promise.all([
     skipLivePricing ? Promise.resolve(new Map<string, OutcomePrices>()) : fetchOutcomePrices(tokensForPricing),
     skipLivePricing ? Promise.resolve(new Map<string, number>()) : fetchLastTradePrices(tokensForPricing),
@@ -1820,9 +1824,10 @@ async function hydrateEventListResults({
     getLocalizedEventTitlesById(eventIds, locale),
     getLocalizedEventAdditionalContextsById(eventIds, locale),
     getLocalizedEventRulesById(eventIds, locale),
-    getSportsAggregatedVolumesByGroupKey(sportsVolumeGroupKeysForAggregation),
+    sportsVolumeGroupKeysPromise,
+    groupedSportsVolumesPromise,
+    getEnabledLiveChartSeriesSlugs(),
   ])
-  const liveChartSeriesSlugs = await getEnabledLiveChartSeriesSlugs()
 
   return eventsData
     .filter((event) => event.markets?.length > 0)
@@ -1856,36 +1861,6 @@ async function hydrateEventListResults({
         volume: groupedVolume,
       }
     })
-}
-
-export async function hydrateEventListPrices(events: Event[]): Promise<Event[]> {
-  'use cache'
-  cacheLife({ stale: 30, revalidate: 30, expire: 120 })
-  cacheTag(cacheTags.eventsList)
-
-  if (events.length === 0) {
-    return events
-  }
-
-  const tokenIds = events.flatMap((event) =>
-    event.markets.flatMap((market) => market.outcomes.map((outcome) => outcome.token_id).filter(Boolean)),
-  )
-  const [priceMap, lastTradeMap] = await Promise.all([fetchOutcomePrices(tokenIds), fetchLastTradePrices(tokenIds)])
-
-  return events.map((event) => ({
-    ...event,
-    markets: event.markets.map((market) => {
-      const outcomes = market.outcomes.map((outcome) => ({
-        ...outcome,
-        buy_price: priceMap.get(outcome.token_id)?.buy,
-        sell_price: priceMap.get(outcome.token_id)?.sell,
-        last_trade_price: lastTradeMap.get(outcome.token_id),
-      }))
-      const price = resolveMarketDisplayPrice(outcomes)
-
-      return { ...market, outcomes, price, probability: price * 100 }
-    }),
-  }))
 }
 
 export const EventRepository = {
@@ -4021,16 +3996,27 @@ export const EventRepository = {
     slugs: string[],
     userId: string = '',
     locale: SupportedLocale = DEFAULT_LOCALE,
+    listFilters?: ListEventsProps,
   ): Promise<QueryResult<Event[]>> {
     return runQuery(async () => {
       const normalizedSlugs = Array.from(new Set(slugs.map((slug) => slug.trim()).filter(Boolean)))
       if (normalizedSlugs.length === 0) {
         return { data: [], error: null }
       }
+      const listContext = listFilters ? await buildEventListQueryContext({ ...listFilters, userId, locale }) : null
+      if (listContext?.empty) {
+        return { data: [], error: null }
+      }
 
       const eventResults = (await db.query.events.findMany({
         where: {
-          RAW: (table) => and(inArray(table.slug, normalizedSlugs), eq(table.is_hidden, false))!,
+          RAW: (table) =>
+            listContext
+              ? mapEventColumnsToRelationAlias(
+                  and(listContext.baseWhere, inArray(events.slug, normalizedSlugs))!,
+                  table,
+                )
+              : and(inArray(table.slug, normalizedSlugs), eq(table.is_hidden, false))!,
         },
         with: {
           markets: {
@@ -4058,7 +4044,7 @@ export const EventRepository = {
       }
 
       const hydratedEventResults = await Promise.all(eventResults.map(hydrateSportsAuxiliaryEventContext))
-      const sportsSlugResolver = await getSportsSlugResolverFromDb()
+      const sportsSlugResolver = listContext?.sportsSlugResolver ?? (await getSportsSlugResolverFromDb())
       const eventsWithMarkets = await hydrateEventListResults({
         eventsData: hydratedEventResults,
         locale,

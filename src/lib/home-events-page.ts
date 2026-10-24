@@ -2,7 +2,7 @@ import type { SupportedLocale } from '@/i18n/locales'
 import type { EventListSortBy, EventListStatusFilter } from '@/lib/event-list-filters'
 import type { Event } from '@/types'
 
-import { EventRepository, hydrateEventListPrices } from '@/lib/db/queries/event'
+import { EventRepository } from '@/lib/db/queries/event'
 import { filterHomeEvents, HOME_EVENTS_PAGE_SIZE, isSportsPrimaryHomeEvent } from '@/lib/home-events'
 
 const HOME_EVENTS_QUERY_BATCH_SIZE = 128
@@ -31,6 +31,7 @@ interface LoadHomeEventCandidatesOptions extends Omit<ListHomeEventsPageOptions,
 interface LoadHomeEventBatchesOptions extends Omit<LoadHomeEventCandidatesOptions, 'offset'> {
   initialEvents?: Event[]
   offset: number
+  skipLivePricing?: boolean
 }
 
 async function loadHomeEventBatches({
@@ -44,6 +45,7 @@ async function loadHomeEventBatches({
   mainTag,
   offset,
   search = '',
+  skipLivePricing = false,
   sortBy,
   sportsSection = '',
   sportsSportSlug = '',
@@ -59,6 +61,7 @@ async function loadHomeEventBatches({
       tag,
       mainTag,
       search,
+      skipLivePricing,
       sortBy,
       userId,
       bookmarked,
@@ -73,7 +76,6 @@ async function loadHomeEventBatches({
       hideCrypto,
       hideEarnings,
       excludeSportsAuxiliary: true,
-      skipLivePricing: true,
     })
 
     if (error) {
@@ -139,8 +141,8 @@ async function loadHomeEventCandidates({
       hideCrypto,
       hideEarnings,
       excludeSportsAuxiliary: true,
-      skipLivePricing: true,
       preferResolvedDateOrder: true,
+      skipLivePricing: true,
     })
 
     return {
@@ -173,8 +175,8 @@ async function loadHomeEventCandidates({
         hideCrypto,
         hideEarnings,
         excludeSportsAuxiliary: true,
-        skipLivePricing: true,
         preferResolvedDateOrder: true,
+        skipLivePricing: true,
       })
 
       if (error) {
@@ -230,7 +232,6 @@ async function loadHomeEventCandidates({
       sportsSportSlug,
       sportsSection,
       excludeSportsAuxiliary: true,
-      skipLivePricing: true,
     })
 
     if (error) {
@@ -249,7 +250,10 @@ async function loadHomeEventCandidates({
       }
     }
 
-    return loadHomeEventBatches({
+    // Series selection uses event dates and resolution state, not live prices.
+    // Price only the cards that survive the full scan on the public landing pages.
+    const skipIntermediateLivePricing = !bookmarked && !userId && (tag === 'trending' || tag === 'crypto')
+    const result = await loadHomeEventBatches({
       bookmarked,
       frequency,
       hideCrypto,
@@ -260,6 +264,7 @@ async function loadHomeEventCandidates({
       mainTag,
       offset: candidates.length,
       search,
+      skipLivePricing: skipIntermediateLivePricing,
       sortBy,
       sportsSection,
       sportsSportSlug,
@@ -267,6 +272,10 @@ async function loadHomeEventCandidates({
       tag,
       userId,
     })
+    return {
+      ...result,
+      initiallyPricedEventIds: skipIntermediateLivePricing ? new Set(candidates.map((event) => event.id)) : null,
+    }
   }
 
   return loadHomeEventBatches({
@@ -310,27 +319,31 @@ export async function listHomeEventsPage({
   const resolvedCurrentTimestamp = currentTimestamp ?? null
   const hasHomeVisibilityFilters = hideSports || hideCrypto || hideEarnings
 
-  // Latest is the same public home feed ordered by creation time. Imported events
-  // can carry hide-from-new when automatic deployment is off, even after they are
-  // active and visible on Home. Keep the repository's public visibility filters.
+  // Latest uses the public home feed ordered by creation time, including imported
+  // events that remain visible on Home while carrying the hide-from-new tag.
   const isLatestFeed = tag === 'new' || mainTag === 'new'
-  const { data: rawEvents, error } = await loadHomeEventCandidates({
+  const listMainTag = mainTag === 'new' ? 'trending' : mainTag
+  const listTag = tag === 'new' ? 'trending' : tag
+  const listSortBy = sortBy ?? (isLatestFeed ? 'created_at' : undefined)
+
+  const candidatesResult = await loadHomeEventCandidates({
     bookmarked,
     frequency,
     hideCrypto,
     hideEarnings,
     hideSports,
     locale,
-    mainTag: mainTag === 'new' ? 'trending' : mainTag,
+    mainTag: listMainTag,
     offset,
     search,
-    sortBy: sortBy ?? (isLatestFeed ? 'created_at' : undefined),
+    sortBy: listSortBy,
     sportsSection,
     sportsSportSlug,
     status,
-    tag: tag === 'new' ? 'trending' : tag,
+    tag: listTag,
     userId,
   })
+  const { data: rawEvents, error } = candidatesResult
 
   if (error) {
     return { data: [], error, currentTimestamp: resolvedCurrentTimestamp ?? null, hasMore: false }
@@ -353,13 +366,43 @@ export async function listHomeEventsPage({
   const pageStart = status === 'resolved' && !hasHomeVisibilityFilters ? 0 : targetOffset
   const pageEnd = pageStart + HOME_EVENTS_PAGE_SIZE
 
-  const pageEvents = visibleEvents.slice(pageStart, pageEnd)
-  // Candidate scans can include many recurring events that never reach this page.
-  // Price only the final page; home filtering and ordering do not depend on prices.
-  const pricedEvents = status === 'resolved' ? pageEvents : await hydrateEventListPrices(pageEvents)
+  let pageEvents = visibleEvents.slice(pageStart, pageEnd)
+  const initiallyPricedEventIds =
+    'initiallyPricedEventIds' in candidatesResult ? candidatesResult.initiallyPricedEventIds : null
+  const eventsNeedingPrices = initiallyPricedEventIds
+    ? pageEvents.filter((event) => !initiallyPricedEventIds.has(event.id))
+    : []
+  if (eventsNeedingPrices.length > 0) {
+    const { data: refreshedEvents, error: refreshError } = await EventRepository.getEventsBySlugs(
+      eventsNeedingPrices.map((event) => event.slug),
+      userId,
+      locale,
+      {
+        bookmarked,
+        excludeSportsAuxiliary: true,
+        frequency,
+        hideCrypto,
+        hideEarnings,
+        hideSports,
+        mainTag: listMainTag,
+        search,
+        sortBy: listSortBy,
+        sportsSection,
+        sportsSportSlug,
+        status,
+        tag: listTag,
+      },
+    )
+    const refreshedById = new Map((refreshError ? [] : (refreshedEvents ?? [])).map((event) => [event.id, event]))
+    // A selected event may have become a draft or hidden since the cached scan.
+    // Never restore an ineligible event from that scan if the fresh query omits it.
+    pageEvents = pageEvents
+      .filter((event) => initiallyPricedEventIds?.has(event.id) || refreshedById.has(event.id))
+      .map((event) => refreshedById.get(event.id) ?? event)
+  }
 
   return {
-    data: pricedEvents,
+    data: pageEvents,
     error: null,
     currentTimestamp: resolvedCurrentTimestamp ?? null,
     hasMore: visibleEvents.length > pageEnd,

@@ -401,7 +401,7 @@ describe('tradingOnboardingProvider', () => {
           <EnsureTradingReadyProbe onTradingReady={onTradingReady} />
         </TradingOnboardingProvider>,
       )
-      await waitFor(() => expect(fetch).toHaveBeenCalled())
+      await waitFor(() => expect(mocks.dialogProps.sumsubStatus).toMatchObject({ enforcement, status: 'error' }))
       act(() => screen.getByRole('button', { name: 'Submit trade' }).click())
 
       await waitFor(() => expect(onTradingReady).toHaveBeenCalledOnce())
@@ -447,7 +447,9 @@ describe('tradingOnboardingProvider', () => {
         <EnsureTradingReadyProbe onTradingReady={onTradingReady} />
       </TradingOnboardingProvider>,
     )
-    await waitFor(() => expect(fetch).toHaveBeenCalled())
+    await waitFor(() =>
+      expect(mocks.dialogProps.sumsubStatus).toMatchObject({ enforcement: 'required', status: 'error' }),
+    )
     act(() => screen.getByRole('button', { name: 'Submit trade' }).click())
 
     expect(onTradingReady).not.toHaveBeenCalled()

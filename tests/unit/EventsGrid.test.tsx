@@ -238,9 +238,11 @@ describe('eventsGrid', () => {
     expect(fetchNextPage).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: 'Show more markets' }))
 
-    await waitFor(() => expect(fetchNextPage).toHaveBeenCalledTimes(1))
-    expect(screen.queryByRole('button', { name: 'Show more markets' })).not.toBeInTheDocument()
-    expect(screen.getByTestId('events-infinite-scroll-sentinel')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(fetchNextPage).toHaveBeenCalledTimes(1)
+      expect(screen.queryByRole('button', { name: 'Show more markets' })).not.toBeInTheDocument()
+      expect(screen.getByTestId('events-infinite-scroll-sentinel')).toBeInTheDocument()
+    })
   })
 
   it('offers the show more button only when the server confirms a 33rd market', () => {
