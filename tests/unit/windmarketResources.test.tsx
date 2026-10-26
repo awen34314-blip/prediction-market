@@ -83,7 +83,7 @@ describe('WindMarket editorial SEO', () => {
         expect(html).toContain(
           `href="https://windmarket.top${locale === 'zh-hant' ? '/' : locale === 'zh' ? '/zh' : '/en'}"`,
         )
-        expect(html).toContain(`href="https://windmarket.top${locale === 'en' ? '' : '/zh'}/blog"`)
+        expect(html).toContain(`href="https://windmarket.top${locale === 'en' ? '' : `/${locale}`}/blog"`)
         expect(html).not.toContain('/zh/https:')
         expect(html).toContain('https://t.me/WindMarketOfficial')
         expect(html).toContain(`href="/zh${windmarketResources[id].path}"`)

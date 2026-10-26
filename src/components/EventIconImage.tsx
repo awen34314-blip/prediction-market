@@ -9,6 +9,22 @@ export function isEventMarketIconUrl(url: string | null | undefined) {
   return normalizedUrl.includes('/events/icons/') || normalizedUrl.includes('/markets/icons/')
 }
 
+export function isPublicCatalogIcon(src: ImageProps['src']) {
+  if (typeof src !== 'string') {
+    return false
+  }
+  try {
+    const url = new URL(src)
+    return (
+      url.protocol === 'https:' &&
+      url.hostname.endsWith('.supabase.co') &&
+      /^\/storage\/v1\/object\/public\/kuest-assets\/icons\/source\/[^/]+\.png$/.test(url.pathname)
+    )
+  } catch {
+    return false
+  }
+}
+
 interface EventIconImageProps extends Omit<ImageProps, 'className' | 'fill' | 'height' | 'width'> {
   containerClassName?: string
   imageClassName?: string
@@ -20,6 +36,7 @@ export default function EventIconImage({
   sizes = '100vw',
   containerClassName,
   imageClassName,
+  unoptimized,
   ...props
 }: EventIconImageProps) {
   if (typeof src === 'string' && !src.trim()) {
@@ -34,6 +51,9 @@ export default function EventIconImage({
         alt={alt}
         fill
         sizes={sizes}
+        // Small public catalog icons already have CDN caching. Use the original
+        // so their visibility does not depend on wsrv.nl's crawler restrictions.
+        unoptimized={unoptimized ?? isPublicCatalogIcon(src)}
         className={cn('shrink-0 object-cover object-center', imageClassName)}
       />
     </div>

@@ -27,7 +27,7 @@ export const windmarketResources: Record<
 > = {
   about: {
     path: '/about',
-    updated: '2026-10-16',
+    updated: '2026-10-26',
     copy: {
       'zh-hant': {
         label: '關於風向市場',

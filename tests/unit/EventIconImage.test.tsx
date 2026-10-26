@@ -2,15 +2,33 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it, mock } from 'bun:test'
 import { createElement } from 'react'
 
-import EventIconImage from '@/components/EventIconImage'
+import EventIconImage, { isPublicCatalogIcon } from '@/components/EventIconImage'
 
 void mock.module('next/image', () => ({
-  default: function MockNextImage({ fill: _fill, ...props }: any) {
-    return createElement('img', props)
+  default: function MockNextImage({ fill: _fill, unoptimized, ...props }: any) {
+    return createElement('img', { ...props, 'data-unoptimized': String(unoptimized) })
   },
 }))
 
 describe('eventIconImage', () => {
+  it('uses the small public catalog originals while preserving the optimizer for other images', () => {
+    const src = 'https://assets.supabase.co/storage/v1/object/public/kuest-assets/icons/source/btc.png'
+    render(<EventIconImage src={src} alt="Public catalog icon" />)
+    expect(screen.getByAltText('Public catalog icon')).toHaveAttribute('data-unoptimized', 'true')
+    expect(screen.getByAltText('Public catalog icon')).toHaveAttribute('src', src)
+    const optimizedUrls = [
+      '/images/logo.png',
+      'https://cdn.example.com/photo.png',
+      'https://assets.supabase.co/storage/v1/object/public/kuest-assets/photos/large.png',
+      'https://assets.supabase.co.evil.example/storage/v1/object/public/kuest-assets/icons/source/btc.png',
+    ]
+    optimizedUrls.forEach((url) => {
+      expect(isPublicCatalogIcon(url)).toBe(false)
+    })
+    render(<EventIconImage src={src} alt="Explicitly optimized icon" unoptimized={false} />)
+    expect(screen.getByAltText('Explicitly optimized icon')).toHaveAttribute('data-unoptimized', 'false')
+  })
+
   it('uses object-cover without forcing extra zoom by default', () => {
     const { container } = render(
       <EventIconImage src="/images/test.png" alt="Test event" sizes="40px" containerClassName="size-10 rounded-sm" />,

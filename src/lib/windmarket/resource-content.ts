@@ -72,7 +72,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
             '品牌官網 windmarket.top 用於瞭解風向市場和閱讀科普博客；市場應用 app.windmarket.top 用於查看具體市場與規則。官方 Telegram 社區為 @WindMarketOfficial，可用於討論市場和獲取使用幫助。',
           ],
           links: [
-            { label: '瞭解風向市場：品牌官網', href: 'https://windmarket.top/zh' },
+            { label: '瞭解風向市場：品牌官網', href: 'https://windmarket.top/' },
             { label: '閱讀平臺服務條款', href: '/tos' },
             { label: '充值指南', href: '/learn/deposits' },
             { label: '提現指南', href: '/learn/withdrawals' },
@@ -197,7 +197,7 @@ const content: Record<WindMarketResourceId, Record<WindMarketResourceLocale, Res
             'Visit windmarket.top for the WindMarket brand website and educational blog, and app.windmarket.top to inspect individual markets and their rules. Our official Telegram community, @WindMarketOfficial, is a place for market discussion and help using the platform.',
           ],
           links: [
-            { label: 'Meet WindMarket on our official website', href: 'https://windmarket.top/' },
+            { label: 'Meet WindMarket on our official website', href: 'https://windmarket.top/en' },
             { label: 'Read the platform terms', href: '/tos' },
             { label: 'Deposit guide', href: '/learn/deposits' },
             { label: 'Withdrawal guide', href: '/learn/withdrawals' },

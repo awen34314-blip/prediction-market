@@ -149,7 +149,7 @@ export default function ResourceArticle({
             {zh ? text('风向市场品牌官网') : 'WindMarket official website'}
             <ArrowUpRightIcon size={15} aria-hidden="true" />
           </a>
-          <a href={`${windmarket.website}${zh ? text('/zh') : ''}/blog`}>
+          <a href={`${windmarket.website}${locale === 'en' ? '' : `/${locale}`}/blog`}>
             {zh ? text('预测市场科普博客') : 'Prediction market blog'}
             <ArrowUpRightIcon size={15} aria-hidden="true" />
           </a>

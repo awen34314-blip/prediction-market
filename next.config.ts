@@ -48,6 +48,10 @@ const config: NextConfig = {
   },
   async headers() {
     return [
+      ...['/api/events', '/api/locales'].map((source) => ({
+        source,
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
+      })),
       {
         source: '/sw.js',
         headers: [

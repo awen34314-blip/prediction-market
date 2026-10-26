@@ -12,7 +12,9 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        // These public GET endpoints are needed when the homepage hydrates.
+        // Keep the exact path/query boundary so nested API routes stay excluded.
+        allow: ['/', '/api/events$', '/api/events?', '/api/locales$', '/api/locales?'],
         disallow: ['/api/'],
       },
     ],
