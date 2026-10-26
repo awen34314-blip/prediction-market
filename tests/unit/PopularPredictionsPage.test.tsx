@@ -37,7 +37,7 @@ describe('popular predictions page', () => {
     })
 
     expect(mocks.renderPredictionResultsPage).toHaveBeenCalledWith({
-      heading: 'Explore popular predictions & real-time odds',
+      heading: 'Explore popular predictions & real-time probabilities',
       initialSort: 'volume',
       initialStatus: 'resolved',
       locale: 'en',
@@ -53,16 +53,16 @@ describe('popular predictions page', () => {
       searchParams: Promise.resolve({}),
     })
 
-    expect(mocks.translate).toHaveBeenCalledWith('Explore popular predictions & real-time odds')
+    expect(mocks.translate).toHaveBeenCalledWith('Explore popular predictions & real-time probabilities')
     expect(mocks.translate).toHaveBeenCalledWith(
-      'Explore popular prediction markets with live prices and real-time odds.',
+      'Explore popular prediction markets with live prices and real-time probabilities.',
     )
     expect(mocks.generatePredictionResultsMetadata).toHaveBeenCalledWith({
-      description: 'Explore popular prediction markets with live prices and real-time odds.',
+      description: 'Explore popular prediction markets with live prices and real-time probabilities.',
       locale: 'en',
       pageSlug: null,
       slug: 'trending',
-      title: 'Explore popular predictions & real-time odds',
+      title: 'Explore popular predictions & real-time probabilities',
     })
   })
 })

@@ -100,10 +100,10 @@ export async function generateSportsVerticalSectionMetadata({
   const t = await getExtracted()
   const title =
     section === 'props'
-      ? t('{sportTitle} Props Prediction Markets & Live Odds', { sportTitle: sportContext.sportTitle })
+      ? t('{sportTitle} Props Prediction Markets & Live Probabilities', { sportTitle: sportContext.sportTitle })
       : parsedWeek == null
-        ? t('{sportTitle} Prediction Markets & Live Odds', { sportTitle: sportContext.sportTitle })
-        : t('{sportTitle} Prediction Markets & Live Odds - Week {week}', {
+        ? t('{sportTitle} Prediction Markets & Live Probabilities', { sportTitle: sportContext.sportTitle })
+        : t('{sportTitle} Prediction Markets & Live Probabilities - Week {week}', {
             sportTitle: sportContext.sportTitle,
             week: String(parsedWeek),
           })
@@ -115,20 +115,20 @@ export async function generateSportsVerticalSectionMetadata({
     section === 'props'
       ? vertical === 'esports'
         ? t(
-            'Trade on live {sportTitle} esports player props in real time on {siteName}. Bet on kills, assists, maps, rounds, and more specialty markets while you watch.',
+            '{siteName} offers prediction markets for {sportTitle}. Explore outcome probabilities, share prices, trading activity, and settlement rules.',
             descriptionParams,
           )
         : t(
-            'Trade on live {sportTitle} player props in real time on {siteName}. Bet on points, rebounds, strikeouts, touchdowns, and more specialty markets while you watch.',
+            '{siteName} offers prediction markets for {sportTitle}. Explore outcome probabilities, share prices, trading activity, and settlement rules.',
             descriptionParams,
           )
       : vertical === 'esports'
         ? t(
-            'Trade on live {sportTitle} esports matches in real time on {siteName}. Bet on moneyline, spread, and total markets. Watch streams while you trade.',
+            '{siteName} offers prediction markets for {sportTitle}. Explore outcome probabilities, share prices, trading activity, and settlement rules.',
             descriptionParams,
           )
         : t(
-            'Trade on live {sportTitle} matches in real time on {siteName}. Bet on moneyline, spread, and total markets. Real-time odds and scores.',
+            '{siteName} offers prediction markets for {sportTitle}. Explore outcome probabilities, share prices, trading activity, and settlement rules.',
             descriptionParams,
           )
 

@@ -24,7 +24,7 @@ interface BuildEventOgImageUrlOptions extends BuildEventPageMetadataOptions {
 }
 
 function buildEventMetaDescription(title: string, siteName: string) {
-  return `Live odds, market activity, and trading data for ${title} on ${siteName}.`
+  return `Outcome probabilities, market activity, and trading data for ${title} on ${siteName}.`
 }
 
 function buildLocalizedPagePath(path: string, locale: SupportedLocale) {

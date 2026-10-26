@@ -378,7 +378,7 @@ export async function GET(request: Request) {
                     width: '100%',
                   }}
                 >
-                  <div style={{ display: 'flex', fontSize: '32px', color: '#64748b' }}>Odds</div>
+                  <div style={{ display: 'flex', fontSize: '32px', color: '#64748b' }}>Probability</div>
                   <div style={{ display: 'flex', fontSize: '32px', fontWeight: 900, color: '#0f172a' }}>
                     {payload.odds}
                   </div>
@@ -416,7 +416,9 @@ export async function GET(request: Request) {
                   width: '100%',
                 }}
               >
-                <div style={{ display: 'flex', fontSize: '38px', fontWeight: 900, color: '#0f172a' }}>To win</div>
+                <div style={{ display: 'flex', fontSize: '38px', fontWeight: 900, color: '#0f172a' }}>
+                  Potential payout
+                </div>
                 <div style={{ display: 'flex', fontSize: '64px', fontWeight: 900, color: '#0f172a' }}>
                   {payload.toWin}
                 </div>

@@ -95,7 +95,7 @@ function humanizeSlug(value: string) {
 }
 
 function buildEventStructuredDataDescription(eventTitle: string, siteName: string) {
-  return `Live odds, market activity, and trading data for ${eventTitle} on ${siteName}.`
+  return `Outcome probabilities, market activity, and trading data for ${eventTitle} on ${siteName}.`
 }
 
 function resolveEventImageUrls(event: Event, eventOgImageUrl: string, siteUrl: string) {

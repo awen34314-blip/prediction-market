@@ -49,7 +49,7 @@ export async function generatePredictionResultsMetadata({
   const [context, runtimeTheme] = await Promise.all([getPredictionPageContext(locale, slug), loadRuntimeThemeState()])
   const title =
     titleOverride ??
-    t('{slug} Predictions & Real-Time Odds', {
+    t('{slug} Predictions & Real-Time Probabilities', {
       slug: context.label,
     })
   const description =

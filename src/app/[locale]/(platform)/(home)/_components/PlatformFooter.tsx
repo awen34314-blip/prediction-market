@@ -187,7 +187,7 @@ function FooterCategoryLink({ category }: { category: PlatformNavigationTag }) {
       <span className="block text-sm font-medium text-foreground transition-colors group-hover:text-primary">
         {category.name}
       </span>
-      <span className="block text-xs text-muted-foreground">{t('Predictions & odds')}</span>
+      <span className="block text-xs text-muted-foreground">{t('Predictions & probabilities')}</span>
     </Link>
   )
 }
@@ -301,7 +301,7 @@ function CategoryMarketsFooter({
     {
       key: 'related' as const,
       title: t('Related topics'),
-      items: relatedTopicItems(category, t('Predictions & odds')),
+      items: relatedTopicItems(category, t('Predictions & probabilities')),
     },
     {
       key: 'popular' as const,

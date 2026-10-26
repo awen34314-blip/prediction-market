@@ -1038,7 +1038,7 @@ export default function SportsGamesCenter({
               type="button"
               variant="ghost"
               size="icon"
-              aria-label={t('Odds format settings')}
+              aria-label={t('Price display settings')}
               className={headerIconButtonClass}
             />
           }
@@ -1053,7 +1053,7 @@ export default function SportsGamesCenter({
         >
           <DropdownMenuGroup>
             <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold tracking-wide text-muted-foreground">
-              {t('Odds Format')}
+              {t('Price display')}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {ODDS_FORMAT_OPTIONS.map((option) => (

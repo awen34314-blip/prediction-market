@@ -34,10 +34,10 @@ export async function buildTranslatedCategoryFaqItems({ locale, ...options }: Bu
     ),
     topicsQuestion: t('What topics can I trade in the {categoryName} category?', values),
     topicsAnswer: t(
-      'The {categoryName} category currently covers {eventCount} events and {marketCount} active markets. Topics include {subcategories}. Use the category navigation to explore live odds, volume, and active markets for each topic.',
+      'The {categoryName} category currently covers {eventCount} events and {marketCount} active markets. Topics include {subcategories}. Use the category navigation to explore live probabilities, volume, and active markets for each topic.',
       values,
     ),
-    oddsQuestion: t('How do {categoryName} odds work on {siteName}?', values),
+    oddsQuestion: t('How do {categoryName} probabilities work on {siteName}?', values),
     oddsAnswer: t(
       "Every {categoryName} outcome is priced between 0 and 100 cents. The price is the market's implied probability: a 65-cent share, for example, represents roughly a 65% chance. Prices update continuously as traders react to new information.",
       values,
@@ -51,7 +51,7 @@ export async function buildTranslatedCategoryFaqItems({ locale, ...options }: Bu
     resolutionAnswer: t(
       'Each market has specific resolution criteria and sources published in its rules. Once the result is confirmed by the defined source, the market resolves and winning shares pay $1 each. Read the complete rules before trading.',
     ),
-    changesQuestion: t('Why do {categoryName} odds change so often?', values),
+    changesQuestion: t('Why do {categoryName} probabilities change so often?', values),
     changesAnswer: t(
       '{categoryName} markets respond in real time to news, announcements, data, deadlines, and other developments. Each trade can move the price as participants update their views, so the displayed probability can change at any time.',
       values,
@@ -65,9 +65,9 @@ export async function buildTranslatedCategoryFaqItems({ locale, ...options }: Bu
     futureAnswer: t(
       "Yes. Most prediction markets open before the underlying event, allowing you to take a position as information emerges. The available time horizon depends on each market's closing date and resolution rules.",
     ),
-    accuracyQuestion: t("Are {siteName}'s {categoryName} odds more accurate than polls or forecasts?", values),
+    accuracyQuestion: t("Are {siteName}'s {categoryName} probabilities more accurate than polls or forecasts?", values),
     accuracyAnswer: t(
-      'Prediction markets, polls, models, and analyst forecasts are complementary tools. Because traders risk capital, market prices aggregate their information and incentives into one probability. No market is a guarantee; odds show the consensus at a point in time.',
+      'Prediction markets, polls, models, and analyst forecasts are complementary tools. Because traders risk capital, market prices aggregate their information and incentives into one probability. No market is a guarantee; probabilities show the consensus at a point in time.',
     ),
     startQuestion: t('How do I start trading {categoryName} markets on {siteName}?', values),
     startAnswer: t(
@@ -78,7 +78,7 @@ export async function buildTranslatedCategoryFaqItems({ locale, ...options }: Bu
     movesAnswer: t(
       'Prices are driven by developments related to the underlying event, including official announcements, scheduled dates, data releases, reporting, and major news. Buying and selling turn those changing views into updated implied probabilities.',
     ),
-    liveQuestion: t('Where can I see live {categoryName} odds and trading volume?', values),
+    liveQuestion: t('Where can I see live {categoryName} probabilities and trading volume?', values),
     liveAnswer: t(
       'Market cards on this page show current outcome probabilities and trading volume. Open any market for its price history, available outcomes, full resolution rules, and trading controls.',
     ),

@@ -757,7 +757,7 @@ export default function PredictionResultsClient({
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <h1 className="text-xl font-medium whitespace-nowrap">
                   {heading ??
-                    t('{slug} predictions & odds', {
+                    t('{slug} predictions & probabilities', {
                       slug: displayLabel,
                     })}
                 </h1>

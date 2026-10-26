@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { getExtracted } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 import type { SportsMenuEntry, SportsMenuLinkEntry } from '@/lib/sports-menu-types'
@@ -164,10 +165,14 @@ async function generateEsportsSubcategoryMetadata(
   const runtimeTheme = await loadRuntimeThemeState()
   const siteName = runtimeTheme.site.name
   const seriesTitle = `${context.sportTitle} ${context.subcategoryLabel}`
+  const t = await getExtracted()
 
   return {
-    title: `${seriesTitle} Prediction Markets & Live Odds`,
-    description: `Trade on live ${seriesTitle} esports matches in real time on ${siteName}. Bet on moneyline, spread, and total markets while you watch.`,
+    title: t('{sportTitle} Prediction Markets & Live Probabilities', { sportTitle: seriesTitle }),
+    description: t(
+      '{siteName} offers prediction markets for {sportTitle}. Explore outcome probabilities, share prices, trading activity, and settlement rules.',
+      { siteName, sportTitle: seriesTitle },
+    ),
   }
 }
 

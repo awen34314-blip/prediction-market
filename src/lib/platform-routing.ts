@@ -147,7 +147,7 @@ export function buildPublicProfilePath(slug: string): string | null {
 }
 
 export function getMainTagSeoTitle(name: string) {
-  return `${name} Odds & Predictions`
+  return `${name} Prediction Markets`
 }
 
 export function getNewPageSeoTitle() {

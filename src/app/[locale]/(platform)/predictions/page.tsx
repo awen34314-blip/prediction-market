@@ -16,8 +16,8 @@ async function getPopularPredictionsCopy(locale: SupportedLocale) {
   const t = await getExtracted({ locale })
 
   return {
-    description: t('Explore popular prediction markets with live prices and real-time odds.'),
-    heading: t('Explore popular predictions & real-time odds'),
+    description: t('Explore popular prediction markets with live prices and real-time probabilities.'),
+    heading: t('Explore popular predictions & real-time probabilities'),
   }
 }
 

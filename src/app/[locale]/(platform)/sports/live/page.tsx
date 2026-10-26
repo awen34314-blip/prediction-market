@@ -12,9 +12,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteName = runtimeTheme.site.name
 
   return {
-    title: t('Sports Live Prediction Markets & Live Odds'),
+    title: t('Sports Live Prediction Markets & Live Probabilities'),
     description: t(
-      `Trade on live sports in real time on {siteName}. Trade on NBA, NHL, UFC, MLB, soccer, and 20+ sports with moneyline, spread, and total markets. Real-time odds and scores.`,
+      'Explore prediction markets on {siteName}. Review outcome probabilities, share prices, and settlement rules before trading.',
       { siteName },
     ),
   }
