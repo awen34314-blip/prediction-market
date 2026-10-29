@@ -1921,12 +1921,12 @@ export const EventRepository = {
     sportsSportSlug = '',
     sportsSection = '',
     sportsVertical = '',
-  }: ListEventsProps): Promise<QueryResult<Event[]>> {
+  }: ListEventsProps): Promise<QueryResult<Event[]> & { updatedAt: number }> {
     'use cache'
     cacheTag(cacheTags.events(userId || 'guest'))
     cacheTag(cacheTags.eventsList)
 
-    return await runQuery(async () => {
+    const result = await runQuery(async () => {
       const safeLimit = normalizeEventListLimit(limit)
       const validOffset = normalizeEventListOffset(offset)
       const sportsSlugResolver = await getSportsSlugResolverFromDb()
@@ -2298,6 +2298,7 @@ export const EventRepository = {
 
       return { data: eventsWithMarkets, error: null }
     })
+    return { ...result, updatedAt: result.error ? 0 : Date.now() }
   },
 
   async listSportsFeedEvents({
@@ -3789,18 +3790,24 @@ export const EventRepository = {
         .innerJoin(tags, eq(event_tags.tag_id, tags.id))
         .where(eq(event_tags.event_id, eventRow.id))
 
-      const sportsSlugResolver = await getSportsSlugResolverFromDb()
       const normalizedSportsTags = toOptionalStringArray(eventRow.sports_tags)
+      const hasSportsSlugInputs =
+        Boolean(eventRow.sports_sport_slug?.trim()) ||
+        Boolean(eventRow.sports_series_slug?.trim()) ||
+        Boolean(normalizedSportsTags?.length)
+      const sportsSlugResolver = hasSportsSlugInputs ? await getSportsSlugResolverFromDb() : null
 
       return {
         data: {
           slug: eventRow.slug,
           total_markets_count: eventRow.total_markets_count ?? 0,
-          sports_sport_slug: resolveCanonicalSportsSportSlug(sportsSlugResolver, {
-            sportsSportSlug: eventRow.sports_sport_slug,
-            sportsSeriesSlug: eventRow.sports_series_slug,
-            sportsTags: normalizedSportsTags,
-          }),
+          sports_sport_slug: sportsSlugResolver
+            ? resolveCanonicalSportsSportSlug(sportsSlugResolver, {
+                sportsSportSlug: eventRow.sports_sport_slug,
+                sportsSeriesSlug: eventRow.sports_series_slug,
+                sportsTags: normalizedSportsTags,
+              })
+            : null,
           sports_league_slug: eventRow.sports_league_slug ?? null,
           sports_event_slug: eventRow.sports_event_slug ?? null,
           sports_section: resolveSportsSection({ tags: tagRows }),
@@ -4201,7 +4208,6 @@ export const EventRepository = {
         return { data: [], error: null }
       }
 
-      const sportsSlugResolver = await getSportsSlugResolverFromDb()
       const rows = await db
         .select({
           id: events.id,
@@ -4227,6 +4233,14 @@ export const EventRepository = {
           ),
         )
         .orderBy(desc(events.end_date), desc(events.created_at))
+
+      const hasSportsSlugInputs = rows.some(
+        (row) =>
+          Boolean(row.sports_sport_slug?.trim()) ||
+          Boolean(row.sports_series_slug?.trim()) ||
+          Boolean(toOptionalStringArray(row.sports_tags)?.length),
+      )
+      const sportsSlugResolver = hasSportsSlugInputs ? await getSportsSlugResolverFromDb() : null
 
       const eventIds = rows.map((row) => row.id)
       const marketRows =
@@ -4307,11 +4321,13 @@ export const EventRepository = {
         resolved_at: row.resolved_at?.toISOString() ?? null,
         created_at: row.created_at.toISOString(),
         sports_event_slug: row.sports_event_slug ?? null,
-        sports_sport_slug: resolveCanonicalSportsSportSlug(sportsSlugResolver, {
-          sportsSportSlug: row.sports_sport_slug ?? null,
-          sportsSeriesSlug: row.sports_series_slug ?? null,
-          sportsTags: toOptionalStringArray(row.sports_tags),
-        }),
+        sports_sport_slug: sportsSlugResolver
+          ? resolveCanonicalSportsSportSlug(sportsSlugResolver, {
+              sportsSportSlug: row.sports_sport_slug ?? null,
+              sportsSeriesSlug: row.sports_series_slug ?? null,
+              sportsTags: toOptionalStringArray(row.sports_tags),
+            })
+          : null,
         sports_league_slug: row.sports_league_slug ?? null,
         resolved_direction: outcomeDirectionByEventId.get(row.id) ?? null,
       }))

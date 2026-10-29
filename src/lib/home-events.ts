@@ -20,6 +20,7 @@ interface HomeVisibleEventTagCandidate {
 
 interface HomeVisibleEventMarketCandidate {
   is_resolved: boolean
+  end_time?: string | null
   condition?: {
     resolved?: boolean | null
   } | null
@@ -31,6 +32,8 @@ export interface HomeVisibleEventCandidate {
   status: 'draft' | 'active' | 'resolved' | 'archived'
   series_slug?: string | null
   series_recurrence?: string | null
+  has_live_chart?: boolean
+  start_date?: string | null
   sports_event_id?: string | null
   sports_event_slug?: string | null
   sports_parent_event_id?: number | string | null
@@ -88,8 +91,33 @@ function toTimestamp(value: string | null | undefined) {
     return Number.NEGATIVE_INFINITY
   }
 
-  const timestamp = Date.parse(value)
+  const normalized = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value.trim())
+    ? `${value.trim().replace(' ', 'T')}Z`
+    : value.trim()
+  const timestamp = Date.parse(normalized)
   return Number.isFinite(timestamp) ? timestamp : Number.NEGATIVE_INFINITY
+}
+
+export function resolveHomeLiveSeriesStartTimestamp(event: HomeVisibleEventCandidate) {
+  return toTimestamp(event.start_date)
+}
+
+export function resolveHomeLiveSeriesEndTimestamp(event: HomeVisibleEventCandidate) {
+  const endTimestamps = [
+    toTimestamp(event.end_date),
+    ...(event.markets ?? []).map((market) => toTimestamp(market.end_time)),
+  ]
+  return Math.max(...endTimestamps)
+}
+
+export function isCurrentHomeLiveSeriesEvent(event: HomeVisibleEventCandidate, nowMs: number) {
+  const startTimestamp = resolveHomeLiveSeriesStartTimestamp(event)
+  return (
+    event.status === 'active' &&
+    !isEventResolvedLike(event) &&
+    startTimestamp <= nowMs &&
+    nowMs < resolveHomeLiveSeriesEndTimestamp(event)
+  )
 }
 
 function isMoreRecentEvent<T extends HomeVisibleEventCandidate>(candidate: T, current: T) {
@@ -136,6 +164,26 @@ function isSameUtcDay(leftTimestamp: number, rightTimestamp: number) {
 }
 
 function isPreferredSeriesEvent<T extends HomeVisibleEventCandidate>(candidate: T, current: T, nowMs: number) {
+  if (candidate.has_live_chart && current.has_live_chart) {
+    const candidateCurrent = isCurrentHomeLiveSeriesEvent(candidate, nowMs)
+    const currentCurrent = isCurrentHomeLiveSeriesEvent(current, nowMs)
+    if (candidateCurrent !== currentCurrent) {
+      return candidateCurrent
+    }
+
+    const candidateEnd = resolveHomeLiveSeriesEndTimestamp(candidate)
+    const currentEnd = resolveHomeLiveSeriesEndTimestamp(current)
+    const candidateNotEnded = candidateEnd > nowMs
+    const currentNotEnded = currentEnd > nowMs
+    if (candidateNotEnded !== currentNotEnded) {
+      return candidateNotEnded
+    }
+    if (candidateEnd !== currentEnd) {
+      return candidateNotEnded ? candidateEnd < currentEnd : candidateEnd > currentEnd
+    }
+    return isMoreRecentEvent(candidate, current)
+  }
+
   const candidateEnd = toTimestamp(candidate.end_date)
   const currentEnd = toTimestamp(current.end_date)
   // Intraday trading closes at the boundary, independently of oracle settlement.
@@ -297,6 +345,12 @@ export function filterHomeEvents<T extends HomeVisibleEventCandidate>(
       return true
     }
 
-    return newestBySeriesSlug.get(seriesSlug)?.id === event.id
+    return (
+      newestBySeriesSlug.get(seriesSlug)?.id === event.id &&
+      (status !== 'active' ||
+        !event.has_live_chart ||
+        currentTimestamp == null ||
+        resolveHomeLiveSeriesEndTimestamp(event) > currentTimestamp)
+    )
   })
 }

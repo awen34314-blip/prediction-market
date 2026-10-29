@@ -66,20 +66,28 @@ describe('homeContent', () => {
     )
   })
 
-  it('uses the provided current timestamp for initial home events', async () => {
+  it.each([true, false])('keeps cache freshness when the SEO page wrapper is %s', async (withPageWrapper) => {
     const currentTimestamp = Date.parse('2026-05-11T12:34:00.000Z')
-    mocks.listHomeEventsPage.mockResolvedValueOnce({ data: [], error: null, currentTimestamp })
+    const updatedAt = currentTimestamp - 20_000
+    mocks.listHomeEventsPage.mockResolvedValueOnce({ data: [], error: null, currentTimestamp, updatedAt })
 
     const HomeContent = (await import('@/app/[locale]/(platform)/(home)/_components/HomeContent')).default
-    await HomeContent({
+    const result = await HomeContent({
       currentTimestamp,
+      withPageWrapper,
     })
 
     expect(mocks.listHomeEventsPage).toHaveBeenCalledWith(
       expect.objectContaining({
         currentTimestamp,
+        includeUpdatedAt: true,
       }),
     )
+    const content = result.props.children[1]
+    const homeClient = withPageWrapper ? content.props.children : content
+    expect(content.type === 'main').toBe(withPageWrapper)
+    expect(homeClient.props.initialCurrentTimestamp).toBe(currentTimestamp)
+    expect(homeClient.props.initialEventsUpdatedAt).toBe(updatedAt)
   })
 
   it('does not query hot topics when no featured cards will be rendered', async () => {

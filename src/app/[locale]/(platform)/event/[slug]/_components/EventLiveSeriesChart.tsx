@@ -49,6 +49,7 @@ import {
   normalizeSubscriptionSymbol,
   parseUtcDate,
   requiresCanonicalBinanceDailyClose,
+  resolveRecentPersistedLivePrice,
   resolveLiveChartPaddedDomainEnd,
   resolveDisplayedLiveSeriesBaselinePrice,
   resolveEventEndTimestamp,
@@ -380,7 +381,7 @@ function EventLiveSeriesChartContent({
     [config.active_window_minutes, realtimeTopic],
   )
 
-  const { data, idleRecovery, idleRecoveryVersion, status } = useLiveSeriesWebSocket({
+  const { data, idleRecovery, idleRecoveryVersion, resumedAtTimestamp, status } = useLiveSeriesWebSocket({
     topic: realtimeTopic,
     eventType: config.event_type,
     eventEndTimestamp: explicitEndTimestamp,
@@ -517,23 +518,8 @@ function EventLiveSeriesChartContent({
       return finalPrice
     }
 
-    if (referenceSnapshot) {
-      const snapshotPrice = normalizeLiveChartPrice(
-        referenceSnapshot.latest_price ?? referenceSnapshot.closing_price ?? Number.NaN,
-        realtimeTopic,
-      )
-
-      if (typeof snapshotPrice === 'number' && Number.isFinite(snapshotPrice) && snapshotPrice > 0) {
-        return snapshotPrice
-      }
-    }
-
-    if (persistedFallbackPrice && Number.isFinite(persistedFallbackPrice.price) && persistedFallbackPrice.price > 0) {
-      return persistedFallbackPrice.price
-    }
-
-    return null
-  }, [finalPrice, isEventClosed, persistedFallbackPrice, realtimeTopic, referenceSnapshot])
+    return resolveRecentPersistedLivePrice(persistedFallbackPrice, nowMs)
+  }, [finalPrice, isEventClosed, nowMs, persistedFallbackPrice])
 
   const tradingWindowMs = useMemo(() => {
     const configuredWindowMinutes = Number(config.active_window_minutes)
@@ -600,7 +586,7 @@ function EventLiveSeriesChartContent({
   )
   const dataSource = useMemo(() => {
     if (!isEventClosed) {
-      return data.length > 0 ? data : liveFallbackData
+      return data.length > 0 ? data : resumedAtTimestamp == null ? liveFallbackData : []
     }
 
     if ((requiresCanonicalGoldClose || requiresCanonicalEquityClose) && !isFinitePositivePrice(finalPrice)) {
@@ -634,6 +620,7 @@ function EventLiveSeriesChartContent({
     finalPrice,
     isEventClosed,
     liveFallbackData,
+    resumedAtTimestamp,
     requiresCanonicalBinanceClose,
     requiresCanonicalEquityClose,
     requiresCanonicalGoldClose,
@@ -675,7 +662,11 @@ function EventLiveSeriesChartContent({
       const firstPoint = pointsWithinDomain[0]
       const firstPrice = firstPoint?.[SERIES_KEY]
 
-      if (typeof firstPrice === 'number' && Number.isFinite(firstPrice)) {
+      if (
+        typeof firstPrice === 'number' &&
+        Number.isFinite(firstPrice) &&
+        (resumedAtTimestamp == null || firstPoint.date.getTime() - domainStart <= 2_000)
+      ) {
         next = [
           {
             date: new Date(domainStart),
@@ -694,7 +685,8 @@ function EventLiveSeriesChartContent({
       typeof lastPrice === 'number' &&
       Number.isFinite(lastPrice) &&
       Number.isFinite(lastTimestamp) &&
-      chartNowMs > lastTimestamp
+      chartNowMs > lastTimestamp &&
+      (resumedAtTimestamp == null || chartNowMs - lastTimestamp <= 2_000)
     ) {
       next = [
         ...next,
@@ -706,7 +698,7 @@ function EventLiveSeriesChartContent({
     }
 
     return next
-  }, [chartNowMs, dataSource, isEventClosed, liveWindowMs, tradingWindowStartMs])
+  }, [chartNowMs, dataSource, isEventClosed, liveWindowMs, resumedAtTimestamp, tradingWindowStartMs])
 
   const lastPoint = renderData.at(-1)
   const rawRenderedPrice = lastPoint?.[SERIES_KEY]
@@ -776,7 +768,7 @@ function EventLiveSeriesChartContent({
     )
   }, [axisCurrentPrice, axisPriceDisplayDigits, dataSource, featuredChartLayout, idleRecovery, renderData])
   const axisInitializationPhase =
-    data.length > 0 ? 'realtime-ready' : dataSource.length > 0 ? 'reference-ready' : 'empty'
+    data.length > 0 ? 'realtime-ready' : dataSource.length > 0 ? `fallback-ready:${fallbackCurrentPrice}` : 'empty'
   const chartScopeKey = preserveSeriesContinuity
     ? `${config.series_slug}:${config.topic}:${config.event_type}:${subscriptionSymbol}`
     : `${event.id}:${realtimeTopic}:${subscriptionSymbol}`
