@@ -6,6 +6,31 @@ import { normalizeEnabledLocales } from '@/i18n/locales'
 import { withLocalePrefix } from '@/lib/locale-path'
 import { getWindMarketCopy } from '@/lib/windmarket/localization'
 
+export function buildLocalizedPageAlternates({
+  path,
+  locale,
+  enabledLocales,
+  siteUrl,
+}: {
+  path: string
+  locale: SupportedLocale
+  enabledLocales: SupportedLocale[]
+  siteUrl: string
+}) {
+  const languages = Object.fromEntries(
+    normalizeEnabledLocales(enabledLocales).map((language) => [
+      language,
+      new URL(withLocalePrefix(path, language), siteUrl).toString(),
+    ]),
+  )
+  languages['x-default'] = new URL(path, siteUrl).toString()
+
+  return {
+    canonical: new URL(withLocalePrefix(path, locale), siteUrl).toString(),
+    languages,
+  }
+}
+
 export function buildLocalizedPageMetadata({
   path,
   locale,
@@ -24,16 +49,13 @@ export function buildLocalizedPageMetadata({
   inherited: Pick<ResolvedMetadata, 'openGraph' | 'twitter'>
 }): Metadata {
   const locales = normalizeEnabledLocales(enabledLocales)
-  const url = new URL(withLocalePrefix(path, locale), siteUrl).toString()
-  const languages = Object.fromEntries(
-    locales.map((language) => [language, new URL(withLocalePrefix(path, language), siteUrl).toString()]),
-  )
-  languages['x-default'] = new URL(path, siteUrl).toString()
+  const alternates = buildLocalizedPageAlternates({ path, locale, enabledLocales, siteUrl })
+  const url = alternates.canonical
 
   return {
     title,
     description,
-    alternates: { canonical: url, languages },
+    alternates,
     openGraph: {
       type: 'website',
       title,

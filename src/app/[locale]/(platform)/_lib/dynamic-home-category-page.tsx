@@ -7,9 +7,11 @@ import {
   buildLocalizedPagePath,
   buildPredictionResultsOgImageUrl,
 } from '@/app/[locale]/(platform)/_lib/prediction-results-metadata'
+import { loadEnabledLocales } from '@/i18n/locale-settings'
 import { resolveSupportedLocale } from '@/i18n/locales'
 import { getRootLocale } from '@/i18n/root-locale'
 import { resolveCommitSha } from '@/lib/git'
+import { buildLocalizedPageAlternates } from '@/lib/localized-page-seo'
 import { loadPlatformMainTags } from '@/lib/platform-main-tags'
 import {
   findDynamicHomeCategoryBySlug,
@@ -85,6 +87,12 @@ export async function buildDynamicHomeCategoryMetadata(slug: string): Promise<Me
 
   return {
     title,
+    alternates: buildLocalizedPageAlternates({
+      path: `/${category.slug}`,
+      locale,
+      enabledLocales: await loadEnabledLocales(),
+      siteUrl,
+    }),
     openGraph: {
       type: 'website',
       url: pageUrl,
@@ -128,6 +136,12 @@ export async function buildDynamicHomeSubcategoryMetadata(slug: string, subcateg
 
   return {
     title,
+    alternates: buildLocalizedPageAlternates({
+      path: `/${resolvedSubcategory.category.slug}/${resolvedSubcategory.subcategory.slug}`,
+      locale,
+      enabledLocales: await loadEnabledLocales(),
+      siteUrl,
+    }),
     openGraph: {
       type: 'website',
       url: pageUrl,
