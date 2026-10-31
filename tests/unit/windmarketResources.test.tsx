@@ -110,4 +110,23 @@ describe('WindMarket editorial SEO', () => {
       expect(html).not.toContain('"@type":"Organization"')
     }
   })
+
+  it('renders direct, language-matched official website links in the public footer HTML', () => {
+    for (const [locale, path, language, label] of [
+      ['zh', '/zh', 'zh-Hans', '风向市场 WindMarket 官网'],
+      ['zh-hant', '/', 'zh-Hant', '風向市場 WindMarket 官網'],
+      ['en', '/en', 'en', 'WindMarket official website'],
+      ['de', '/en', 'en', 'WindMarket official website'],
+    ] as const) {
+      const html = renderToStaticMarkup(<ResourceLinks locale={locale} includeWebsite />)
+      expect(html).toContain(`href="https://windmarket.top${path}" hrefLang="${language}"`)
+      expect(html).toContain(label)
+      expect(html).not.toContain('nofollow')
+      expect(html).not.toContain('onclick')
+    }
+    // Editorial pages already provide their own website link in the action row.
+    expect(renderToStaticMarkup(<ResourceLinks locale="zh" current="about" />)).not.toContain(
+      'href="https://windmarket.top',
+    )
+  })
 })

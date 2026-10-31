@@ -559,7 +559,7 @@ export default function PlatformFooter({
           <span>{site.name}</span>
         </Link>
         <p className="mt-3 max-w-xl text-base font-medium text-foreground/90">{site.description}</p>
-        <ResourceLinks locale={locale} />
+        <ResourceLinks locale={locale} includeWebsite />
       </div>
 
       <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-1 sm:gap-12 lg:grid-cols-12">
